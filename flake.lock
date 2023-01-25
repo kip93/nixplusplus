@@ -1,0 +1,314 @@
+{
+  "nodes": {
+    "agenix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1673301561,
+        "narHash": "sha256-gRUWHbBAtMuPDJQXotoI8u6+3DGBIUZHkyQWpIv7WpM=",
+        "ref": "main",
+        "rev": "42d371d861a227149dc9a7e03350c9ab8b8ddd68",
+        "revCount": 159,
+        "type": "git",
+        "url": "https://github.com/ryantm/agenix"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/ryantm/agenix"
+      }
+    },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1667395993,
+        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
+        "ref": "master",
+        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
+        "revCount": 66,
+        "type": "git",
+        "url": "https://github.com/numtide/flake-utils"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/numtide/flake-utils"
+      }
+    },
+    "gitignore-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1660459072,
+        "narHash": "sha256-8DFJjXG8zqoONA1vXtgeKXy68KdJL5UaXR8NtVMUbx8=",
+        "ref": "master",
+        "rev": "a20de23b925fd8264fd7fad6454652e142fd7f73",
+        "revCount": 85,
+        "type": "git",
+        "url": "https://github.com/hercules-ci/gitignore.nix"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/hercules-ci/gitignore.nix"
+      }
+    },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "utils": [
+          "flake-utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1672244468,
+        "narHash": "sha256-xaZb8AZqoXRCSqPusCk4ouf+fUNP8UJdafmMTF1Ltlw=",
+        "ref": "release-22.11",
+        "rev": "89a8ba0b5b43b3350ff2e3ef37b66736b2ef8706",
+        "revCount": 2407,
+        "type": "git",
+        "url": "https://github.com/nix-community/home-manager"
+      },
+      "original": {
+        "ref": "release-22.11",
+        "type": "git",
+        "url": "https://github.com/nix-community/home-manager"
+      }
+    },
+    "hydra": {
+      "inputs": {
+        "nix": [
+          "nix"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1671755331,
+        "narHash": "sha256-hXsgJj0Cy0ZiCiYdW2OdBz5WmFyOMKuw4zyxKpgUKm4=",
+        "ref": "master",
+        "rev": "f48f00ee6d5727ae3e488cbf9ce157460853fea8",
+        "revCount": 4007,
+        "type": "git",
+        "url": "https://github.com/NixOS/hydra"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/NixOS/hydra"
+      }
+    },
+    "impermanence": {
+      "locked": {
+        "lastModified": 1668668915,
+        "narHash": "sha256-QjY4ZZbs9shwO4LaLpvlU2bO9J1juYhO9NtV3nrbnYQ=",
+        "ref": "master",
+        "rev": "5df9108b346f8a42021bf99e50de89c9caa251c3",
+        "revCount": 93,
+        "type": "git",
+        "url": "https://github.com/nix-community/impermanence"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/nix-community/impermanence"
+      }
+    },
+    "lowdown-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1633514407,
+        "narHash": "sha256-Dw32tiMjdK9t3ETl5fzGrutQTzh2rufgZV4A/BbxuD4=",
+        "owner": "kristapsdz",
+        "repo": "lowdown",
+        "rev": "d2c2b44ff6c27b936ec27358a2653caaef8f73b8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kristapsdz",
+        "repo": "lowdown",
+        "type": "github"
+      }
+    },
+    "microvm-nix": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1674261360,
+        "narHash": "sha256-U1Be009p1fO+tb2+GEfoVOda8SvX8+CGfkRUJsl9UXg=",
+        "ref": "main",
+        "rev": "b2a0cff1dd11429e42f02521588408e2e22d03ce",
+        "revCount": 405,
+        "type": "git",
+        "url": "https://github.com/astro/microvm.nix"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/astro/microvm.nix"
+      }
+    },
+    "nix": {
+      "inputs": {
+        "lowdown-src": "lowdown-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-regression": "nixpkgs-regression"
+      },
+      "locked": {
+        "lastModified": 1674058777,
+        "narHash": "sha256-uXh4+xjJUHQSCg+LHh6+SSYtMdjKQiTXMZ4uZFwzdq4=",
+        "ref": "latest-release",
+        "rev": "7304806241fe4f72c5f33a5a929d675c8342fabd",
+        "revCount": 13418,
+        "type": "git",
+        "url": "https://github.com/NixOS/nix"
+      },
+      "original": {
+        "ref": "latest-release",
+        "type": "git",
+        "url": "https://github.com/NixOS/nix"
+      }
+    },
+    "nix-bundle": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1660100837,
+        "narHash": "sha256-RKzH/bCKzz6rw1IbTjm0tusjBlT4Dp52VkBPIpXyHtc=",
+        "ref": "master",
+        "rev": "e9fa7e8a118942adafa8592a28b301ee23d37c13",
+        "revCount": 155,
+        "type": "git",
+        "url": "https://github.com/matthewbauer/nix-bundle"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/matthewbauer/nix-bundle"
+      }
+    },
+    "nix-serve": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1666084249,
+        "narHash": "sha256-+0pgVtcSLHvEdP12HazglbNH6xlUlSG29Aqx9dq6gXY=",
+        "ref": "master",
+        "rev": "988014200965d96eda1285be2d2e4edd05bd3fe0",
+        "revCount": 54,
+        "type": "git",
+        "url": "https://github.com/edolstra/nix-serve"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/edolstra/nix-serve"
+      }
+    },
+    "nixos-hardware": {
+      "locked": {
+        "lastModified": 1674550793,
+        "narHash": "sha256-ljJlIFQZwtBbzWqWTmmw2O5BFmQf1A/DspwMOQtGXHk=",
+        "ref": "master",
+        "rev": "b7ac0a56029e4f9e6743b9993037a5aaafd57103",
+        "revCount": 1132,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixos-hardware"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/NixOS/nixos-hardware"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1674407282,
+        "narHash": "sha256-2qwc8mrPINSFdWffPK+ji6nQ9aGnnZyHSItVcYDZDlk=",
+        "ref": "nixos-22.11",
+        "rev": "ab1254087f4cdf4af74b552d7fc95175d9bdbb49",
+        "revCount": 430528,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs"
+      },
+      "original": {
+        "ref": "nixos-22.11",
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs"
+      }
+    },
+    "nixpkgs-regression": {
+      "locked": {
+        "lastModified": 1643052045,
+        "narHash": "sha256-uGJ0VXIhWKGXxkeNnq4TvV3CIOkUJ3PAoLZ3HMzNVMw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "215d4d0fd80ca5163643b03a33fde804a29cc1e2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "215d4d0fd80ca5163643b03a33fde804a29cc1e2",
+        "type": "github"
+      }
+    },
+    "nur": {
+      "locked": {
+        "lastModified": 1674679506,
+        "narHash": "sha256-QTq21QzB3js8+8R8rEOOyBp6UEKmNzXSZSUae6XcXSk=",
+        "ref": "master",
+        "rev": "1e7181b58e88c9a190b44ffd09898caad7d97f11",
+        "revCount": 13362,
+        "type": "git",
+        "url": "https://github.com/nix-community/NUR"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/nix-community/NUR"
+      }
+    },
+    "root": {
+      "inputs": {
+        "agenix": "agenix",
+        "flake-utils": "flake-utils",
+        "gitignore-nix": "gitignore-nix",
+        "home-manager": "home-manager",
+        "hydra": "hydra",
+        "impermanence": "impermanence",
+        "microvm-nix": "microvm-nix",
+        "nix": "nix",
+        "nix-bundle": "nix-bundle",
+        "nix-serve": "nix-serve",
+        "nixos-hardware": "nixos-hardware",
+        "nixpkgs": "nixpkgs",
+        "nur": "nur"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
