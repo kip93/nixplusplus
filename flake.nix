@@ -75,10 +75,10 @@
 
   outputs = { ... } @ inputs: {
     apps = import ./apps inputs;
-    packages = import ./packages inputs;
     lib = import ./lib inputs;
-    nixosModules = import ./modules;
-    overlays = import ./overlays;
-    templates = import ./templates;
+    nixosModules = import ./modules inputs;
+    overlays = import ./overlays inputs;
+    packages = import ./packages inputs;
+    templates = import ./templates inputs;
   };
 }
