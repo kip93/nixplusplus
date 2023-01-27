@@ -75,6 +75,7 @@
 
   outputs = { ... } @ inputs: {
     apps = import ./apps inputs;
+    checks = import ./checks inputs;
     lib = import ./lib inputs;
     nixosModules = import ./modules inputs;
     overlays = import ./overlays inputs;
