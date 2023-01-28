@@ -1,6 +1,6 @@
 { nixpkgs, self, system, ... } @ args:
 nixpkgs.legacyPackages.${system}.nixosTest {
-  name = "backup_module";
+  name = builtins.baseNameOf ./.;
 
   nodes = {
     client = {

@@ -1,6 +1,6 @@
 { nixpkgs, self, system, ... } @ args:
 nixpkgs.legacyPackages.${system}.nixosTest {
-  name = "packages.nix-gc";
+  name = builtins.baseNameOf ./.;
 
   nodes = {
     machine = { pkgs, ... }: {

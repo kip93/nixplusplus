@@ -1,6 +1,6 @@
 { nixpkgs, system, ... } @ args:
 with nixpkgs.legacyPackages.${system}; writeShellApplication {
-  name = "nix-gc";
+  name = builtins.baseNameOf ./.;
   runtimeInputs = [ bash coreutils findutils gawk gnused nix ];
   text = ''
     # Defaults
