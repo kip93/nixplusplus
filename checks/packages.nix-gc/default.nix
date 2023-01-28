@@ -13,6 +13,10 @@ nixpkgs.legacyPackages.${system}.nixosTest {
   testScript = ''
     machine.start()
 
+    machine.succeed("mkdir -p /nix/var/nix/gcroots/auto/{foo,bar}")
+    machine.succeed("ln -sf /dev/null /nix/var/nix/gcroots/auto/foo/bar")
+    machine.succeed("ln -sf /dev/null /nix/var/nix/gcroots/auto/bar/foo")
+
     machine.succeed("nix-gc -u")
     machine.fail("nix-gc 0 0")
 
@@ -22,10 +26,12 @@ nixpkgs.legacyPackages.${system}.nixosTest {
       machine.succeed("date -s 'now + 1 days'")
 
     machine.succeed("[ -e ${nixpkgs.legacyPackages.${system}.hello} ]")
+    machine.succeed("[ $(ls /nix/var/nix/gcroots/auto/ | wc -l) -ne 0 ]")
+
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 100 ]")
-    machine.succeed("nix-gc -l 99")
+    machine.succeed("nix-gc -ul 99")
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 100 ]")
-    machine.succeed("nix-gc -d 101")
+    machine.succeed("nix-gc -ud 101")
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 100 ]")
     machine.succeed("nix-gc -u")
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 54 ]")
@@ -34,7 +40,10 @@ nixpkgs.legacyPackages.${system}.nixosTest {
     machine.succeed("date -s 'now + 1 years'")
     machine.succeed("nix-gc -u")
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 6 ]")
+    machine.succeed("nix-gc")
     machine.succeed("[ -e ${nixpkgs.legacyPackages.${system}.hello} ]")
+    machine.succeed("[ $(ls /nix/var/nix/gcroots/auto/ | wc -l) -eq 0 ]")
+    machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 6 ]")
     machine.succeed("nix-gc -l0 -d0")
     machine.succeed("[ ! -e ${nixpkgs.legacyPackages.${system}.hello} ]")
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 1 ]")
