@@ -47,12 +47,12 @@ nixpkgs.legacyPackages.${system}.nixosTest {
     server.wait_for_open_port(22)
 
     client.start()
-    client.wait_for_console_text("Started restic-backups-backups-test_backup-.timer.")
-    client.wait_for_console_text("Starting restic-backups-backups-test_backup-.service...")
+    client.wait_for_console_text("Started restic-backups-backups-test_backup-\.timer\.")
+    client.wait_for_console_text("Starting restic-backups-backups-test_backup-\.service\.\.\.")
     client.wait_for_console_text("Applying Policy: keep 5 latest, 7 daily, 4 weekly snapshots")
     client.wait_for_console_text("check snapshots, trees and blobs")
     client.wait_for_console_text("no errors were found")
-    client.wait_for_console_text("Finished restic-backups-backups-test_backup-.service.")
+    client.wait_for_console_text("Finished restic-backups-backups-test_backup-\.service\.")
     client.shutdown()
 
     server.copy_from_host("${../test.key}", "/tmp/agenix.key")
