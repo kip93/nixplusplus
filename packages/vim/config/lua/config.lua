@@ -82,9 +82,9 @@ vim.cmd [[
   let g:startify_list_order = [ 'bookmarks', 'dir' ]
 ]]
 
-vim.cmd [[
+pcall(vim.cmd, [[
   let g:startify_bookmarks = map(
   \   readfile((!empty($XDG_CONFIG_HOME)?$XDG_CONFIG_HOME:$HOME.'/.config').'/nvim/bookmarks'),
   \   '{split(v:val)[0]:split(v:val)[1]}'
   \ )
-]]
+]])
