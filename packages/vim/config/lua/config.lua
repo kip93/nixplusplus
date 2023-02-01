@@ -42,7 +42,7 @@ vim.cmd [[
 
 -- Icons
 vim.cmd [[
-  let g:webdevicons_enable_airline_statusline = 1
+  let g:webdevicons_enable_airline_statusline = 0
 ]]
 
 -- Git
@@ -74,17 +74,28 @@ vim.cmd [[
   \   ''     : 'S',
   \   ''     : 'V',
   \ }
-  let g:airline_section_a = airline#section#create(['mode'])
-  let g:airline_section_b = airline#section#create(['%f'])
-  let g:airline_section_c = airline#section#create(['ffenc', '%r:%B'])
-  let g:airline_section_x = airline#section#create(['filetype'])
+  let g:airline_section_a = airline#section#create([
+  \   'mode',
+  \ ])
+  let g:airline_section_b = airline#section#create([
+  \   '%{WebDevIconsGetFileTypeSymbol()} ',
+  \   '%{resolve(expand("%"))}',
+  \ ])
+  let g:airline_section_c = airline#section#create([
+  \   airline#parts#ffenc() !=? ''
+  \     ? '%{WebDevIconsGetFileFormatSymbol()." ".&fenc}'
+  \     : '',
+  \   '%r',
+  \ ])
+  let g:airline_section_x = airline#section#create([
+  \   '%{get(b:,"gitsigns_status","")}',
+  \ ])
   let g:airline_section_y = airline#section#create([
   \   '%{get(b:,"gitsigns_head","")}',
-  \   '(',
-  \   '%{get(b:,"gitsigns_status","")}',
-  \   ')'
   \ ])
-  let g:airline_section_z = airline#section#create(['%c:%l/%L'])
+  let g:airline_section_z = airline#section#create([
+  \   '%B@%c:%l/%L',
+  \ ])
 ]]
 
 -- Whitespace
