@@ -11,7 +11,9 @@ with nixpkgs.legacyPackages.${system};
   configure = {
     packages.default = with vimPlugins; {
       start = [
+        fzf-vim
         gitsigns-nvim
+        gv-vim
         jellybeans-vim
         nerdtree
         nerdtree-git-plugin
@@ -32,6 +34,7 @@ with nixpkgs.legacyPackages.${system};
         vim-fugitive
         vim-nix
         vim-startify
+        vim-visual-multi
         (pkgs.vimUtils.buildVimPlugin {
           name = "virt-column-nvim";
           src = pkgs.fetchFromGitHub {
