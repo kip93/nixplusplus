@@ -32,6 +32,15 @@ with nixpkgs.legacyPackages.${system};
         vim-fugitive
         vim-nix
         vim-startify
+        (pkgs.vimUtils.buildVimPlugin {
+          name = "virt-column-nvim";
+          src = pkgs.fetchFromGitHub {
+            owner = "lukas-reineke";
+            repo = "virt-column.nvim";
+            rev = "refs/tags/v1.5.5";
+            sha256 = "6EbEzg2bfoHmVZyggwvsDlW9OOA4UkcfO0qG0TEDKQs=";
+          };
+        })
 
         (vimUtils.buildVimPlugin { name = "config"; src = ./config; })
       ];

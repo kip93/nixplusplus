@@ -28,7 +28,7 @@ vim.o.background = "dark"
 vim.o.cursorline = true
 vim.o.list = true
 vim.o.listchars =
-  "eol:¬,space: ,lead:·,trail:·,nbsp:◇,tab:--→,extends:▸,precedes:◂"
+  "eol:↲,space: ,lead:·,trail:·,nbsp:◇,tab:--→,extends:▸,precedes:◂"
 vim.o.number = true
 vim.o.numberwidth = 3
 vim.o.relativenumber = true
@@ -155,6 +155,7 @@ vim.cmd [[
 ]]
 
 -- Others
+require("virt-column").setup { char = "│", virtcolumn = "80,120" }
 vim.cmd [[
   nnoremap q <Nop>
 ]]
