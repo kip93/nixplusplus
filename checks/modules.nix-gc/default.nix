@@ -8,7 +8,6 @@ nixpkgs.legacyPackages.${system}.nixosTest {
         imports = with self.nixosModules; [ nix-gc ];
         virtualisation.graphics = false;
         virtualisation.additionalPaths = with pkgs; [ hello ];
-
         nixplusplus.nix-gc = { schedule = "@0"; };
       };
     in
