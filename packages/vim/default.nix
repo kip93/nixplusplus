@@ -9,7 +9,7 @@ with nixpkgs.legacyPackages.${system};
   withRuby = false;
 
   configure = {
-    packages.default = with vimPlugins; {
+    packages.default = with vimPlugins; with pkgs.callPackage ./plugins.nix { }; {
       start = [
         fzf-vim
         gitsigns-nvim
@@ -17,15 +17,8 @@ with nixpkgs.legacyPackages.${system};
         jellybeans-vim
         nerdtree
         nerdtree-git-plugin
-        (pkgs.vimUtils.buildVimPlugin {
-          name = "vim-nerdtree-syntax-highlight";
-          src = pkgs.fetchFromGitHub {
-            owner = "johnstef99";
-            repo = "vim-nerdtree-syntax-highlight";
-            rev = "0c495b4ec3776946d4b6a9f08c0e48d683af4add";
-            sha256 = "aH3fdAQQjLVth0rYGnqGIGxRZgSPkmpeUfAwVg8feWY=";
-          };
-        })
+        nerdtree-syntax-highlight
+        nvim-transparent
         unite-vim
         vim-airline
         vim-airline-themes
@@ -35,15 +28,7 @@ with nixpkgs.legacyPackages.${system};
         vim-nix
         vim-startify
         vim-visual-multi
-        (pkgs.vimUtils.buildVimPlugin {
-          name = "virt-column-nvim";
-          src = pkgs.fetchFromGitHub {
-            owner = "lukas-reineke";
-            repo = "virt-column.nvim";
-            rev = "refs/tags/v1.5.5";
-            sha256 = "6EbEzg2bfoHmVZyggwvsDlW9OOA4UkcfO0qG0TEDKQs=";
-          };
-        })
+        virt-column-nvim
 
         (vimUtils.buildVimPlugin { name = "config"; src = ./config; })
       ];

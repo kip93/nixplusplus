@@ -40,6 +40,12 @@ vim.cmd [[
   colorscheme jellybeans
 ]]
 
+require("transparent").setup ({
+  enable = true,
+  extra_groups = { },
+  exclude = { },
+})
+
 -- Icons
 vim.cmd [[
   let g:webdevicons_enable_airline_statusline = 0
