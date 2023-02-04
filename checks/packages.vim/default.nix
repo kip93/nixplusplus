@@ -12,10 +12,12 @@ nixpkgs.legacyPackages.${system}.nixosTest {
   testScript = ''
     machine.start()
 
-    machine.succeed('[ "$(realpath "$(which vi)")"   == "${self.packages.${system}.vim}/bin/nvim" ]')
-    machine.succeed('[ "$(realpath "$(which vim)")"  == "${self.packages.${system}.vim}/bin/nvim" ]')
-    machine.succeed('[ "$(realpath "$(which nvim)")" == "${self.packages.${system}.vim}/bin/nvim" ]')
-    machine.succeed("vim -es")
+    machine.succeed('[ "$(realpath "$(which v)")"    == "$(realpath "${self.packages.${system}.vim}/bin/nvim")" ]')
+    machine.succeed('[ "$(realpath "$(which v)")"    == "$(realpath "${self.packages.${system}.vim}/bin/nvim")" ]')
+    machine.succeed('[ "$(realpath "$(which vi)")"   == "$(realpath "${self.packages.${system}.vim}/bin/nvim")" ]')
+    machine.succeed('[ "$(realpath "$(which vim)")"  == "$(realpath "${self.packages.${system}.vim}/bin/nvim")" ]')
+    machine.succeed('[ "$(realpath "$(which nvim)")" == "$(realpath "${self.packages.${system}.vim}/bin/nvim")" ]')
+    machine.succeed("v -es")
 
     machine.shutdown()
   '';

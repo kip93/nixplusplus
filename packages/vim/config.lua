@@ -7,11 +7,14 @@
 -- Default configs
 vim.o.autoindent = true
 vim.o.backspace = "indent,eol,start"
+vim.o.backup = false
 vim.o.cindent = true
 vim.o.clipboard = "unnamedplus"
+vim.o.confirm = true
 vim.o.expandtab = true
 vim.o.history = 50
 vim.o.ignorecase = true
+vim.o.incsearch = true
 vim.o.scrolloff = 999
 vim.o.shiftwidth = 4
 vim.o.smartcase = true
@@ -21,14 +24,16 @@ vim.o.splitbelow = true
 vim.o.splitright = true
 vim.o.tabstop = 4
 vim.o.timeoutlen = 500
-vim.o.updatetime = 1000
+vim.o.updatetime = 200
+vim.o.visualbell = true
+vim.o.writebackup = false
 vim.opt.mouse = "a"
 
 vim.o.background = "dark"
 vim.o.cursorline = true
 vim.o.list = true
 vim.o.listchars =
-  "eol:↲,space: ,lead:·,trail:·,nbsp:◇,tab:--→,extends:▸,precedes:◂"
+  "eol:↲,lead:·,trail:·,nbsp:◇,tab:--→,extends:▸,precedes:◂"
 vim.o.number = true
 vim.o.numberwidth = 3
 vim.o.relativenumber = true
@@ -37,6 +42,10 @@ vim.o.wrap = true
 
 -- Theme
 vim.cmd [[
+  function! s:tweak_jellybeans()
+    highlight GitSignsChangeNr ctermfg=110
+  endfunction
+  autocmd! ColorScheme jellybeans call s:tweak_jellybeans()
   colorscheme jellybeans
 ]]
 
@@ -45,6 +54,7 @@ require("transparent").setup ({
   extra_groups = { },
   exclude = { },
 })
+require("virt-column").setup { char = "│", virtcolumn = "80,120" }
 
 -- Icons
 vim.cmd [[
@@ -171,8 +181,7 @@ vim.cmd [[
   \ Startify | endif
 ]]
 
--- Others
-require("virt-column").setup { char = "│", virtcolumn = "80,120" }
+-- Keymaps
 vim.cmd [[
   nnoremap q <Nop>
 ]]
