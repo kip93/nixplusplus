@@ -15,7 +15,7 @@
       flake = false;
     };
     flake-utils = {
-      url = "git+https://github.com/numtide/flake-utils?ref=master";
+      url = "git+https://github.com/numtide/flake-utils?ref=main";
     };
     gitignore-nix = {
       url = "git+https://github.com/hercules-ci/gitignore.nix?ref=master";
@@ -41,6 +41,7 @@
     };
     naersk = {
       url = "git+https://github.com/nix-community/naersk?ref=master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix = {
       url = "git+https://github.com/NixOS/nix?ref=latest-release";
@@ -60,6 +61,7 @@
       url = "git+https://github.com/nix-community/nixpkgs-fmt?ref=master";
       inputs.flake-utils.follows = "flake-utils";
       inputs.fenix.follows = "fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs-lint = {
       url = "git+https://github.com/nix-community/nixpkgs-lint?ref=master";
