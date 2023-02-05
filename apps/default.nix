@@ -4,11 +4,26 @@ builtins.listToAttrs
     (system: {
       name = system;
       value = builtins.listToAttrs
-        (builtins.map
-          (name: { inherit name; value = import "${./.}/${name}" (inputs // { inherit system; }); })
-          (builtins.filter
-            (name: builtins.pathExists "${./.}/${name}/default.nix")
-            (builtins.attrNames (builtins.readDir ./.))
+        (builtins.filter
+          (app: app.value != null)
+          (builtins.map
+            (name:
+              let
+                drv = import "${./.}/${name}" (inputs // { inherit system; });
+              in
+              {
+                inherit name;
+                value =
+                  if (!drv.meta ? platforms) || (builtins.any (p: p == system) drv.meta.platforms) then
+                    drv
+                  else
+                    null
+                ;
+              })
+            (builtins.filter
+              (name: builtins.pathExists "${./.}/${name}/default.nix")
+              (builtins.attrNames (builtins.readDir ./.))
+            )
           )
         );
     })
