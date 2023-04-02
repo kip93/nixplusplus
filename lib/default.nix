@@ -4,9 +4,9 @@ nixpkgs.lib.extend (_:_: {
     (x: y: nixpkgs.lib.recursiveUpdate x y)
     { }
     (builtins.map
-      (name: import "${./.}/${name}" inputs)
+      (name: import (./. + "/${name}") inputs)
       (builtins.filter
-        (name: builtins.pathExists "${./.}/${name}/default.nix")
+        (name: builtins.pathExists (./. + "/${name}/default.nix"))
         (builtins.attrNames (builtins.readDir ./.))
       )
     );

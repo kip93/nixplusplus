@@ -9,7 +9,7 @@ builtins.listToAttrs
           (builtins.map
             (name:
               let
-                drv = (import "${./.}/${name}" (inputs // { inherit system; })).overrideAttrs (super: {
+                drv = (import (./. + "/${name}") (inputs // { inherit system; })).overrideAttrs (super: {
                   meta = super.meta // {
                     homepage = "ssh://git.kip93.net/nix++";
                     maintainers = [
@@ -32,7 +32,7 @@ builtins.listToAttrs
                 ;
               })
             (builtins.filter
-              (name: builtins.pathExists "${./.}/${name}/default.nix")
+              (name: builtins.pathExists (./. + "/${name}/default.nix"))
               (builtins.attrNames (builtins.readDir ./.))
             )
           )

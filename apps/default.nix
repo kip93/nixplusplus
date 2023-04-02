@@ -9,7 +9,7 @@ builtins.listToAttrs
           (builtins.map
             (name:
               let
-                drv = import "${./.}/${name}" (inputs // { inherit system; });
+                drv = import (./. + "/${name}") (inputs // { inherit system; });
               in
               {
                 inherit name;
@@ -21,7 +21,7 @@ builtins.listToAttrs
                 ;
               })
             (builtins.filter
-              (name: builtins.pathExists "${./.}/${name}/default.nix")
+              (name: builtins.pathExists (./. + "/${name}/default.nix"))
               (builtins.attrNames (builtins.readDir ./.))
             )
           )
