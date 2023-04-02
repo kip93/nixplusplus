@@ -7,7 +7,7 @@ flake-utils.lib.mkApp {
       nixpkgs-fmt.defaultPackage.${system}
     ];
     text = ''
-      nixpkgs-fmt -- "$@"
+      nixpkgs-fmt -- "''${@:-.}"
     '';
   };
 }
