@@ -3,40 +3,23 @@ builtins.listToAttrs
   (builtins.map
     (system: {
       name = system;
-      value = builtins.listToAttrs
-        (builtins.filter
-          (package: package.value != null)
-          (builtins.map
-            (name:
-              let
-                drv = (import (./. + "/${name}") (inputs // { inherit system; })).overrideAttrs (super: {
-                  meta = super.meta // {
-                    homepage = "ssh://git.kip93.net/nix++";
-                    maintainers = [
-                      {
-                        name = "Leandro Emmanuel Reina Kiperman";
-                        email = "leandro@kip93.net";
-                        github = "kip93";
-                      }
-                    ];
-                  };
-                });
-              in
-              {
-                inherit name;
-                value =
-                  if (!self.lib.hasAttrByPath [ "meta" "platforms" ] drv) || (builtins.any (p: p == system) drv.meta.platforms) then
-                    drv
-                  else
-                    null
-                ;
-              })
-            (builtins.filter
-              (name: builtins.pathExists (./. + "/${name}/default.nix"))
-              (builtins.attrNames (builtins.readDir ./.))
-            )
-          )
-        );
+      value = self.lib.nixplusplus.import.asAttrs' {
+        path = ./.;
+        func = x:
+          (x (inputs // { inherit system; })).overrideAttrs (super: {
+            meta = super.meta // {
+              homepage = "ssh://git.kip93.net/nix++";
+              maintainers = [{
+                name = "Leandro Emmanuel Reina Kiperman";
+                email = "leandro@kip93.net";
+                github = "kip93";
+              }];
+              license = with self.lib.licenses; super.meta.license or [ gpl3 ];
+            };
+          })
+        ;
+        inherit system;
+      };
     })
     self.lib.nixplusplus.supportedSystems
   )

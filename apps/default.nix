@@ -3,29 +3,11 @@ builtins.listToAttrs
   (builtins.map
     (system: {
       name = system;
-      value = builtins.listToAttrs
-        (builtins.filter
-          (app: app.value != null)
-          (builtins.map
-            (name:
-              let
-                drv = import (./. + "/${name}") (inputs // { inherit system; });
-              in
-              {
-                inherit name;
-                value =
-                  if (!self.lib.hasAttrByPath [ "meta" "platforms" ] drv) || (builtins.any (p: p == system) drv.meta.platforms) then
-                    drv
-                  else
-                    null
-                ;
-              })
-            (builtins.filter
-              (name: builtins.pathExists (./. + "/${name}/default.nix"))
-              (builtins.attrNames (builtins.readDir ./.))
-            )
-          )
-        );
+      value = self.lib.nixplusplus.import.asAttrs' {
+        path = ./.;
+        func = x: x (inputs // { inherit system; });
+        inherit system;
+      };
     })
     self.lib.nixplusplus.supportedSystems
   )

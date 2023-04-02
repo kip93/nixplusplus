@@ -1,9 +1,5 @@
-{ ... } @ inputs:
-builtins.listToAttrs
-  (builtins.map
-    (name: { inherit name; value = import (./. + "/${name}") inputs; })
-    (builtins.filter
-      (name: builtins.pathExists (./. + "/${name}/default.nix"))
-      (builtins.attrNames (builtins.readDir ./.))
-    )
-  )
+{ self, ... } @ inputs:
+self.lib.nixplusplus.import.asAttrs' {
+  path = ./.;
+  func = x: x inputs;
+}
