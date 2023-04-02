@@ -3,7 +3,9 @@ with nixpkgs.legacyPackages.${system};
 flake-utils.lib.mkApp {
   drv = writeShellApplication {
     name = builtins.baseNameOf ./.;
-    runtimeInputs = [ nixpkgs-fmt.defaultPackage.${system} ];
+    runtimeInputs = [
+      nixpkgs-fmt.defaultPackage.${system}
+    ];
     text = ''
       nixpkgs-fmt -- "$@"
     '';
