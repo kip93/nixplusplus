@@ -25,7 +25,7 @@ builtins.listToAttrs
               {
                 inherit name;
                 value =
-                  if (!drv.meta ? platforms) || (builtins.any (p: p == system) drv.meta.platforms) then
+                  if (!self.lib.hasAttrByPath [ "meta" "platforms" ] drv) || (builtins.any (p: p == system) drv.meta.platforms) then
                     drv
                   else
                     null
