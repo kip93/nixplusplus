@@ -6,10 +6,6 @@
       url = "git+https://github.com/ryantm/agenix?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    fenix = {
-      url = "git+https://github.com/nix-community/fenix?ref=main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flake-compat = {
       url = "git+https://github.com/edolstra/flake-compat?ref=master";
       flake = false;
@@ -39,39 +35,27 @@
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    naersk = {
-      url = "git+https://github.com/nix-community/naersk?ref=master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix = {
       url = "git+https://github.com/NixOS/nix?ref=latest-release";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-serve = {
-      url = "git+https://github.com/edolstra/nix-serve?ref=master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware = {
       url = "git+https://github.com/NixOS/nixos-hardware?ref=master";
     };
     nixpkgs = {
-      url = "git+https://github.com/NixOS/nixpkgs?ref=nixos-22.11";
+      url = "git+https://github.com/NixOS/nixpkgs?ref=nixos-unstable"; # TODO: nixos-23.05
     };
     nixpkgs-fmt = {
       url = "git+https://github.com/nix-community/nixpkgs-fmt?ref=master";
       inputs.flake-utils.follows = "flake-utils";
-      inputs.fenix.follows = "fenix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixpkgs-lint = {
-      url = "git+https://github.com/nix-community/nixpkgs-lint?ref=master";
-      inputs.naersk.follows = "naersk";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "flake-utils";
-      inputs.flake-compat.follows = "flake-compat";
     };
     nur = {
       url = "git+https://github.com/nix-community/NUR?ref=master";
+    };
+    statix = {
+      url = "git+https://github.com/nerdypepper/statix?ref=master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
