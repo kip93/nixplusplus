@@ -7,9 +7,13 @@ nixpkgs.legacyPackages.${system}.nixosTest {
       virtualisation.graphics = false;
       virtualisation.additionalPaths = with pkgs; [ hello ];
       environment.systemPackages = with self.packages.${system}; [ nix-gc ];
-      nix.settings.experimental-features = [ "nix-command" "flakes" ];
-      nix.settings.flake-registry = pkgs.writeText "flake-registry.json" "{flakes=[],version=2}";
-      nix.registry.nixpkgs.flake = nixpkgs;
+      nix = {
+        settings = {
+          experimental-features = [ "nix-command" "flakes" ];
+          flake-registry = pkgs.writeText "flake-registry.json" "{flakes=[],version=2}";
+        };
+        registry.nixpkgs.flake = nixpkgs;
+      };
     };
   };
 

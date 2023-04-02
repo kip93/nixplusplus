@@ -33,7 +33,7 @@ in
   };
 
   config = {
-    assertions = [{ assertion = (options ? age); message = "Agenix module not installed"; }];
+    assertions = [{ assertion = options ? age; message = "Agenix module not installed"; }];
 
     age.secrets =
       let
@@ -51,7 +51,7 @@ in
           name = lib.strings.sanitizeDerivationName p.dst;
           value = {
             initialize = true;
-            user = cfg.user;
+            inherit (cfg) user;
             repository = "sftp:backup-server:${p.dst}";
             paths = p.srcs;
             passwordFile = config.age.secrets."backup.password".path;

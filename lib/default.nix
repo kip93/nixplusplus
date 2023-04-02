@@ -1,7 +1,7 @@
 { nixpkgs, ... } @ inputs:
-nixpkgs.lib.extend (_:_: {
+nixpkgs.lib.extend (_: _: {
   nixplusplus = builtins.foldl'
-    (x: y: nixpkgs.lib.recursiveUpdate x y)
+    nixpkgs.lib.recursiveUpdate
     { }
     (builtins.map
       (name: import (./. + "/${name}") inputs)
