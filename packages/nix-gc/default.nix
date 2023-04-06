@@ -1,5 +1,5 @@
-{ self, localSystem, crossSystem, ... } @ args:
-with self.lib.nixplusplus.pkgs.${localSystem}.${crossSystem};
+{ pkgs, ... } @ args:
+with pkgs;
 writeShellApplication {
   name = builtins.baseNameOf ./.;
   runtimeInputs = [ bash coreutils findutils gawk gnused nix ];

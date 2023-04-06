@@ -1,5 +1,5 @@
-{ self, localSystem, crossSystem, ... } @ args:
-with self.lib.nixplusplus.pkgs.${localSystem}.${crossSystem};
+{ pkgs, ... } @ args:
+with pkgs;
 { ... } @ features':
 let
   _optional = condition: value: if condition then value else null;
