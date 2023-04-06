@@ -1,4 +1,4 @@
-{ self, system, ... } @ args:
+{ self, localSystem, crossSystem, ... } @ args:
 import ../vim-common/setup.nix args {
   bash = false;
   css = false;

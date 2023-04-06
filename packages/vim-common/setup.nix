@@ -1,5 +1,5 @@
-{ nixpkgs, system, ... } @ args:
-with nixpkgs.legacyPackages.${system};
+{ self, localSystem, crossSystem, ... } @ args:
+with self.lib.nixplusplus.pkgs.${localSystem}.${crossSystem};
 { ... } @ features':
 let
   _optional = condition: value: if condition then value else null;

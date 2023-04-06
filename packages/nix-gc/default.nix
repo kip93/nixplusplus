@@ -1,5 +1,6 @@
-{ nixpkgs, system, ... } @ args:
-with nixpkgs.legacyPackages.${system}; writeShellApplication {
+{ self, localSystem, crossSystem, ... } @ args:
+with self.lib.nixplusplus.pkgs.${localSystem}.${crossSystem};
+writeShellApplication {
   name = builtins.baseNameOf ./.;
   runtimeInputs = [ bash coreutils findutils gawk gnused nix ];
   text = ''
