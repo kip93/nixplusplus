@@ -38,10 +38,18 @@ builtins.mapAttrs
   (localSystem: systems:
   builtins.mapAttrs
     (crossSystem: attrset:
-      if self.lib.isDerivation attrset then
-        attrset
-      else
-        builtins.derivation ({ name = "${crossSystem} package set"; } // attrset)
+    if self.lib.isDerivation attrset then
+      attrset
+
+    else
+      (self.lib.nixplusplus.pkgs.${localSystem}.${crossSystem}.linkFarm
+        "${crossSystem} package set"
+        (
+          self.lib.mapAttrsToList
+            (name: path: { inherit name path; })
+            attrset
+        )
+      ).overrideAttrs (_: { passthru = attrset; })
     )
     systems
   )
