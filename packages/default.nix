@@ -1,16 +1,9 @@
 { self, ... } @ inputs:
 let
-  args = localSystem: crossSystem: inputs // {
-    inherit (self.lib.nixplusplus.pkgs.${localSystem}.${crossSystem}) pkgs;
-    inherit localSystem crossSystem;
-  };
-  mapSystems = mapFunction:
-    builtins.listToAttrs
-      (builtins.map
-        mapFunction
-        self.lib.nixplusplus.supportedSystems
-      )
-  ;
+  inherit (self) lib;
+  inherit (lib.nixplusplus) forEachSystem pkgs;
+  importAsAttrs' = lib.nixplusplus.import.asAttrs';
+
   patchMeta = super: {
     meta = super.meta // {
       homepage = "ssh://git.kip93.net/nix++";
@@ -19,31 +12,54 @@ let
         email = "leandro@kip93.net";
         github = "kip93";
       }];
-      license = with self.lib.licenses; super.meta.license or [ gpl3 ];
+      license = with lib.licenses; super.meta.license or [ gpl3 ];
     };
   };
 
-  packages = mapSystems (localSystem: {
+  packages = forEachSystem (localSystem: {
     name = localSystem;
-    value = mapSystems (crossSystem: {
+    value = forEachSystem (crossSystem: {
       name = crossSystem;
-      value = (self.lib.nixplusplus.pkgs.${localSystem}.${crossSystem}.linkFarm
-        "${crossSystem}_package-set"
-        (self.lib.nixplusplus.import.asAttrs' {
+      value = (pkgs.${localSystem}.${crossSystem}.linkFarm
+        "${crossSystem}-meta-package"
+        (importAsAttrs' {
           path = ./.;
           system = crossSystem;
           func = pkg:
-            (pkg (args localSystem crossSystem)).overrideAttrs patchMeta
+            (pkg (inputs // {
+              inherit (pkgs.${localSystem}.${crossSystem}) pkgs;
+              inherit localSystem crossSystem;
+            })).overrideAttrs patchMeta
           ;
         })
-      ).overrideAttrs (super: { passthru = super.passthru.entries; });
+      ).overrideAttrs (super: {
+        passthru = super.passthru.entries // {
+          _all = pkgs.${localSystem}.${crossSystem}.linkFarm
+            "all-packages-meta-package"
+            super.passthru.entries
+          ;
+          _apps = pkgs.${localSystem}.${crossSystem}.linkFarm
+            "apps-meta-package"
+            (importAsAttrs' {
+              path = ../apps;
+              system = crossSystem;
+              func = pkg:
+                pkg (inputs // {
+                  inherit (pkgs.${localSystem}.${crossSystem}) pkgs;
+                  system = crossSystem;
+                })
+              ;
+            })
+          ;
+        };
+      });
     });
   });
 
 in
-self.lib.recursiveUpdate
+lib.recursiveUpdate
   packages
-  (mapSystems (system: {
+  (forEachSystem (system: {
     name = system;
     value = packages.${system}.${system}.passthru;
   }))

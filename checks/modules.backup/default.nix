@@ -1,5 +1,5 @@
-{ nixpkgs, self, system, ... } @ args:
-nixpkgs.legacyPackages.${system}.nixosTest {
+{ self, pkgs, ... } @ args:
+pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
 
   nodes = {

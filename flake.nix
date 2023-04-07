@@ -45,17 +45,8 @@
     nixpkgs = {
       url = "git+https://github.com/NixOS/nixpkgs?ref=nixos-unstable"; # TODO: nixos-23.05
     };
-    nixpkgs-fmt = {
-      url = "git+https://github.com/nix-community/nixpkgs-fmt?ref=master";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nur = {
       url = "git+https://github.com/nix-community/NUR?ref=master";
-    };
-    statix = {
-      url = "git+https://github.com/nerdypepper/statix?ref=master";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 

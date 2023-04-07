@@ -1,5 +1,5 @@
-{ nixpkgs, self, system, ... } @ args:
-nixpkgs.legacyPackages.${system}.nixosTest {
+{ self, nixpkgs, pkgs, system, ... } @ args:
+pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
 
   nodes = {
@@ -17,7 +17,7 @@ nixpkgs.legacyPackages.${system}.nixosTest {
     };
   };
 
-  testScript = ''
+  testScript = with pkgs; ''
     machine.start()
 
     machine.succeed("mkdir -p /nix/var/nix/gcroots/auto/{foo,bar}")
@@ -29,10 +29,10 @@ nixpkgs.legacyPackages.${system}.nixosTest {
 
     for _ in range(50):
       machine.succeed("nix profile install nixpkgs#hello")
-      machine.succeed("nix profile remove ${nixpkgs.legacyPackages.${system}.hello}")
+      machine.succeed("nix profile remove ${hello}")
       machine.succeed("date -s 'now + 1 days'")
 
-    machine.succeed("[ -e ${nixpkgs.legacyPackages.${system}.hello} ]")
+    machine.succeed("[ -e ${hello} ]")
     machine.succeed("[ $(ls /nix/var/nix/gcroots/auto/ | wc -l) -ne 0 ]")
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 100 ]")
 
@@ -53,12 +53,12 @@ nixpkgs.legacyPackages.${system}.nixosTest {
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 6 ]")
 
     machine.succeed("nix-gc")
-    machine.succeed("[ -e ${nixpkgs.legacyPackages.${system}.hello} ]")
+    machine.succeed("[ -e ${hello} ]")
     machine.succeed("[ $(ls /nix/var/nix/gcroots/auto/ | wc -l) -eq 0 ]")
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 6 ]")
 
     machine.succeed("nix-gc -l0 -d0")
-    machine.succeed("[ ! -e ${nixpkgs.legacyPackages.${system}.hello} ]")
+    machine.succeed("[ ! -e ${hello} ]")
     machine.succeed("[ $(nix-env --list-generations | wc -l) -eq 1 ]")
 
     machine.shutdown()

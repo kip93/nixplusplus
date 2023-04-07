@@ -1,6 +1,6 @@
 { pkgs, ... } @ args:
-with pkgs;
 { ... } @ features':
+with pkgs;
 let
   _optional = condition: value: if condition then value else null;
 

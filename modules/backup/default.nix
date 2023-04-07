@@ -2,6 +2,7 @@
 { config, lib, options, ... }:
 let
   cfg = config.nixplusplus.backup;
+
 in
 {
   options.nixplusplus.backup = with lib; {
@@ -38,6 +39,7 @@ in
     age.secrets =
       let
         permissions = { mode = "600"; owner = cfg.user; };
+
       in
       {
         "backup.password" = { file = cfg.passwordFile; } // permissions;

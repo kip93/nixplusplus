@@ -2,6 +2,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.nixplusplus.nix-gc;
+
 in
 {
   options.nixplusplus.nix-gc = with lib; {

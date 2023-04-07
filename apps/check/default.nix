@@ -1,62 +1,83 @@
-{ flake-utils, nixpkgs, self, system, nixpkgs-fmt, statix, ... } @ inputs:
-with nixpkgs.legacyPackages.${system};
-flake-utils.lib.mkApp {
-  drv = writeShellApplication {
-    name = builtins.baseNameOf ./.;
-    runtimeInputs = [
-      findutils
-      nix
-      nixpkgs-fmt.defaultPackage.${system}
-      statix.defaultPackage.${system}
-      vulnix
-    ];
-    text = ''
-      XC=0
+{ self, pkgs, ... } @ args:
+with pkgs;
+let
+  inherit (self) lib;
+  inherit (lib.nixplusplus) supportedSystems;
 
-      printf '# Check flake ##################################################\n'
+in
+writeShellApplication {
+  name = builtins.baseNameOf ./.;
+  runtimeInputs = [
+    findutils
+    jq
+    nix
+    nixpkgs-fmt
+    statix
+    vulnix
+  ];
+  text = ''
+    XC=0
+
+    printf '# Get paths ####################################################\n'
+    # shellcheck disable=SC2016
+    mapfile -t drvs < <(
       (
-        nix --option warn-dirty false -L flake check -- ${lib.escapeShellArg self} ;
-      ) || XC="$(( XC + 0x01 ))"
+        nix --no-warn-dirty eval .#packages --json --apply ${lib.escapeShellArg ''
+          packages:
+            let
+              systems = builtins.attrNames packages;
 
-      printf '\n# Check format #################################################\n'
-      (
-        nixpkgs-fmt --check -- ${lib.escapeShellArg self} ;
-      ) || XC="$(( XC + 0x02 ))"
+            in
+            builtins.map (localSystem:
+              builtins.map (crossSystem:
+                let
+                  pkg = packages.''${localSystem}.''${crossSystem};
 
-      printf '\n# Check linting ################################################\n'
-      (
-        statix check -c ${import ../lint/config.nix inputs} -- ${lib.escapeShellArg self} ;
-      ) || XC="$(( XC + 0x04 ))"
+                in
+                [ pkg._all.drvPath pkg._apps.drvPath ]
+              ) systems
+            ) systems
+        ''} \
+        | jq -r .[][][] ;
+      ) | sort -u ;
+    ) || XC="$(( XC + 0x01 ))"
 
-      printf '\n# Check vulnerabilities ########################################\n'
-      (
-        printf '%s\n' \
-          ${builtins.placeholder "out"} \
-          ${builtins.concatStringsSep " "
-            (builtins.map
-              (app: builtins.head (builtins.match "(/.*)/bin/[^/]+" app.program))
-              (builtins.attrValues
-                (builtins.removeAttrs
-                  self.apps.${system}
-                  [ (builtins.baseNameOf ./.) ]
-                )
-              )
-            )
-          } \
-          ${lib.optionalString (self ? devShells)
-            (builtins.concatStringsSep " " (builtins.attrValues self.devShells.${system}))
-          } \
-          ${lib.optionalString (self ? packages)
-            (builtins.concatStringsSep " " (builtins.attrValues self.packages.${system}))
-          } \
-        | awk '!x[$0]++' | xargs -r vulnix ;
-      ) || XC="$(( XC + 0x08 ))"
+    printf '\n# Check format #################################################\n'
+    (
+      nixpkgs-fmt --check -- . ;
+    ) || XC="$(( XC + 0x02 ))"
 
-      printf '\n\n# Finished #####################################################\n'
-      printf '\x1B[1;%dmXC: 0x%02X\x1B[0m\n' \
-        "$([ "$XC" -eq 0 ] && printf 32 || printf 31)" \
-        "$XC"
-      exit $XC
-    '';
-  };
+    printf '\n# Check linting ################################################\n'
+    (
+      statix check --config ${import ../lint/config.nix args} -- . ;
+    ) || XC="$(( XC + 0x04 ))"
+
+    [ $(( XC & 0x01 )) -ne 0 ] \
+    || printf '\n# Check build ##################################################\n'
+    [ $(( XC & 0x01 )) -ne 0 ] \
+    || (
+      printf '%s\n' "''${drvs[@]}" \
+      | xargs -r nix --no-warn-dirty --print-build-logs \
+        build --no-link ;
+    ) || XC="$(( XC + 0x08 ))"
+
+    printf '\n# Check flake ##################################################\n'
+    (
+      nix --no-warn-dirty --print-build-logs --keep-going flake check -- . ;
+    ) || XC="$(( XC + 0x10 ))"
+
+    [ $(( XC & 0x01 )) -ne 0 ] \
+    || printf '\n# Check vulnerabilities ########################################\n'
+    [ $(( XC & 0x01 )) -ne 0 ] \
+    || (
+      printf '%s\n' "''${drvs[@]}" \
+      | xargs -r vulnix ;
+    ) || XC="$(( XC + 0x20 ))"
+
+    printf '\n# Finished #####################################################\n'
+    printf '\x1B[1;%dmXC: 0x%02X\x1B[0m\n' \
+      "$([ "$XC" -eq 0 ] && printf 32 || printf 31)" \
+      "$XC"
+    exit $XC
+  '';
 }

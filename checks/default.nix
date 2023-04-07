@@ -1,13 +1,20 @@
 { self, ... } @ inputs:
-builtins.listToAttrs
-  (builtins.map
-    (system: {
-      name = system;
-      value = self.lib.nixplusplus.import.asAttrs' {
-        path = ./.;
-        func = x: x (inputs // { inherit system; });
+let
+  inherit (self) lib;
+  inherit (lib.nixplusplus) forEachSystem pkgs;
+  importAsAttrs' = lib.nixplusplus.import.asAttrs';
+
+in
+forEachSystem (system: {
+  name = system;
+  value = importAsAttrs' {
+    path = ./.;
+    func = check:
+      check (inputs // {
         inherit system;
-      };
-    })
-    self.lib.nixplusplus.supportedSystems
-  )
+        inherit (pkgs.${system}.${system}) pkgs;
+      })
+    ;
+    inherit system;
+  };
+})

@@ -1,5 +1,5 @@
-{ nixpkgs, self, system, ... } @ args:
-nixpkgs.legacyPackages.${system}.nixosTest {
+{ self, pkgs, ... } @ args:
+pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
 
   nodes =
@@ -10,6 +10,7 @@ nixpkgs.legacyPackages.${system}.nixosTest {
         virtualisation.additionalPaths = with pkgs; [ hello ];
         nixplusplus.nix-gc = { schedule = "@0"; };
       };
+
     in
     {
       machine1 = { imports = [ common ]; nixplusplus.nix-gc = { }; };
@@ -18,11 +19,11 @@ nixpkgs.legacyPackages.${system}.nixosTest {
       machine4 = { imports = [ common ]; nixplusplus.nix-gc = { last = 0; days = 0; }; };
     };
 
-  testScript = ''
+  testScript = with pkgs; ''
     start_all()
     for machine in machines:
       for _ in range(50):
-        machine.succeed("nix-env -i ${nixpkgs.legacyPackages.${system}.hello}")
+        machine.succeed("nix-env -i ${hello}")
         machine.succeed("nix-env -e hello")
         machine.succeed("date -s 'now + 1 days'")
 
@@ -37,10 +38,10 @@ nixpkgs.legacyPackages.${system}.nixosTest {
     machine3.succeed("[ $(nix-env --list-generations | wc -l) -eq 18 ]")
     machine4.succeed("[ $(nix-env --list-generations | wc -l) -eq 1 ]")
 
-    machine1.succeed("[ -e ${nixpkgs.legacyPackages.${system}.hello} ]")
-    machine2.succeed("[ -e ${nixpkgs.legacyPackages.${system}.hello} ]")
-    machine3.succeed("[ -e ${nixpkgs.legacyPackages.${system}.hello} ]")
-    machine4.succeed("[ ! -e ${nixpkgs.legacyPackages.${system}.hello} ]")
+    machine1.succeed("[ -e ${hello} ]")
+    machine2.succeed("[ -e ${hello} ]")
+    machine3.succeed("[ -e ${hello} ]")
+    machine4.succeed("[ ! -e ${hello} ]")
 
     for machine in machines:
       machine.succeed("[ $(ls /nix/var/nix/gcroots/auto/ | wc -l) -eq 0 ]")

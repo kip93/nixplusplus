@@ -1,5 +1,5 @@
-{ nixpkgs, system, ... } @ inputs:
-with nixpkgs.legacyPackages.${system};
+{ pkgs, ... } @ args:
+with pkgs;
 writeText "statix-config" ''
   disabled = [
     'redundant_pattern_bind',
