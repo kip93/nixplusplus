@@ -9,8 +9,14 @@
             (crossSystem: {
               name = crossSystem;
               value = import nixpkgs {
-                localSystem.config = nixpkgs.lib.systems.parse.tripleFromSystem (nixpkgs.lib.systems.parse.mkSystemFromString localSystem);
-                crossSystem.config = nixpkgs.lib.systems.parse.tripleFromSystem (nixpkgs.lib.systems.parse.mkSystemFromString crossSystem);
+                localSystem.config =
+                  nixpkgs.lib.systems.parse.tripleFromSystem
+                    (nixpkgs.lib.systems.parse.mkSystemFromString localSystem)
+                ;
+                crossSystem.config =
+                  nixpkgs.lib.systems.parse.tripleFromSystem
+                    (nixpkgs.lib.systems.parse.mkSystemFromString crossSystem)
+                ;
               };
             })
             self.lib.nixplusplus.supportedSystems
