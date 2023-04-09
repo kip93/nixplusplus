@@ -61,14 +61,16 @@ writeShellApplication {
         build --no-link ;
     ) || XC="$(( XC + 0x08 ))"
 
-    printf '\n# Check flake ##################################################\n'
-    (
+    [ $(( XC & 0x08 )) -ne 0 ] \
+    || printf '\n# Check flake ##################################################\n'
+    [ $(( XC & 0x08 )) -ne 0 ] \
+    || (
       nix --no-warn-dirty --print-build-logs --keep-going flake check -- . ;
     ) || XC="$(( XC + 0x10 ))"
 
-    [ $(( XC & 0x01 )) -ne 0 ] \
+    [ $(( XC & 0x09 )) -ne 0 ] \
     || printf '\n# Check vulnerabilities ########################################\n'
-    [ $(( XC & 0x01 )) -ne 0 ] \
+    [ $(( XC & 0x09 )) -ne 0 ] \
     || (
       printf '%s\n' "''${drvs[@]}" \
       | xargs -r vulnix ;
