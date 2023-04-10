@@ -6,18 +6,17 @@ let
   inherit (flake-utils.lib) mkApp;
 
 in
-forEachSystem (system: {
-  name = system;
-  value = importAsAttrs' {
-    path = ./.;
-    func = app:
-      mkApp {
-        drv = app (inputs // {
-          inherit system;
-          inherit (pkgs.${system}.${system}) pkgs;
-        });
-      }
-    ;
-    inherit system;
-  };
+forEachSystem (system: importAsAttrs' {
+  path = ./.;
+  apply = _: app:
+    mkApp {
+      drv = (app (inputs // {
+        inherit system;
+        inherit (pkgs.${system}.${system}) pkgs;
+      })).overrideAttrs (super: {
+        meta = super.meta // lib.nixplusplus.meta;
+      });
+    }
+  ;
+  inherit system;
 })

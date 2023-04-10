@@ -43,7 +43,7 @@ let
       (_optional features.prose languagetool)
       (_optional features.latex texlab)
       (_optional features.latex zathura)
-      (_optional features.lua sumneko-lua-language-server)
+      (_optional features.lua lua-language-server)
       (_optional features.nix rnix-lsp)
       (_optional features.python (runCommand "coc-python" { } ''
         mkdir -p $out/bin ; ln -sf ${python3.withPackages (pypkgs: with pypkgs; [

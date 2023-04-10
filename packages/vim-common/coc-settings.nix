@@ -2,7 +2,7 @@
 with pkgs;
 (lib.optionalAttrs features.lua {
   # Lua
-  sumneko-lua.serverDir = sumneko-lua-language-server;
+  sumneko-lua.serverDir = lua-language-server;
   Lua.telemetry.enable = false;
 }) // (lib.optionalAttrs features.nix {
   # Nix

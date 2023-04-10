@@ -1,51 +1,179 @@
 { ... } @ inputs:
 { config, lib, options, ... }:
 let
-  cfg = config.nixplusplus.backup;
+  cfg = config.nixplusplus.${builtins.baseNameOf ./.};
+  cfg_secrets = config.nixplusplus.secrets.secrets;
 
 in
 {
-  options.nixplusplus.backup = with lib; {
-    user = mkOption { type = types.singleLineStr; default = "root"; };
-    passwordFile = mkOption { type = types.path; };
-    sshConfig = mkOption { type = types.path; };
-    sshKey = mkOption { type = types.path; };
+  options.nixplusplus.${builtins.baseNameOf ./.} = with lib; {
+    user = mkOption {
+      type = types.singleLineStr;
+      description = mdDoc ''
+        Name of the user to execute the backups. Needs to have permission to access the
+        files to be backed up.
+      '';
+      default = "root";
+    };
+
+    passwordFile = mkOption {
+      type = types.path;
+      description = mdDoc ''
+        File containing the encrypted password, to be used to the encrypt the backups
+        before transit.
+      '';
+    };
+    sshConfig = mkOption {
+      type = types.path;
+      description = mdDoc ''
+        An SSH configuration file, which must contain a host entry for `backup-server`,
+        which specifies how to connect to the backup server. Must be encrypted.
+      '';
+    };
+    sshKey = mkOption {
+      type = types.path;
+      description = mdDoc ''
+        The encrypted SSH private key, to be used to connect to the backup server.
+      '';
+    };
 
     paths = mkOption {
       type = types.listOf
         (types.submodule {
           options = {
-            srcs = mkOption { type = types.listOf types.nonEmptyStr; };
-            dst = mkOption { type = types.nonEmptyStr; };
+            srcs = mkOption {
+              type = types.listOf types.nonEmptyStr;
+              description = mdDoc ''
+                A list of local paths to be backed up.
+              '';
+            };
+            dst = mkOption {
+              type = types.nonEmptyStr;
+              description = mdDoc ''
+                A path to the target folder on the backup server where files will be backed up
+                to.
+              '';
+            };
           };
         });
+      description = mdDoc ''
+        A list of backups to be done, in the form `srcs` -> `dst`, where `srcs` is a
+        list of local paths to be backed up, and `dst` is the target folder in the
+        backup server.
+      '';
+      example = [{
+        srcs = [ "/var/important_data" ];
+        dst = ".local/share/backups/important_data";
+      }];
     };
 
-    schedule = mkOption { type = types.nonEmptyStr; };
+    schedule = mkOption {
+      type = types.nonEmptyStr;
+      description = mdDoc ''
+        A schedule defining calendar events when backups should be done, in [a format
+        supported by systemd][systemd.time(7)].
 
-    keep = {
-      last = mkOption { type = types.nullOr types.ints.positive; default = null; };
-      hours = mkOption { type = types.nullOr types.ints.positive; default = null; };
-      days = mkOption { type = types.nullOr types.ints.positive; default = null; };
-      weeks = mkOption { type = types.nullOr types.ints.positive; default = null; };
-      months = mkOption { type = types.nullOr types.ints.positive; default = null; };
-      years = mkOption { type = types.nullOr types.ints.positive; default = null; };
+        You can use [systemd-analyze calendar '<SCHEDULE>'][systemd.analyze(1)] to test
+        out expressions.
+
+        [systemd.analyze(1)]: https://www.freedesktop.org/software/systemd/man/systemd-analyze.html
+        [systemd.time(7)]: https://www.freedesktop.org/software/systemd/man/systemd.time.html
+      '';
+    };
+
+    keep = mkOption {
+      type = types.submodule {
+        options = {
+          last = mkOption {
+            type = types.nullOr types.ints.positive;
+            description = mdDoc ''
+              Keep the last N backup(s) made.
+            '';
+            default = null;
+          };
+          hours = mkOption {
+            type = types.nullOr types.ints.positive;
+            description = mdDoc ''
+              Keep one backup for each hour from the last N hour(s).
+            '';
+            default = null;
+          };
+          days = mkOption {
+            type = types.nullOr types.ints.positive;
+            description = mdDoc ''
+              Keep one backup for each day from the last N day(s).
+            '';
+            default = null;
+          };
+          weeks = mkOption {
+            type = types.nullOr types.ints.positive;
+            description = mdDoc ''
+              Keep one backup for each week from the last N week(s).
+            '';
+            default = null;
+          };
+          months = mkOption {
+            type = types.nullOr types.ints.positive;
+            description = mdDoc ''
+              Keep one backup for each month from the last N month(s).
+            '';
+            default = null;
+          };
+          years = mkOption {
+            type = types.nullOr types.ints.positive;
+            description = mdDoc ''
+              Keep one backup for each year from the last N year(s).
+            '';
+            default = null;
+          };
+        };
+      };
+      description = mdDoc ''
+        Specifies which backups should be kept after clean up.
+      '';
+      example = { last = 5; days = 7; weeks = 4; };
     };
   };
 
   config = {
-    assertions = [{ assertion = options ? age; message = "Agenix module not installed"; }];
+    warnings = (
+      # Suggest sane "keep" settings.
+      lib.optional (builtins.all (x: x == null) (builtins.attrValues cfg.keep)) ''
+        You should set at least one of the "keep" options, otherwise only a single
+        backup will be kept at any given time, reducing their usefulness in case of
+        catastrophic failure.
 
-    age.secrets =
-      let
-        permissions = { mode = "600"; owner = cfg.user; };
-
-      in
+        Check the example for a good starting point.
+      ''
+    ) ++ (
+      # Check there's stuff to backup.
+      lib.optional (builtins.length cfg.paths == 0) ''
+        You're not backing up any paths. You need to set the "paths" option to at least
+        one source and destination, otherwise nothing will be done.
+      ''
+    ) ++ (
+      # Check there's no empty backups.
+      lib.optional (builtins.any (x: builtins.length x.srcs == 0) cfg.paths) ''
+        There's empty backups. Check that there's at least one source for every backup
+        destination, otherwise you may be missing backups of important data.
+      ''
+    );
+    assertions = [
       {
-        "backup.password" = { file = cfg.passwordFile; } // permissions;
-        "backup.sshconfig" = { file = cfg.sshConfig; } // permissions;
-        "backup.sshkey" = { file = cfg.sshKey; } // permissions;
-      };
+        # Check on requirements.
+        assertion = options.nixplusplus ? secrets;
+        message = ''
+          `nixplusplus.nixosModules.secrets` module not installed, which is needed for
+          decrypting secrets.
+        '';
+      }
+    ];
+
+    nixplusplus.secrets.secrets = {
+      "backup.password" = { file = cfg.passwordFile; owner = cfg.user; };
+      "backup.sshconfig" = { file = cfg.sshConfig; owner = cfg.user; };
+      "backup.sshkey" = { file = cfg.sshKey; owner = cfg.user; };
+    };
 
     services.restic.backups =
       builtins.listToAttrs (builtins.map
@@ -56,16 +184,16 @@ in
             inherit (cfg) user;
             repository = "sftp:backup-server:${p.dst}";
             paths = p.srcs;
-            passwordFile = config.age.secrets."backup.password".path;
+            passwordFile = cfg_secrets."backup.password".path;
             extraOptions = [
               (
                 "sftp.command='ssh " +
                 ''-o StrictHostKeyChecking=accept-new '' +
                 ''-o ServerAliveInterval=60 '' +
                 ''-o ServerAliveCountMax=240 '' +
-                ''-F '"'"'${config.age.secrets."backup.sshconfig".path}'"'"' '' +
+                ''-F '"'"'${cfg_secrets."backup.sshconfig".path}'"'"' '' +
                 ''backup-server '' +
-                ''-i '"'"'${config.age.secrets."backup.sshkey".path}'"'"' '' +
+                ''-i '"'"'${cfg_secrets."backup.sshkey".path}'"'"' '' +
                 "-s sftp'"
               )
             ];
@@ -83,4 +211,6 @@ in
         cfg.paths
       );
   };
+
+  meta.doc = ./README.md;
 }

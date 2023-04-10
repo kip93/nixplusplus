@@ -1,5 +1,7 @@
 { nixpkgs, self, ... } @ inputs:
 {
+  # A shorthand expression to get cross-compiled packages. First key is the
+  # build machine, the second the target one.
   pkgs = builtins.listToAttrs
     (builtins.map
       (localSystem: {

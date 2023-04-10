@@ -1,5 +1,17 @@
 { self, ... } @ inputs:
-self.lib.nixplusplus.import.asAttrs' {
+let
+  inherit (self) lib;
+  inherit (lib) recursiveUpdate;
+  importAsAttrs' = lib.nixplusplus.import.asAttrs';
+
+in
+importAsAttrs' {
   path = ./.;
-  func = module: module inputs;
+  apply = name: module: { config, ... }: {
+    imports = [ (module inputs) ];
+    meta = {
+      inherit (lib.nixplusplus.meta) maintainers;
+      doc = config.nixplusplus.${name}.meta.doc or null;
+    };
+  };
 }

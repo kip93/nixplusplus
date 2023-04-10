@@ -4,10 +4,10 @@ pkgs.nixosTest {
 
   nodes = {
     client = {
-      imports = with self.nixosModules; [ agenix backup ];
+      imports = with self.nixosModules; [ secrets backup ];
       virtualisation.graphics = false;
 
-      age.identityPaths = [ "/etc/nixos/agenix.key" ];
+      nixplusplus.secrets.key = "/etc/nixos/agenix.key";
       nixplusplus.backup = {
         passwordFile = ./backup.password.age;
         sshConfig = ./backup.sshconfig.age;
