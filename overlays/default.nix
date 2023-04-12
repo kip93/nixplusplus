@@ -1,5 +1,5 @@
 { self, ... } @ inputs:
-self.lib.nixplusplus.import.asAttrs' {
+self.lib.import.asOverlays' {
   path = ./.;
   apply = _: overlay: overlay inputs;
 }

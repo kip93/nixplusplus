@@ -1,5 +1,5 @@
 { self, ... } @ inputs:
-self.lib.nixplusplus.import.asAttrs' {
+self.lib.import.asTemplates' {
   path = ./.;
   apply = _: template: template inputs;
 }

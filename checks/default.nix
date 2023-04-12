@@ -1,20 +1,12 @@
-{ self, ... } @ inputs:
-let
-  inherit (self) lib;
-  inherit (lib) recursiveUpdate;
-  inherit (lib.nixplusplus) forEachSystem pkgs;
-  importAsAttrs' = lib.nixplusplus.import.asAttrs';
-
-in
-forEachSystem (system: importAsAttrs' {
+{ nixpkgs, self, ... } @ inputs:
+self.lib.import.asChecks' {
   path = ./.;
-  apply = _: check:
-    recursiveUpdate
+  apply = _: system: check:
+    nixpkgs.lib.recursiveUpdate
       (check (inputs // {
         inherit system;
-        inherit (pkgs.${system}.${system}) pkgs;
+        inherit (self.lib.pkgs.${system}.${system}) pkgs;
       }))
-      { inherit (lib.nixplusplus) meta; }
+      { inherit (self.lib) meta; }
   ;
-  inherit system;
-})
+}

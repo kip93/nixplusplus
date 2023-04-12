@@ -1,4 +1,4 @@
-{ self, ... } @ inputs:
+{ nixpkgs, self, ... } @ inputs:
 let
   # The use of `unsafeDiscardStringContext` is a technicality, since if the path
   # is on the nix store the basename will remember that. This breaks the
@@ -25,12 +25,10 @@ rec {
 
   # Locate importable paths in a directory, and import them into a list.
   asList = path: asList' { inherit path; };
-  asList' = { path, apply ? (_: self.lib.id), system ? null }:
+  asList' = { path, apply ? (_: x: x), system ? null }:
     builtins.filter
-      (x:
-        (system == null)
-        || (!self.lib.hasAttrByPath [ "meta" "platforms" ] x)
-        || (builtins.any (p: p == system) x.meta.platforms)
+      (element:
+        (system == null) || (self.lib.isSupported element system)
       )
       (builtins.map
         (path': apply (getName path') (import path'))
@@ -40,13 +38,11 @@ rec {
 
   # Locate importable paths in a directory, and import them into an attribute set.
   asAttrs = path: asAttrs' { inherit path; };
-  asAttrs' = { path, apply ? (_: self.lib.id), system ? null }:
+  asAttrs' = { path, apply ? (_: x: x), system ? null }:
     builtins.listToAttrs
       (builtins.filter
-        (x:
-          (system == null)
-          || (!self.lib.hasAttrByPath [ "meta" "platforms" ] x.value)
-          || (builtins.any (p: p == system) x.value.meta.platforms)
+        (entry:
+          (system == null) || (self.lib.isSupported entry.value system)
         )
         (builtins.map
           (path': rec {
@@ -56,5 +52,89 @@ rec {
           (locate path)
         )
       )
+  ;
+
+  # Locate importable paths in a directory, and import them as apps.
+  asApps = path: asApps' { inherit path; };
+  asApps' = { path, apply ? (_: _: x: x) }:
+    self.lib.forEachSupportedSystem (system: asAttrs' {
+      inherit path system;
+      apply = name: app:
+        let
+          drv = apply name system app;
+
+        in
+        {
+          type = "app";
+          program = "${drv}${drv.passthru.exePath or "/bin/${drv.pname or drv.name}"}";
+        }
+      ;
+    })
+  ;
+
+  # Locate importable paths in a directory, and import them as checks.
+  asChecks = path: asChecks' { inherit path; };
+  asChecks' = { path, apply ? (_: _: x: x) }:
+    self.lib.forEachSupportedSystem (system: asAttrs' {
+      inherit path system;
+      apply = name: apply name system;
+    })
+  ;
+
+  # Locate importable paths in a directory, and import them as a library.
+  asLib = path: asLib' { inherit path; };
+  asLib' = { path, apply ? (_: x: x) }:
+    builtins.foldl'
+      self.lib.recursiveUpdate
+      { }
+      (asAttrs' { inherit apply path; })
+  ;
+
+  # Locate importable paths in a directory, and import them as modules.
+  asModules = path: asModules' { inherit path; };
+  asModules' = { path, apply ? (_: x: x) }:
+    asAttrs' { inherit apply path; }
+  ;
+
+  # Locate importable paths in a directory, and import them as overlays.
+  asOverlays = path: asOverlays' { inherit path; };
+  asOverlays' = { path, apply ? (_: x: x) }:
+    asAttrs' { inherit apply path; }
+  ;
+
+  # Locate importable paths in a directory, and import them as packages.
+  asPackages = path: asPackages' { inherit path; };
+  asPackages' = { path, apply ? (_: _: _: x: x) }:
+    let
+      packages = self.lib.forEachSupportedSystem' (localSystem: crossSystem:
+        (self.lib.pkgs.${localSystem}.${crossSystem}.linkFarm
+          "${crossSystem}-meta-package"
+          (asAttrs' {
+            inherit path;
+            system = crossSystem;
+            apply = name: apply name localSystem crossSystem;
+          })
+        ).overrideAttrs (super: {
+          passthru = super.passthru.entries // {
+            _all = self.lib.pkgs.${localSystem}.${crossSystem}.linkFarm
+              "all-packages-meta-package"
+              super.passthru.entries
+            ;
+          };
+        })
+      );
+
+    in
+    nixpkgs.lib.recursiveUpdate
+      packages
+      (self.lib.forEachSupportedSystem (system:
+        packages.${system}.${system}.passthru
+      ))
+  ;
+
+  # Locate importable paths in a directory, and import them as templates.
+  asTemplates = path: asTemplates' { inherit path; };
+  asTemplates' = { path, apply ? (_: x: x) }:
+    asAttrs' { inherit apply path; }
   ;
 }

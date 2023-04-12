@@ -1,22 +1,12 @@
-{ self, flake-utils, ... } @ inputs:
-let
-  inherit (self) lib;
-  inherit (lib.nixplusplus) forEachSystem pkgs;
-  importAsAttrs' = lib.nixplusplus.import.asAttrs';
-  inherit (flake-utils.lib) mkApp;
-
-in
-forEachSystem (system: importAsAttrs' {
+{ self, ... } @ inputs:
+self.lib.import.asApps' {
   path = ./.;
-  apply = _: app:
-    mkApp {
-      drv = (app (inputs // {
-        inherit system;
-        inherit (pkgs.${system}.${system}) pkgs;
-      })).overrideAttrs (super: {
-        meta = super.meta // lib.nixplusplus.meta;
-      });
-    }
+  apply = _: system: app:
+    (app (inputs // {
+      inherit system;
+      inherit (self.lib.pkgs.${system}.${system}) pkgs;
+    })).overrideAttrs (super: {
+      meta = (super.meta or { }) // self.lib.meta;
+    })
   ;
-  inherit system;
-})
+}

@@ -1,4 +1,4 @@
-{ self, pkgs, system, ... } @ args:
+{ pkgs, self, system, ... } @ args:
 with self.packages.${system};
 pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
@@ -8,7 +8,7 @@ pkgs.nixosTest {
       virtualisation.graphics = false;
       environment.systemPackages = [ vim-minimal ];
     };
-  } // (self.lib.optionalAttrs (system != "armv7l-linux")) {
+  } // (pkgs.lib.optionalAttrs (system != "armv7l-linux")) {
     machine2 = { pkgs, ... }: {
       virtualisation.graphics = false;
       environment.systemPackages = [ vim ];
@@ -26,7 +26,7 @@ pkgs.nixosTest {
 
     machine1.shutdown()
 
-    ${self.lib.optionalString (system != "armv7l-linux") ''
+    ${pkgs.lib.optionalString (system != "armv7l-linux") ''
       machine2.start()
 
       machine2.succeed('[ "$(realpath "$(which v)")"    == "$(realpath "${vim}/bin/nvim")" ]')

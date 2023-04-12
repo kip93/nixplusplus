@@ -1,4 +1,4 @@
-{ self, ... } @ inputs:
+{ nixpkgs, ... } @ inputs:
 {
   # Meta attributes.
   meta = rec {
@@ -9,6 +9,6 @@
       github = "kip93";
     };
     maintainers = [ maintainer ];
-    license = with self.lib.licenses; [ gpl3 ];
+    license = with nixpkgs.lib.licenses; [ gpl3 ];
   };
 }

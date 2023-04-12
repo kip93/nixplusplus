@@ -36,7 +36,7 @@
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
     # nix = {
-    #   url = "git+https://github.com/NixOS/nix?ref=latest-release"; # TODO: 2.13?
+    #   url = "git+https://github.com/NixOS/nix?ref=latest-release";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
     nixos-hardware = {

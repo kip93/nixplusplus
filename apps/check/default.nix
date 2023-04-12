@@ -1,8 +1,8 @@
-{ self, pkgs, ... } @ args:
+{ pkgs, self, ... } @ args:
 with pkgs;
 let
-  inherit (self) lib;
-  inherit (lib.nixplusplus) supportedSystems;
+  inherit (pkgs.lib) escapeShellArg;
+  inherit (self.lib) supportedSystems;
 
 in
 writeShellApplication {
@@ -22,7 +22,7 @@ writeShellApplication {
     # shellcheck disable=SC2016
     mapfile -t drvs < <(
       (
-        nix --no-warn-dirty eval .#packages --json --apply ${lib.escapeShellArg ''
+        nix --no-warn-dirty eval .#packages --json --apply ${escapeShellArg ''
           packages:
             let
               systems = builtins.attrNames packages;

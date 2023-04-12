@@ -1,4 +1,4 @@
-{ self, nixpkgs, pkgs, system, ... } @ args:
+{ nixpkgs, pkgs, self, system, ... } @ args:
 pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
 
