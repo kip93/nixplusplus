@@ -6,13 +6,9 @@
       url = "git+https://github.com/ryantm/agenix?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # flake-compat = {
-    #   url = "git+https://github.com/edolstra/flake-compat?ref=master";
-    #   flake = false;
+    # flake-utils = {
+    #   url = "git+https://github.com/numtide/flake-utils?ref=main";
     # };
-    flake-utils = {
-      url = "git+https://github.com/numtide/flake-utils?ref=main";
-    };
     gitignore-nix = {
       url = "git+https://github.com/hercules-ci/gitignore.nix?ref=master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,7 +16,7 @@
     home-manager = {
       url = "git+https://github.com/nix-community/home-manager?ref=release-22.11";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "flake-utils";
+      # inputs.utils.follows = "flake-utils";
     };
     # hydra = {
     #   url = "git+https://github.com/NixOS/hydra?ref=master";
