@@ -8,7 +8,7 @@ pkgs.nixosTest {
       virtualisation.graphics = false;
       environment.systemPackages = [ vim-minimal ];
     };
-  } // (pkgs.lib.optionalAttrs (system != "armv7l-linux")) {
+  } // (pkgs.lib.optionalAttrs (self.packages.${system} ? vim-full)) {
     machine2 = { pkgs, ... }: {
       virtualisation.graphics = false;
       environment.systemPackages = [ vim ];
@@ -26,13 +26,13 @@ pkgs.nixosTest {
 
     machine1.shutdown()
 
-    ${pkgs.lib.optionalString (system != "armv7l-linux") ''
+    ${pkgs.lib.optionalString (self.packages.${system} ? vim-full) ''
       machine2.start()
 
-      machine2.succeed('[ "$(realpath "$(which v)")"    == "$(realpath "${vim}/bin/nvim")" ]')
-      machine2.succeed('[ "$(realpath "$(which vi)")"   == "$(realpath "${vim}/bin/nvim")" ]')
-      machine2.succeed('[ "$(realpath "$(which vim)")"  == "$(realpath "${vim}/bin/nvim")" ]')
-      machine2.succeed('[ "$(realpath "$(which nvim)")" == "$(realpath "${vim}/bin/nvim")" ]')
+      machine2.succeed('[ "$(realpath "$(which v)")"    == "$(realpath "${vim-full}/bin/nvim")" ]')
+      machine2.succeed('[ "$(realpath "$(which vi)")"   == "$(realpath "${vim-full}/bin/nvim")" ]')
+      machine2.succeed('[ "$(realpath "$(which vim)")"  == "$(realpath "${vim-full}/bin/nvim")" ]')
+      machine2.succeed('[ "$(realpath "$(which nvim)")" == "$(realpath "${vim-full}/bin/nvim")" ]')
       machine2.succeed("v -es")
 
       machine2.shutdown()
