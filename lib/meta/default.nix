@@ -9,6 +9,6 @@
       github = "kip93";
     };
     maintainers = [ maintainer ];
-    license = with nixpkgs.lib.licenses; [ gpl3 ];
+    license = with nixpkgs.lib.licenses; [ gpl3Plus ];
   };
 }
