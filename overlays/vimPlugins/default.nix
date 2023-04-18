@@ -1,14 +1,14 @@
-{ pkgs, ... }:
-builtins.listToAttrs
-  (builtins.map
+{ nixpkgs, self, ... } @ inputs:
+final: prev: with final; {
+  vimPlugins = prev.vimPlugins // builtins.listToAttrs (builtins.map
     (pluginConfig: {
       inherit (pluginConfig) name;
-      value = pkgs.vimUtils.buildVimPlugin pluginConfig;
+      value = vimUtils.buildVimPlugin pluginConfig;
     })
     [
       {
         name = "nvim-transparent";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "xiyaowong";
           repo = "nvim-transparent";
           rev = "6816751e3d595b3209aa475a83b6fbaa3a5ccc98";
@@ -17,7 +17,7 @@ builtins.listToAttrs
       }
       {
         name = "nerdtree-syntax-highlight";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "johnstef99";
           repo = "vim-nerdtree-syntax-highlight";
           rev = "0c495b4ec3776946d4b6a9f08c0e48d683af4add";
@@ -26,7 +26,7 @@ builtins.listToAttrs
       }
       {
         name = "virt-column-nvim";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "lukas-reineke";
           repo = "virt-column.nvim";
           rev = "refs/tags/v1.5.5";
@@ -34,4 +34,5 @@ builtins.listToAttrs
         };
       }
     ]
-  )
+  );
+}

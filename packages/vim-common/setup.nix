@@ -55,7 +55,7 @@ let
     ])}"'';
 
     configure = {
-      packages.default = with vimPlugins; with callPackage ./plugins.nix { }; {
+      packages.default = with vimPlugins; {
         start =
           builtins.filter (p: p != null)
             [
