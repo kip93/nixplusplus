@@ -113,7 +113,7 @@ with pkgs;
     \ }
     let g:airline_section_a = airline#section#create([
     \   'mode',
-    \   '${lib.optionalString features.prose "%{PencilMode()}"}'
+    \   '%{PencilMode()}'
     \ ])
     let g:airline_section_b = airline#section#create([
     \   '%{WebDevIconsGetFileTypeSymbol()} ',
@@ -145,28 +145,28 @@ with pkgs;
     let g:strip_whitelines_at_eof = 1
   ]]
 
-  ${lib.optionalString features.prose ''
-    -- Prose
-    vim.cmd [[
-      let g:pencil#autoformat = 1
-      let g:pencil#cursorwrap = 1
-      let g:pencil#wrapModeDefault = 'hard'
-      let g:pencil#textwidth = 120
-      let g:pencil#conceallevel = 3
-      let g:pencil#mode_indicators = {
-      \   'hard': '/H',
-      \   'auto': '/A',
-      \   'soft': '/S',
-      \   'off': ''',
-      \ }
-      let g:limelight_conceal_ctermfg = 240
-      let g:limelight_default_coefficient = 0.3
-      let g:limelight_priority = -1
+  -- Prose
+  vim.cmd [[
+    let g:pencil#autoformat = 1
+    let g:pencil#cursorwrap = 1
+    let g:pencil#wrapModeDefault = 'hard'
+    let g:pencil#textwidth = 120
+    let g:pencil#conceallevel = 3
+    let g:pencil#mode_indicators = {
+    \   'hard': '/H',
+    \   'auto': '/A',
+    \   'soft': '/S',
+    \   'off': ''',
+    \ }
+    let g:limelight_conceal_ctermfg = 240
+    let g:limelight_default_coefficient = 0.3
+    let g:limelight_priority = -1
+    ${lib.optionalString features.coc ''
       let g:languagetool_jar = '${languagetool}/share/languagetool-commandline.jar'
+    ''}
 
-      autocmd FileType markdown,text call pencil#init() | Limelight
-    ]]
-  ''}
+    autocmd FileType markdown,text call pencil#init() | Limelight
+  ]]
 
   ${lib.optionalString features.nerdtree ''
     -- NERD tree
@@ -233,7 +233,7 @@ with pkgs;
     ''}
   ]]
 
-  ${lib.optionalString features.latex ''
+  ${lib.optionalString features.coc ''
     -- LaTeX
     vim.cmd [[
       let g:livepreview_previewer = 'zathura'
