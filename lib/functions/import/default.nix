@@ -99,7 +99,23 @@ rec {
   # Locate importable paths in a directory, and import them as overlays.
   asOverlays = path: asOverlays' { inherit path; };
   asOverlays' = { path, apply ? (_: x: x) }:
-    asAttrs' { inherit apply path; }
+    let
+      overlays = asAttrs' { inherit apply path; };
+    in
+    if overlays ? default then
+      overlays
+    else
+      overlays // {
+        default = final: prev:
+          builtins.foldl'
+            (x: y: x // y)
+            { }
+            (builtins.map
+              (overlay: overlay final prev)
+              (builtins.attrValues overlays)
+            )
+        ;
+      }
   ;
 
   # Locate importable paths in a directory, and import them as packages.
