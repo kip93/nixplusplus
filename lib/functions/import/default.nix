@@ -123,12 +123,9 @@ rec {
       overlays // {
         default = final: prev:
           builtins.foldl'
-            (x: y: x // y)
+            (x: y: x // (y final (prev // x)))
             { }
-            (builtins.map
-              (overlay: overlay final prev)
-              (builtins.attrValues overlays)
-            )
+            (builtins.attrValues overlays)
         ;
       }
   ;
