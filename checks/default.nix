@@ -22,6 +22,15 @@ self.lib.import.asChecks' {
         inherit system;
         inherit (self.lib.pkgs.${system}.${system}) pkgs;
       }))
-      { inherit (self.lib) meta; }
+      {
+        meta = {
+          inherit (self.lib.meta) homepage license maintainers;
+          # NixOS test are Linux exclusive.
+          platforms = builtins.filter
+            (nixpkgs.lib.hasSuffix "-linux")
+            self.lib.supportedSystems
+          ;
+        };
+      }
   ;
 }

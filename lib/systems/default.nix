@@ -15,9 +15,25 @@
 
 { nixpkgs, ... } @ inputs:
 rec {
-  # This flake's supported systems.
+  # This flake's supported systems. Should cover the good majority of cases.
   # SEE ALSO: ${nixpkgs}/lib/systems/doubles.nix
-  supportedSystems = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+  supportedSystems =  _systems ++ _extraSystems;
+  _systems = [
+    # Linux
+    "x86_64-linux"
+    "aarch64-linux"
+    "armv7l-linux"
+  ];
+  # Everything here I'm willing to try and support; but I don't personally use
+  # any of these, so they may be under-tested.
+  _extraSystems = [
+    # Linux
+    "i686-linux"
+    "armv6l-linux"
+    # MacOS
+    "x86_64-darwin"
+    "aarch64-darwin"
+  ];
 
   # Maps a function over each given system.
   # For a given `x`, it returns `{ <system> = x; }`.
@@ -30,6 +46,10 @@ rec {
   ;
 
   # Maps a function over each of the elements of the supported system matrix.
+  # Makes sure only allow mappings for the differents archs while avoiding
+  # mixing different operating systems, since those can cause a fuck-ton of
+  # issues. Additionally, given https://github.com/NixOS/nixpkgs/issues/180771,
+  # I also had to disable `aarch64-darwin -> x86_64-darwin`.
   # For a given `x`, it returns `{ <local>.<target> = x; }`.
   forEachSystem' = systems: mapFunction:
     builtins.listToAttrs
@@ -42,7 +62,16 @@ rec {
                 name = crossSystem;
                 value = mapFunction localSystem crossSystem;
               })
-              systems
+              (builtins.filter
+                (crossSystem:
+                  builtins.head (builtins.match ".*-(.*)" localSystem)
+                  ==
+                  builtins.head (builtins.match ".*-(.*)" crossSystem)
+                  && # TODO NixOS/nixpkgs#180771
+                  (localSystem != "aarch64-darwin" || crossSystem != "x86_64-darwin")
+                )
+                systems
+              )
             )
           ;
         })
