@@ -17,7 +17,7 @@
 rec {
   # This flake's supported systems. Should cover the good majority of cases.
   # SEE ALSO: ${nixpkgs}/lib/systems/doubles.nix
-  supportedSystems =  _systems ++ _extraSystems;
+  supportedSystems = _systems ++ _extraSystems;
   _systems = [
     # Linux
     "x86_64-linux"
