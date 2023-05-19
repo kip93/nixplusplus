@@ -19,6 +19,7 @@
   inputs = {
     agenix = {
       url = "git+https://github.com/ryantm/agenix?ref=main";
+      inputs.home-manager.follows = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils = {
