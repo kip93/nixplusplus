@@ -108,6 +108,23 @@
         "url": "https://github.com/nix-community/home-manager"
       }
     },
+    "nixos-artwork": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1668870925,
+        "narHash": "sha256-nZsD+UatjDBEihZewZOkaAigBHyy6cw8VkGxvbNcaeA=",
+        "ref": "master",
+        "rev": "c1dc75611042b57a385c80495d3728724c35cfee",
+        "revCount": 147,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixos-artwork"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/NixOS/nixos-artwork"
+      }
+    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1683269598,
@@ -146,6 +163,7 @@
         "flake-utils": "flake-utils",
         "gitignore-nix": "gitignore-nix",
         "home-manager": "home-manager",
+        "nixos-artwork": "nixos-artwork",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "rust-overlay": "rust-overlay"

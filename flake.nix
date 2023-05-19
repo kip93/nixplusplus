@@ -50,6 +50,10 @@
     #   url = "git+https://github.com/NixOS/nix?ref=latest-release";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
+    nixos-artwork = {
+      url = "git+https://github.com/NixOS/nixos-artwork?ref=master";
+      flake = false;
+    };
     nixos-hardware = {
       url = "git+https://github.com/NixOS/nixos-hardware?ref=master";
     };
