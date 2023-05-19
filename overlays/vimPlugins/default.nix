@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, self, ... } @ inputs:
+{ ... } @ inputs:
 final: prev: with final; {
   vimPlugins = prev.vimPlugins // builtins.listToAttrs (builtins.map
     (pluginConfig: {
