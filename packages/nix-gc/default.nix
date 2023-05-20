@@ -17,7 +17,14 @@
 with pkgs;
 writeShellApplication {
   name = builtins.baseNameOf ./.;
-  runtimeInputs = [ bash coreutils findutils gawk gnused nix ];
+  runtimeInputs = [
+    bash
+    coreutils
+    findutils
+    gawk
+    gnused
+    (nix.override { enableDocumentation = false; })
+  ];
   text = ''
     # Defaults
     last=5

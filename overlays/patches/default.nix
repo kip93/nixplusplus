@@ -15,18 +15,72 @@
 
 { nixpkgs, self, ... } @ inputs:
 final: prev: with final; {
-  jre_headless = prev.jre_headless.overrideAttrs (prev': {
-    nativeBuildInputs = (prev'.nativeBuildInputs or [ ]) ++
-      (with buildPackages; [ autoconf stdenv.cc which zip ])
-    ;
-    configureFlags = (prev'.configureFlags or [ ]) ++
-      (lib.optionals (buildPlatform != hostPlatform) [
-        "--with-boot-jdk=${buildPackages.jre_headless.home}"
-        "--with-build-jdk=${buildPackages.jre_headless.home}"
-      ])
-    ;
-  });
-  languagetool = prev.languagetool.override {
+  writeShellApplication = { checkPhase ? null, ... }@args: prev.writeShellApplication ({
+    # Shellcheck does not work on armv6l-linux builders.
+    checkPhase = lib.optionalString (checkPhase == null && buildPlatform.system == "armv6l-linux") ''
+      runHook preCheck
+      ${stdenv.shellDryRun} "$target"
+      runHook postCheck
+    '';
+  } // args);
+
+  jre_headless = prev.jre_headless.overrideAttrs (
+    { configureFlags ? [ ]
+    , meta ? { platforms = self.lib.supportedSystems; }
+    , nativeBuildInputs ? [ ]
+    , ...
+    }: {
+      # Fix cross compilation.
+      nativeBuildInputs = nativeBuildInputs ++
+        (with buildPackages; [ autoconf stdenv.cc which zip ])
+      ;
+      configureFlags = configureFlags ++
+        (lib.optionals (buildPlatform != targetPlatform) [
+          "--with-boot-jdk=${buildPackages.jre_headless.home}"
+          "--with-build-jdk=${buildPackages.jre_headless.home}"
+        ])
+      ;
+      # Disable on i686 machines.
+      meta = meta // {
+        platforms = lib.optionals
+          (!lib.hasPrefix "i686-" buildPackages.system)
+          (builtins.filter
+            (x: !lib.hasPrefix "i686-" x)
+            meta.platforms
+          )
+        ;
+      };
+    }
+  );
+  # Apply jre fixes to LanguageTool.
+  languagetool = (prev.languagetool.override {
     jre = jre_headless;
+  }).overrideAttrs (
+    { meta ? { platforms = self.lib.supportedSystems; }
+    , ...
+    }: {
+      meta = meta // {
+        platforms = lib.intersectLists
+          meta.platforms
+          jre_headless.meta.platforms
+        ;
+      };
+    }
+  );
+
+  vimPlugins = prev.vimPlugins // {
+    # Apply LanguageTool fixes to vim plugin.
+    vim-LanguageTool = prev.vimPlugins.vim-LanguageTool.overrideAttrs (
+      { meta ? { platforms = self.lib.supportedSystems; }
+      , ...
+      }: {
+        meta = meta // {
+          platforms = lib.intersectLists
+            meta.platforms
+            languagetool.meta.platforms
+          ;
+        };
+      }
+    );
   };
 }

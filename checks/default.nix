@@ -25,9 +25,14 @@ self.lib.import.asChecks' {
       {
         meta = {
           inherit (self.lib.meta) homepage license maintainers;
-          # NixOS test are Linux exclusive.
           platforms = builtins.filter
-            (nixpkgs.lib.hasSuffix "-linux")
+            (x:
+              # NixOS test are Linux exclusive.
+              # https://github.com/NixOS/nixpkgs/pull/193336
+              nixpkgs.lib.hasSuffix "-linux" x &&
+              # NixOS test VM does not work on armv6l.
+              !nixpkgs.lib.hasPrefix "armv6l-" x
+            )
             self.lib.supportedSystems
           ;
         };

@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ features, pkgs, ... }:
+{ features, pkgs, self, ... }:
 with pkgs;
 ''
   -- -- Enable verbose logs
@@ -161,7 +161,7 @@ with pkgs;
     let g:limelight_conceal_ctermfg = 240
     let g:limelight_default_coefficient = 0.3
     let g:limelight_priority = -1
-    ${lib.optionalString features.coc ''
+    ${lib.optionalString (features.coc && (self.lib.isSupported languagetool pkgs.system)) ''
       let g:languagetool_jar = '${languagetool}/share/languagetool-commandline.jar'
     ''}
 
@@ -236,7 +236,7 @@ with pkgs;
   ${lib.optionalString features.coc ''
     -- LaTeX
     vim.cmd [[
-      let g:livepreview_previewer = 'zathura'
+      let g:livepreview_previewer = 'mupdf'
       let g:livepreview_engine = 'lualatex'
     ]]
   ''}

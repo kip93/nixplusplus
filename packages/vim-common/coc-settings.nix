@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ features, pkgs, ... }:
+{ features, pkgs, self, ... }:
 with pkgs;
 {
   # Lua
@@ -31,8 +31,6 @@ with pkgs;
     linting.flake8Enabled = true;
   };
   pyright.organizeimports.provider = "pyright";
-  # Rust
-  rust-analyzer.server.path = "${rust-analyzer}/bin/rust-analyzer";
   # Snippets
   snippets = {
     ultisnips.pythonPrompt = false;
@@ -40,4 +38,7 @@ with pkgs;
   };
   # Others
   yank.list.maxsize = 100;
-}
+} // (pkgs.lib.optionalAttrs (self.lib.isSupported rustc pkgs.system) {
+  # Rust
+  rust-analyzer.server.path = "${rust-analyzer}/bin/rust-analyzer";
+})

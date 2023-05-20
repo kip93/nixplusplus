@@ -17,6 +17,122 @@
 { ... } @ features:
 with pkgs;
 let
+  # Not including any compilers, since nix's going to handle that (and this is large enough as it is).
+  PATH = builtins.filter (x: self.lib.isSupported x pkgs.system) ([
+    # Global
+    fzf
+    ripgrep
+    silver-searcher
+    # Git
+    cacert
+    git
+    git-lfs
+    openssh
+  ] ++ (lib.optionals (features.coc) ([
+    # CoC
+    bat
+    nodejs
+  ] ++ ([
+    # Bash
+    shellcheck
+    # Go
+    go
+    # LaTeX
+    mupdf
+    texlab
+    # Lua
+    lua-language-server
+    # Nix
+    rnix-lsp
+    # Prose
+    languagetool
+    # Python
+    (runCommand "coc-python" { } ''
+      mkdir -p $out/bin ; ln -sf ${python3.withPackages (pypkgs: with pypkgs; [
+        black
+        flake8
+      ])}/bin/python3 $out/bin/coc-python
+    '')
+    # Rust
+    rust-analyzer
+  ]))));
+
+  PLUGINS = builtins.filter (x: self.lib.isSupported x pkgs.system) (with vimPlugins; [
+    # Theme
+    jellybeans-vim
+    nvim-transparent
+    vim-airline
+    vim-airline-themes
+    vim-devicons
+    virt-column-nvim
+    # General
+    fzf-vim
+    undotree
+    unite-vim
+    vim-better-whitespace
+    vim-visual-multi
+    # Git
+    gitsigns-nvim
+    gv-vim
+    vim-fugitive
+    # CSS
+    vim-css-color
+    # LaTeX
+    vimtex
+    # Nix
+    vim-nix
+    # Prose
+    limelight-vim
+    thesaurus_query-vim
+    vim-abolish
+    vim-pencil
+  ] ++ (lib.optionals (features.nerdtree) [
+    # File tree
+    nerdtree
+    nerdtree-git-plugin
+    nerdtree-syntax-highlight
+  ]) ++ (lib.optionals (features.startify) [
+    # Start page
+    vim-startify
+  ]) ++ (lib.optionals (features.coc) [
+    # CoC
+    coc-nvim
+    coc-fzf
+    coc-snippets
+    coc-yank
+    # Bash
+    coc-sh
+    # CSS
+    coc-css
+    # Docker
+    coc-docker
+    # GO
+    coc-go
+    # HTML
+    coc-html
+    # JSON
+    coc-json
+    # LaTeX
+    coc-texlab
+    vim-latex-live-preview
+    # Lua
+    coc-sumneko-lua
+    # Markdown
+    coc-markdownlint
+    # Prose
+    vim-LanguageTool
+    # Python
+    coc-pyright
+    # Rust
+    coc-rust-analyzer
+    # TOML
+    coc-toml
+    # Vimscript
+    coc-vimlsp
+    # YAML
+    coc-yaml
+  ]));
+
   nvim = neovim.override {
     viAlias = true;
     vimAlias = true;
@@ -27,134 +143,22 @@ let
 
     extraPython3Packages = pypkgs: with pypkgs; [ ];
     extraLuaPackages = luapkgs: with luapkgs; [ ];
-    extraMakeWrapperArgs = ''--prefix PATH : "${
-      # Not including any compilers, since nix's going to handle that (and this is large enough as it is).
-      lib.makeBinPath (builtins.filter (x: self.lib.isSupported x pkgs.system) ([
-        # Global
-        fzf
-        # Git
-        cacert
-        git
-        git-lfs
-        openssh
-      ] ++ (lib.optionals (features.coc) ([
-        # CoC
-        bat
-      ] ++ ([
-        # Bash
-        shellcheck
-        # Go
-        go
-        # LaTeX
-        texlab
-        zathura
-        # Lua
-        lua-language-server
-        # Nix
-        rnix-lsp
-        # Prose
-        languagetool
-        # Python
-        (runCommand "coc-python" { } ''
-          mkdir -p $out/bin ; ln -sf ${python3.withPackages (pypkgs: with pypkgs; [
-            black
-            flake8
-          ])}/bin/python3 $out/bin/coc-python
-        '')
-        # Rust
-        rust-analyzer
-      ])))))
-    }"'';
+    extraMakeWrapperArgs = "--prefix PATH : ${lib.escapeShellArg (lib.makeBinPath PATH)}";
 
     configure = {
-      packages.default = with vimPlugins; {
-        start = [
-          # Theme
-          jellybeans-vim
-          nvim-transparent
-          vim-airline
-          vim-airline-themes
-          vim-devicons
-          virt-column-nvim
-          # General
-          fzf-vim
-          undotree
-          unite-vim
-          vim-better-whitespace
-          vim-visual-multi
-          # Git
-          gitsigns-nvim
-          gv-vim
-          vim-fugitive
-          # CSS
-          vim-css-color
-          # LaTeX
-          vimtex
-          # Nix
-          vim-nix
-          # Prose
-          limelight-vim
-          thesaurus_query-vim
-          vim-abolish
-          vim-pencil
-        ] ++ (lib.optionals (features.nerdtree) [
-          # File tree
-          nerdtree
-          nerdtree-git-plugin
-          nerdtree-syntax-highlight
-        ]) ++ (lib.optionals (features.startify) [
-          # Start page
-          vim-startify
-        ]) ++ (lib.optionals (features.coc) [
-          # CoC
-          coc-nvim
-          coc-fzf
-          coc-snippets
-          coc-yank
-          # Bash
-          coc-sh
-          # CSS
-          coc-css
-          # Docker
-          coc-docker
-          # GO
-          coc-go
-          # HTML
-          coc-html
-          # JSON
-          coc-json
-          # LaTeX
-          coc-texlab
-          vim-latex-live-preview
-          # Lua
-          coc-sumneko-lua
-          # Markdown
-          coc-markdownlint
-          # Prose
-          vim-LanguageTool
-          # Python
-          coc-pyright
-          # Rust
-          coc-rust-analyzer
-          # TOML
-          coc-toml
-          # Vimscript
-          coc-vimlsp
-          # YAML
-          coc-yaml
-        ]) ++ [
-          # Config
+      packages.default = {
+        start = PLUGINS ++ [
           (vimUtils.buildVimPlugin {
             name = "config";
             src = writeTextDir "lua/config.lua"
-              (import ./config.nix { inherit features pkgs; });
+              (import ./config.nix { inherit features pkgs self; });
           })
         ];
       };
       customRC = ''
         lua require('config')
-        ${lib.optionalString features.coc "let g:coc_config_home = '${writeTextDir "coc-settings.json"
-          (builtins.toJSON (import ./coc-settings.nix { inherit features pkgs; }))
+        ${lib.optionalString features.coc "let g:coc_config_home = '${writeText "coc-settings.json"
+          (builtins.toJSON (import ./coc-settings.nix { inherit features pkgs self; }))
         }'"}
       '';
     };
@@ -175,5 +179,8 @@ symlinkJoin rec {
     description = "Neovim, with some pizzazz!";
     longDescription = null;
     mainProgram = "v";
+    platforms = lib.optionals (!lib.hasPrefix "armv6l-" buildPlatform.system)
+      nvim.meta.platforms
+    ;
   };
 }
