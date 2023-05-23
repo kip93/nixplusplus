@@ -97,6 +97,23 @@ rec {
     })
   ;
 
+  # Locate importable paths in a directory, and import them as NixOS
+  # configurations.
+  asConfigs = path: asConfigs' { inherit path; };
+  asConfigs' = { path, apply ? (_: x: x) }:
+    builtins.mapAttrs
+      (_: { specialArgs ? { }, modules ? [ ] }:
+        import "${nixpkgs}/nixos/lib/eval-config.nix" {
+          system = null;
+          specialArgs = { } // specialArgs;
+          modules = [
+            self.nixosModules.default
+          ] ++ modules;
+        }
+      )
+      (asAttrs' { inherit apply path; })
+  ;
+
   # Locate importable paths in a directory, and import them as a library.
   asLib = path: asLib' { inherit path; };
   asLib' = { path, apply ? (_: x: x) }:
