@@ -51,7 +51,8 @@ rec {
       )
   ;
 
-  # Locate importable paths in a directory, and import them into an attribute set.
+  # Locate importable paths in a directory, and import them into an attribute
+  # set.
   asAttrs = path: asAttrs' { inherit path; };
   asAttrs' = { path, apply ? (_: x: x), system ? null }:
     builtins.listToAttrs
@@ -100,9 +101,9 @@ rec {
   asLib = path: asLib' { inherit path; };
   asLib' = { path, apply ? (_: x: x) }:
     builtins.foldl'
-      self.lib.recursiveUpdate
+      nixpkgs.lib.recursiveUpdate
       { }
-      (asAttrs' { inherit apply path; })
+      (asList' { inherit apply path; })
   ;
 
   # Locate importable paths in a directory, and import them as modules.
