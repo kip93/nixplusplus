@@ -51,6 +51,8 @@ in
   };
 
   config = {
+    nix.gc.automatic = lib.mkForce false;
+
     systemd = {
       # Timer that will trigger the clean up.
       timers.nixplusplus_nix-gc = {
