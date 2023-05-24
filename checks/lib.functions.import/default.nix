@@ -139,8 +139,15 @@ pkgs.nixTest {
     };
 
     modules = {
-      expr = modules.sample-module.config;
-      expected = { foo = "bar"; };
+      expr =
+        let
+          module = modules.sample-module;
+        in
+        module.config == { foo = "bar"; }
+        &&
+        module.meta.doc == ./modules/sample-module/README.md
+      ;
+      expected = true;
     };
 
     overlays = {

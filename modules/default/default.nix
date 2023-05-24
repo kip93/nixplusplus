@@ -21,6 +21,4 @@
       self.lib.flakes.registry
     ;
   };
-
-  meta.doc = ./README.md;
 }

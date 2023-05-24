@@ -79,6 +79,4 @@ in
       };
     };
   };
-
-  meta.doc = ./README.md;
 }

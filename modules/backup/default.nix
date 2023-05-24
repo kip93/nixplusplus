@@ -226,6 +226,4 @@ in
         cfg.paths
       );
   };
-
-  meta.doc = ./README.md;
 }

@@ -86,6 +86,4 @@ in
       cfg.secrets
     ;
   };
-
-  meta.doc = ./README.md;
 }
