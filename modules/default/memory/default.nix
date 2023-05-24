@@ -15,8 +15,10 @@
 
 { self, ... } @ inputs:
 {
-  imports = self.lib.import.asList' {
-    path = ./.;
-    apply = _: module: module inputs;
+  config.boot = {
+    kernel.sysctl."vm.swappiness" = 10;
+    runSize = "50%";
+    tmpOnTmpfs = false;
+    cleanTmpDir = true;
   };
 }

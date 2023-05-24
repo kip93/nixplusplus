@@ -15,8 +15,7 @@
 
 { self, ... } @ inputs:
 {
-  imports = self.lib.import.asList' {
-    path = ./.;
-    apply = _: module: module inputs;
+  config.users = {
+    mutableUsers = false;
   };
 }

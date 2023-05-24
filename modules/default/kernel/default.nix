@@ -15,8 +15,14 @@
 
 { self, ... } @ inputs:
 {
-  imports = self.lib.import.asList' {
-    path = ./.;
-    apply = _: module: module inputs;
+  config.boot = {
+    consoleLogLevel = 4; # Warn
+    kernelPatches = [{
+      name = "nix++";
+      patch = null;
+      extraConfig = ''
+        BLK_DEV_RAM m
+      '';
+    }];
   };
 }
