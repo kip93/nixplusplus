@@ -33,6 +33,7 @@ in
         [systemd.analyze(1)]: https://www.freedesktop.org/software/systemd/man/systemd-analyze.html
         [systemd.time(7)]: https://www.freedesktop.org/software/systemd/man/systemd.time.html
       '';
+      default = "0:0";
     };
     last = mkOption {
       type = types.ints.unsigned;
