@@ -45,7 +45,7 @@ rec {
       )
   ;
 
-  # Maps a function over each of the elements of the supported system matrix.
+  # Maps a function over each of the elements of the given system matrix.
   # Makes sure only allow mappings for the differents archs while avoiding
   # mixing different operating systems, since those can cause a fuck-ton of
   # issues. Additionally, given https://github.com/NixOS/nixpkgs/issues/180771,
