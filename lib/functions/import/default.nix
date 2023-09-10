@@ -102,15 +102,13 @@ rec {
   asConfigs = path: asConfigs' { inherit path; };
   asConfigs' = { path, apply ? (_: x: x) }:
     builtins.mapAttrs
-      (_: { specialArgs ? { }, modules ? [ ] }:
-        import "${nixpkgs}/nixos/lib/eval-config.nix" {
-          system = null;
-          specialArgs = { } // specialArgs;
-          modules = [
-            self.nixosModules.default
-          ] ++ modules;
-        }
-      )
+      (_: config: import "${nixpkgs}/nixos/lib/eval-config.nix" {
+        system = null;
+        modules = [
+          self.nixosModules.default
+          config
+        ];
+      })
       (asAttrs' { inherit apply path; })
   ;
 
