@@ -20,7 +20,7 @@
     environment = {
       defaultPackages =
         with pkgs;
-        with self.packages.${pkgs.localSystem.system}.${pkgs.crossSystem.system};
+        with self.packages.${pkgs.buildPlatform.system}.${pkgs.hostPlatform.system};
         lib.mkForce [
           bash
           cacert
