@@ -13,9 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ self, ... } @ inputs:
+{ home-manager, self, ... } @ inputs:
+{ lib, ... }:
 {
-  config.users = {
-    mutableUsers = false;
-  };
+  imports = [ home-manager.nixosModules.default ];
+  config.users.mutableUsers = lib.mkOverride 0 false;
 }
