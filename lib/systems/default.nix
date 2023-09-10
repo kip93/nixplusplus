@@ -18,6 +18,10 @@ rec {
   # This flake's supported systems. Should cover the good majority of cases.
   # SEE ALSO: ${nixpkgs}/lib/systems/doubles.nix
   supportedSystems = _systems ++ _extraSystems;
+  supportedSystems' = builtins.groupBy
+    (system: builtins.head (builtins.match ".*-(.*)" system))
+    supportedSystems
+  ;
   _systems = [
     # Linux
     "x86_64-linux"
