@@ -111,6 +111,17 @@ rec {
       })
       (asAttrs' { inherit apply path; })
   ;
+  # Import a single configuration.
+  asConfig = path: asConfig' { inherit path; };
+  asConfig' = { path, apply ? (_: x: x) }:
+    import "${nixpkgs}/nixos/lib/eval-config.nix" {
+      system = null;
+      modules = [
+        self.nixosModules.default
+        (apply (getName path) (import path))
+      ];
+    }
+  ;
 
   # Locate importable paths in a directory, and import them as a library.
   asLib = path: asLib' { inherit path; };
