@@ -13,8 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nix, self, ... } @ inputs:
-{ config, ... }:
+{ nix, nixpkgs, self, ... } @ inputs:
+{ config, lib, ... }:
 {
   config = {
     nixpkgs.overlays = [ self.overlays.default nix.overlays.default ];
@@ -52,5 +52,18 @@
       (name: "L+ /run/flakes/${name} - - - - ${self.lib.flakes.registry.${name}}")
       (builtins.attrNames self.lib.flakes.registry)
     );
+
+    system.nixos = {
+      version = with config.system.nixos; "${release}.${versionSuffix}";
+      versionSuffix = "${
+        nixpkgs.shortRev or nixpkgs.dirtyShortRev or "dirty"
+      }.${
+        self.shortRev or self.dirtyShortRev or "dirty"
+      }${
+        let rev = config.system.configurationRevision; in
+        lib.optionalString (toString rev != "") ".${rev}"
+      }";
+      tags = [ "nixplusplus" ];
+    };
   };
 }
