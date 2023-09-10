@@ -17,6 +17,7 @@
 {
   config.networking = {
     nameservers = [
+      # OpenDNS
       "208.67.222.222"
       "208.67.220.220"
       "2620:119:35::35"
