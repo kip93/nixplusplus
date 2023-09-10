@@ -18,8 +18,8 @@
 
   inputs = {
     agenix = {
-      url = "git+https://github.com/ryantm/agenix?ref=main";
-      inputs.home-manager.follows = "home-manager";
+      url = "git+https://github.com/ryantm/agenix?ref=refs/tags/0.13.0";
+      # inputs.home-manager.follows = "home-manager"; # TODO Enable for next release
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils = {
@@ -30,27 +30,21 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "git+https://github.com/nix-community/home-manager?ref=release-22.11";
+      url = "git+https://github.com/nix-community/home-manager?ref=release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "flake-utils";
     };
-    # hydra = {
-    #   url = "git+https://github.com/NixOS/hydra?ref=master";
-    #   inputs.nix.follows = "nix";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    # impermanence = {
-    #   url = "git+https://github.com/nix-community/impermanence?ref=master";
-    # };
+    impermanence = {
+      url = "git+https://github.com/nix-community/impermanence?ref=master";
+    };
     # microvm-nix = {
     #   url = "git+https://github.com/astro/microvm.nix?ref=main";
     #   inputs.flake-utils.follows = "flake-utils";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-    # nix = {
-    #   url = "git+https://github.com/NixOS/nix?ref=latest-release";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    nix = {
+      url = "git+https://github.com/NixOS/nix?ref=latest-release";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-artwork = {
       url = "git+https://github.com/NixOS/nixos-artwork?ref=master";
       flake = false;
@@ -59,13 +53,10 @@
       url = "git+https://github.com/NixOS/nixos-hardware?ref=master";
     };
     nixpkgs = {
-      url = "git+https://github.com/NixOS/nixpkgs?ref=nixos-unstable"; # TODO: nixos-23.05
+      url = "git+https://github.com/NixOS/nixpkgs?ref=nixos-23.05";
     };
-    # nur = {
-    #   url = "git+https://github.com/nix-community/NUR?ref=master";
-    # };
     rust-overlay = {
-      url = "git+https://github.com/oxalica/rust-overlay?ref=master";
+      url = "git+https://github.com/oxalica/rust-overlay?ref=stable";
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
