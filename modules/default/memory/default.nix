@@ -14,11 +14,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { self, ... } @ inputs:
+{ lib, ... }:
 {
   config.boot = {
-    kernel.sysctl."vm.swappiness" = 10;
-    runSize = "50%";
-    tmpOnTmpfs = false;
-    cleanTmpDir = true;
+    kernel.sysctl."vm.swappiness" = lib.mkDefault 10;
+    runSize = lib.mkDefault "50%";
   };
 }
