@@ -104,6 +104,7 @@ rec {
     builtins.mapAttrs
       (_: config: import "${nixpkgs}/nixos/lib/eval-config.nix" {
         system = null;
+        specialArgs.nixplusplus = self;
         modules = [
           self.nixosModules.default
           config
@@ -116,6 +117,7 @@ rec {
   asConfig' = { path, apply ? (_: x: x) }:
     import "${nixpkgs}/nixos/lib/eval-config.nix" {
       system = null;
+      specialArgs.nixplusplus = self;
       modules = [
         self.nixosModules.default
         (apply (getName path) (import path))
@@ -203,6 +205,7 @@ rec {
     let
       buildConfig = module: import "${nixpkgs}/nixos/lib/eval-config.nix" {
         system = null;
+        specialArgs.nixplusplus = self;
         modules = [ self.nixosModules.default module ];
       };
       baseConfig = (apply (getName path) (import path));
