@@ -20,7 +20,6 @@ self.lib.import.asModules' {
     imports = [ (module inputs) ];
     meta = {
       inherit (self.lib.meta) maintainers;
-      doc = ./. + "/${name}/README.md";
     };
   };
 }
