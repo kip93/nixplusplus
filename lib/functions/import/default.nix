@@ -222,34 +222,41 @@ rec {
 
       packages =
         let
-          packages = self.lib.forEachSystem' self.lib.supportedSystems'.linux (localSystem: crossSystem:
-            let
-              crossConfig = buildConfig ({ config, lib, ... }: {
-                imports = [ baseConfig ];
-                nixpkgs.pkgs = lib.mkOverride 0 (import nixpkgs {
-                  inherit (config.nixpkgs)
-                    config
-                    overlays
-                    localSystem
-                    crossSystem
-                    ;
+          packages = self.lib.forEachSystem' self.lib.supportedSystems'.linux
+            (localSystem: crossSystem:
+              let
+                crossConfig = buildConfig ({ config, lib, ... }: {
+                  imports = [ baseConfig ];
+                  nixpkgs.pkgs = lib.mkOverride 0 (import nixpkgs {
+                    inherit (config.nixpkgs)
+                      config
+                      overlays
+                      ;
+                    inherit
+                      localSystem
+                      crossSystem
+                      ;
+                  });
+                  nixpkgs.hostPlatform = lib.mkOverride 0
+                    (lib.systems.elaborate crossSystem)
+                  ;
                 });
-              });
-              configTopLevel =
-                crossConfig.config.system.build.toplevel.overrideAttrs
-                  ({ name, ... }: {
-                    name = "${name}+${nixpkgs.lib.optionalString
-                      (localSystem != crossSystem)
-                      "${localSystem}+"
-                    }${crossSystem}";
-                  })
-              ;
+                configTopLevel =
+                  crossConfig.config.system.build.toplevel.overrideAttrs
+                    ({ name, ... }: {
+                      name = "${name}+${nixpkgs.lib.optionalString
+                        (localSystem != crossSystem)
+                        "${localSystem}+"
+                      }${crossSystem}";
+                    })
+                ;
 
-            in
-            configTopLevel.overrideAttrs (_: {
-              passthru.default = configTopLevel;
-            })
-          );
+              in
+              configTopLevel.overrideAttrs (_: {
+                passthru.default = configTopLevel;
+              })
+            )
+          ;
 
         in
         nixpkgs.lib.recursiveUpdate
