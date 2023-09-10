@@ -43,11 +43,14 @@
         self.lib.flakes.registry
       ;
 
-      nixPath = "nixpkgs=/run/nixpkgs";
+      nixPath = [ "nixpkgs=/run/flakes/nixpkgs" ];
     };
 
-    systemd.tmpfiles.rules =
-      "L+ /run/nixpkgs - - - - ${config.nix.registry.nixpkgs.flake}"
-    ;
+    systemd.tmpfiles.rules = [
+      "d /run/flakes 0755 0 0 0 -"
+    ] ++ (builtins.map
+      (name: "L+ /run/flakes/${name} - - - - ${self.lib.flakes.registry.${name}}")
+      (builtins.attrNames self.lib.flakes.registry)
+    );
   };
 }
