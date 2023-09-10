@@ -192,4 +192,69 @@ rec {
   asTemplates' = { path, apply ? (_: x: x) }:
     asAttrs' { inherit apply path; }
   ;
+
+  # This one is a bit different. Usually when it comes to NixOS configurations,
+  # these flakes only ever contain a sinle configuration and nothing else; and
+  # so with that assumption in mind I can do a hacky config cross compilation
+  # setup, by having also package settings alongside with a somewhat simplified
+  # structure (one fewer depth level).
+  asCrossConfig = path: asCrossConfig' { inherit path; };
+  asCrossConfig' = { path, apply ? (_: x: x) }:
+    let
+      buildConfig = module: import "${nixpkgs}/nixos/lib/eval-config.nix" {
+        system = null;
+        modules = [ self.nixosModules.default module ];
+      };
+      baseConfig = (apply (getName path) (import path));
+
+    in
+    {
+      nixosConfigurations =
+        let
+          nativeConfig = buildConfig baseConfig;
+          inherit (nativeConfig.config.networking) hostName;
+        in
+        { ${hostName} = nativeConfig; }
+      ;
+
+      packages =
+        let
+          packages = self.lib.forEachSystem' self.lib.supportedSystems'.linux (localSystem: crossSystem:
+            let
+              crossConfig = buildConfig ({ config, lib, ... }: {
+                imports = [ baseConfig ];
+                nixpkgs.pkgs = lib.mkOverride 0 (import nixpkgs {
+                  inherit (config.nixpkgs)
+                    config
+                    overlays
+                    localSystem
+                    crossSystem
+                    ;
+                });
+              });
+              configTopLevel =
+                crossConfig.config.system.build.toplevel.overrideAttrs
+                  ({ name, ... }: {
+                    name = "${name}+${nixpkgs.lib.optionalString
+                      (localSystem != crossSystem)
+                      "${localSystem}+"
+                    }${crossSystem}";
+                  })
+              ;
+
+            in
+            configTopLevel.overrideAttrs (_: {
+              passthru.default = configTopLevel;
+            })
+          );
+
+        in
+        nixpkgs.lib.recursiveUpdate
+          packages
+          (self.lib.forEachSystem self.lib.supportedSystems'.linux (system:
+            packages.${system}.${system}.passthru
+          ))
+      ;
+    }
+  ;
 }
