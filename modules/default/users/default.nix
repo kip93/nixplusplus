@@ -17,5 +17,7 @@
 { lib, ... }:
 {
   imports = [ home-manager.nixosModules.default ];
+  config.users.motd = "";
   config.users.mutableUsers = lib.mkOverride 0 false;
+  config.home-manager.useUserPackages = true;
 }
