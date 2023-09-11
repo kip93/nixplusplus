@@ -17,6 +17,7 @@
 {
   config.boot = {
     consoleLogLevel = 4; # Warn
+    kernelParams = [ "panic=5" ];
     kernelPatches = [{
       name = "nix++";
       patch = null;
