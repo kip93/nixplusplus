@@ -16,20 +16,20 @@
 { agenix, ... } @ inputs:
 { config, lib, ... }:
 let
-  secrets = config.nixplusplus.${builtins.baseNameOf ./.};
-  key = config.nixplusplus."${builtins.baseNameOf ./.}_key";
+  secrets = config.npp.${builtins.baseNameOf ./.};
+  key = config.npp."${builtins.baseNameOf ./.}_key";
 
 in
 {
   imports = [ agenix.nixosModules.age ];
 
-  options.nixplusplus."${builtins.baseNameOf ./.}_key" = with lib; mkOption {
+  options.npp."${builtins.baseNameOf ./.}_key" = with lib; mkOption {
     type = types.path;
     description = mdDoc ''
       Path to SSH key to be used to decrypt secrets.
     '';
   };
-  options.nixplusplus.${builtins.baseNameOf ./.} = with lib; mkOption {
+  options.npp.${builtins.baseNameOf ./.} = with lib; mkOption {
     type = types.attrsOf (types.submodule ({ ... } @ secret: {
       options = {
         file = mkOption {

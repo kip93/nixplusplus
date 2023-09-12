@@ -22,8 +22,8 @@ pkgs.nixosTest {
       imports = with self.nixosModules; [ secrets backup ];
       virtualisation.graphics = false;
 
-      nixplusplus.secrets.key = "/etc/nixos/agenix.key";
-      nixplusplus.backup = {
+      npp.secrets_key = "/etc/nixos/agenix.key";
+      npp.backup = {
         passwordFile = ./backup.password.age;
         sshConfig = ./backup.sshconfig.age;
         sshKey = ./backup.sshkey.age;

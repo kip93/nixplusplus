@@ -23,15 +23,15 @@ pkgs.nixosTest {
         imports = with self.nixosModules; [ nix-gc ];
         virtualisation.graphics = false;
         virtualisation.additionalPaths = with pkgs; [ hello ];
-        nixplusplus.nix-gc = { schedule = "@0"; };
+        npp.nix-gc = { schedule = "@0"; };
       };
 
     in
     {
-      machine1 = { imports = [ common ]; nixplusplus.nix-gc = { }; };
-      machine2 = { imports = [ common ]; nixplusplus.nix-gc = { last = 10; }; };
-      machine3 = { imports = [ common ]; nixplusplus.nix-gc = { days = 10; }; };
-      machine4 = { imports = [ common ]; nixplusplus.nix-gc = { last = 0; days = 0; }; };
+      machine1 = { imports = [ common ]; npp.nix-gc = { }; };
+      machine2 = { imports = [ common ]; npp.nix-gc = { last = 10; }; };
+      machine3 = { imports = [ common ]; npp.nix-gc = { days = 10; }; };
+      machine4 = { imports = [ common ]; npp.nix-gc = { last = 0; days = 0; }; };
     };
 
   testScript = with pkgs; ''
@@ -46,7 +46,7 @@ pkgs.nixosTest {
       machine.succeed("ln -sf /dev/null /nix/var/nix/gcroots/auto/foo/bar")
       machine.succeed("ln -sf /dev/null /nix/var/nix/gcroots/auto/bar/foo")
 
-      machine.systemctl("start nixplusplus_nix-gc.service")
+      machine.systemctl("start npp_nix-gc.service")
 
     machine1.succeed("[ $(nix-env --list-generations | wc -l) -eq 54 ]")
     machine2.succeed("[ $(nix-env --list-generations | wc -l) -eq 54 ]")

@@ -16,12 +16,12 @@
 { ... } @ inputs:
 { config, lib, options, ... }:
 let
-  cfg = config.nixplusplus.${builtins.baseNameOf ./.};
-  cfg_secrets = config.nixplusplus.secrets.secrets;
+  cfg = config.npp.${builtins.baseNameOf ./.};
+  cfg_secrets = config.npp.secrets;
 
 in
 {
-  options.nixplusplus.${builtins.baseNameOf ./.} = with lib; {
+  options.npp.${builtins.baseNameOf ./.} = with lib; {
     user = mkOption {
       type = types.singleLineStr;
       description = mdDoc ''
@@ -176,15 +176,15 @@ in
     assertions = [
       {
         # Check on requirements.
-        assertion = options.nixplusplus ? secrets;
+        assertion = options.npp ? secrets;
         message = ''
-          `nixplusplus.nixosModules.secrets` module not installed, which is needed for
-          decrypting secrets.
+          `npp.nixosModules.secrets` module not installed, which is needed for decrypting
+          secrets.
         '';
       }
     ];
 
-    nixplusplus.secrets.secrets = {
+    npp.secrets = {
       "backup.password" = { file = cfg.passwordFile; owner = cfg.user; };
       "backup.sshconfig" = { file = cfg.sshConfig; owner = cfg.user; };
       "backup.sshkey" = { file = cfg.sshKey; owner = cfg.user; };

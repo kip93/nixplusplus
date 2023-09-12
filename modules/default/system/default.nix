@@ -63,7 +63,7 @@
         let rev = config.system.configurationRevision; in
         lib.optionalString (toString rev != "") ".${rev}"
       }";
-      tags = [ "nixplusplus" ];
+      tags = [ "npp" ];
     };
   };
 }

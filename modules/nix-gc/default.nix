@@ -16,11 +16,11 @@
 { self, ... } @ inputs:
 { config, lib, pkgs, ... }:
 let
-  cfg = config.nixplusplus.${builtins.baseNameOf ./.};
+  cfg = config.npp.${builtins.baseNameOf ./.};
 
 in
 {
-  options.nixplusplus.${builtins.baseNameOf ./.} = with lib; {
+  options.npp.${builtins.baseNameOf ./.} = with lib; {
     schedule = mkOption {
       type = types.nonEmptyStr;
       description = mdDoc ''
@@ -56,18 +56,18 @@ in
 
     systemd = {
       # Timer that will trigger the clean up.
-      timers.nixplusplus_nix-gc = {
+      timers.npp_nix-gc = {
         enable = true;
         description = "[ nix++ ] Automatic Nix GC - timer";
         wantedBy = [ "multi-user.target" ];
         timerConfig = {
           OnCalendar = cfg.schedule;
-          Unit = "nixplusplus_nix-gc.service";
+          Unit = "npp_nix-gc.service";
         };
       };
 
       # Service that will do the actual clean up.
-      services.nixplusplus_nix-gc = {
+      services.npp_nix-gc = {
         enable = true;
         description = "[ nix++ ] Automatic Nix GC";
         wantedBy = [ ]; # Will be triggered by the timer above.
