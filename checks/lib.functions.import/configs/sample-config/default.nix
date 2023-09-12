@@ -13,11 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{
-  modules = [
-    ({ modulesPath, ... }: {
-      imports = [ "${modulesPath}/profiles/demo.nix" ];
-      nixpkgs.hostPlatform.config = "aarch64-unknown-linux-gnu";
-    })
-  ];
-}
+({ modulesPath, ... }: {
+  imports = [ "${modulesPath}/profiles/demo.nix" ];
+  nixpkgs.hostPlatform.config = "aarch64-unknown-linux-gnu";
+})
