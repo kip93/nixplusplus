@@ -17,5 +17,10 @@
 {
   # A collection of flakes, taken from the inputs of this flake. Useful for
   # overriding NixOS default ones.
-  flakes.registry = (builtins.removeAttrs inputs [ "self" ]) // { nixplusplus = self; };
+  flakes.registry = (builtins.removeAttrs inputs [ "self" ]) // {
+    # Rename self into something actually useful.
+    nixplusplus = self;
+    # And alias it because nixplusplus is too long.
+    npp = self;
+  };
 }
