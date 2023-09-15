@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, self, ... } @ inputs:
+{ devenv, nixpkgs, self, ... } @ inputs:
 let
   # The use of `unsafeDiscardStringContext` is a technicality, since if the path
   # is on the nix store the basename will remember that. This breaks the
@@ -94,6 +94,17 @@ rec {
     self.lib.forEachSupportedSystem (system: asAttrs' {
       inherit path system;
       apply = name: apply name system;
+    })
+  ;
+
+  # Locate importable paths in a directory, and import them as dev shells.
+  asShells = path: asShells' { inherit path; };
+  asShells' = { path, apply ? (_: _: x: x) }:
+    self.lib.forEachSupportedSystem (system: asAttrs' {
+      inherit path system;
+      apply = name: shell:
+        devenv.lib.mkShell (apply name system shell)
+      ;
     })
   ;
 
