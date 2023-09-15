@@ -2,23 +2,49 @@
   "nodes": {
     "agenix": {
       "inputs": {
+        "darwin": "darwin",
+        "home-manager": [
+          "home-manager"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1664140963,
-        "narHash": "sha256-pFxDtOLduRFlol0Y4ShE+soRQX4kbhaCNBtDOvx7ykw=",
-        "ref": "refs/tags/0.13.0",
-        "rev": "9c9fbfb94b2d545c7f0b78da0254ea0041595795",
-        "revCount": 153,
+        "lastModified": 1694733633,
+        "narHash": "sha256-/o/OubAsPMbxqru59tLlWzUI7LBNDaoW4rFwQ2Smxcg=",
+        "ref": "refs/tags/0.14.0",
+        "rev": "50cba110ed27578a644812b3dba2c8910677a148",
+        "revCount": 252,
         "type": "git",
         "url": "https://github.com/ryantm/agenix"
       },
       "original": {
-        "ref": "refs/tags/0.13.0",
+        "ref": "refs/tags/0.14.0",
         "type": "git",
         "url": "https://github.com/ryantm/agenix"
+      }
+    },
+    "darwin": {
+      "inputs": {
+        "nixpkgs": [
+          "agenix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1694497842,
+        "narHash": "sha256-z03v/m0OwcLBok97KcUgMl8ZFw5Xwsi2z+n6nL7JdXY=",
+        "owner": "lnl7",
+        "repo": "nix-darwin",
+        "rev": "4496ab26628c5f43d2a5c577a06683c753e32fe2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lnl7",
+        "ref": "master",
+        "repo": "nix-darwin",
+        "type": "github"
       }
     },
     "flake-compat": {

@@ -18,8 +18,8 @@
 
   inputs = {
     agenix = {
-      url = "git+https://github.com/ryantm/agenix?ref=refs/tags/0.13.0";
-      # inputs.home-manager.follows = "home-manager"; # TODO Enable for next release
+      url = "git+https://github.com/ryantm/agenix?ref=refs/tags/0.14.0";
+      inputs.home-manager.follows = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils = {
