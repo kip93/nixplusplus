@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, pkgs, self, system, ... } @ args:
+{ nixpkgs, npppkgs, pkgs, self, ... } @ args:
 pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
 
@@ -21,7 +21,7 @@ pkgs.nixosTest {
     machine = { pkgs, ... }: {
       virtualisation.graphics = false;
       virtualisation.additionalPaths = with pkgs; [ hello ];
-      environment.systemPackages = with self.packages.${system}; [ nix-gc ];
+      environment.systemPackages = with npppkgs; [ nix-gc ];
       nix = {
         settings = {
           experimental-features = [ "nix-command" "flakes" ];

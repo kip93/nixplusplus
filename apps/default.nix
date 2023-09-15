@@ -20,6 +20,7 @@ self.lib.import.asApps' {
     (app (inputs // {
       inherit system;
       inherit (self.lib.pkgs.${system}.${system}) pkgs;
+      npppkgs = self.packages.${system}.${system};
     })).overrideAttrs (super: {
       meta = (super.meta or { }) // self.lib.meta;
     })

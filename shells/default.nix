@@ -20,6 +20,7 @@ self.lib.import.asShells' {
     shell (inputs // {
       inherit system;
       inherit (self.lib.pkgs.${system}.${system}) pkgs;
+      npppkgs = self.packages.${system}.${system};
     })
   ;
 }

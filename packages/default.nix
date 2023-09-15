@@ -20,6 +20,7 @@ self.lib.import.asPackages' {
     (package (inputs // {
       inherit (self.lib.pkgs.${localSystem}.${crossSystem}) pkgs;
       inherit localSystem crossSystem;
+      npppkgs = self.packages.${localSystem}.${crossSystem};
     })).overrideAttrs (super: {
       meta = super.meta // {
         inherit (self.lib.meta) homepage maintainers;

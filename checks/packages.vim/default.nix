@@ -13,8 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ pkgs, self, system, ... } @ args:
-with self.packages.${system};
+{ npppkgs, pkgs, self, system, ... } @ args:
+with npppkgs;
 pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
 
@@ -23,7 +23,7 @@ pkgs.nixosTest {
       virtualisation.graphics = false;
       environment.systemPackages = [ vim-minimal ];
     };
-  } // (pkgs.lib.optionalAttrs (self.packages.${system} ? vim-full)) {
+  } // (pkgs.lib.optionalAttrs (npppkgs ? vim-full)) {
     machine2 = { pkgs, ... }: {
       virtualisation.graphics = false;
       environment.systemPackages = [ vim ];
@@ -41,7 +41,7 @@ pkgs.nixosTest {
 
     machine1.shutdown()
 
-    ${pkgs.lib.optionalString (self.packages.${system} ? vim-full) ''
+    ${pkgs.lib.optionalString (npppkgs ? vim-full) ''
       machine2.start()
 
       machine2.succeed('[ "$(realpath "$(which v)")"    == "$(realpath "${vim-full}/bin/nvim")" ]')
