@@ -22,8 +22,26 @@
       inputs.home-manager.follows = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    devenv = {
+      url = "git+https://github.com/cachix/devenv?ref=refs/tags/latest";
+      inputs.flake-compat.follows = "flake-compat";
+      inputs.nix.follows = "nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.pre-commit-hooks.follows = "pre-commit-hooks";
+    };
+    devour = {
+      url = "git+https://github.com/srid/devour-flake?ref=refs/tags/v3";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake.follows = "";
+    };
     flake-utils = {
       url = "git+https://github.com/numtide/flake-utils?ref=main";
+      inputs.systems.follows = "systems";
+    };
+    flake-compat = {
+      url = "git+https://github.com/edolstra/flake-compat?ref=master";
+      flake = false;
     };
     gitignore-nix = {
       url = "git+https://github.com/hercules-ci/gitignore.nix?ref=master";
@@ -43,6 +61,7 @@
     # };
     nix = {
       url = "git+https://github.com/NixOS/nix?ref=latest-release";
+      inputs.flake-compat.follows = "flake-compat";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-artwork = {
@@ -55,10 +74,21 @@
     nixpkgs = {
       url = "git+https://github.com/NixOS/nixpkgs?ref=nixos-23.05";
     };
+    pre-commit-hooks = {
+      url = "git+https://github.com/cachix/pre-commit-hooks.nix?ref=master";
+      inputs.flake-compat.follows = "flake-compat";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.gitignore.follows = "gitignore-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     rust-overlay = {
       url = "git+https://github.com/oxalica/rust-overlay?ref=stable";
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    systems = {
+      url = "path:./systems.nix";
+      flake = false;
     };
   };
 
