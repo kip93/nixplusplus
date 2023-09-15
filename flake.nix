@@ -102,4 +102,15 @@
     packages = import ./packages inputs;
     templates = import ./templates inputs;
   };
+
+  nixConfig = {
+    extra-substituters = [
+      "https://devenv.cachix.org"
+      "https://kip93.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+      "kip93.cachix.org-1:SSwmPNc/WrxSIMKREDw/cisT17XYLB14sEkx1HMXGwQ="
+    ];
+  };
 }
