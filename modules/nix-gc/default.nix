@@ -75,7 +75,7 @@ in
           Type = "oneshot";
           User = "root";
           ExecStart =
-            with self.packages.${pkgs.buildPlatform.system}.${pkgs.targetPlatform.system};
+            with self.packages.${pkgs.buildPlatform.system}.${pkgs.hostPlatform.system};
             "${nix-gc}/bin/nix-gc -l${toString cfg.last} -d${toString cfg.days}"
           ;
         };
