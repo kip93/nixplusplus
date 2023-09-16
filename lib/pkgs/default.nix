@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, self, ... } @ inputs:
+{ nix, nixpkgs, self, ... } @ inputs:
 {
   # A shorthand expression to get cross-compiled packages. First key is the
   # build machine; the second, the target one.
@@ -27,6 +27,6 @@
       nixpkgs.lib.systems.parse.tripleFromSystem
         (nixpkgs.lib.systems.parse.mkSystemFromString crossSystem)
     ;
-    overlays = with self.overlays; [ default ];
+    overlays = [ self.overlays.default nix.overlays.default ];
   });
 }
