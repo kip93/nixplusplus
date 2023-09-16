@@ -23,7 +23,7 @@ writeShellApplication {
     findutils
     gawk
     gnused
-    (nix.override { enableDocumentation = false; })
+    nix
   ];
   text = ''
     # Defaults
