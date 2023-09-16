@@ -15,7 +15,7 @@
 
 { pkgs, ... } @ args:
 with pkgs;
-writeText "statix-config" ''
+writeTextDir "statix.toml" ''
   disabled = [
     'redundant_pattern_bind',
   ]
