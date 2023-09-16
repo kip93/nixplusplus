@@ -111,6 +111,7 @@
     extra-trusted-public-keys = [
       "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
       "kip93.cachix.org-1:SSwmPNc/WrxSIMKREDw/cisT17XYLB14sEkx1HMXGwQ="
+      "k93-1:wHbMV55yrJjYJ8HaxUp+WelU79KYJnil+cfSl3dtn24="
     ];
   };
 }
