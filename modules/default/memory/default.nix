@@ -16,8 +16,10 @@
 { self, ... } @ inputs:
 { config, lib, ... }:
 {
-  config.boot = lib.optionalAttrs (!config.boot.isContainer) {
-    kernel.sysctl."vm.swappiness" = lib.mkDefault 10;
+  config.boot = {
+    kernel = lib.optionalAttrs (!config.boot.isContainer) {
+      sysctl."vm.swappiness" = lib.mkDefault 10;
+    };
     runSize = lib.mkDefault "50%";
   };
 }

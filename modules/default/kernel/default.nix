@@ -16,10 +16,10 @@
 { self, ... } @ inputs:
 { config, lib, ... }:
 {
-  config.boot = lib.optionalAttrs (!config.boot.isContainer) {
+  config.boot = {
     consoleLogLevel = 4; # Warn
-    kernelParams = [ "panic=5" ];
-    kernelPatches = [{
+    kernelParams = lib.optionals (!config.boot.isContainer) [ "panic=5" ];
+    kernelPatches = lib.optionals (!config.boot.isContainer) [{
       name = "nix++";
       patch = null;
       extraConfig = ''
