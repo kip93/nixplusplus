@@ -87,7 +87,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     systems = {
-      url = "path:./systems.nix";
+      url = "path:systems.nix";
       flake = false;
     };
   };

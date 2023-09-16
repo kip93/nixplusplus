@@ -436,12 +436,12 @@
       "flake": false,
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-ST+kthcpjwSWNYOhwwna+9whM6U55EEPs3WxTmEGKWk=",
-        "path": "./systems.nix",
+        "narHash": "sha256-iv1/KHlEi0XEbBBGKifxJ+GBjGI+3oOdYF4G5gfwvp4=",
+        "path": "systems.nix",
         "type": "path"
       },
       "original": {
-        "path": "./systems.nix",
+        "path": "systems.nix",
         "type": "path"
       }
     }
