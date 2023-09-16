@@ -219,7 +219,7 @@ rec {
         specialArgs = self.lib.flakes.registry;
         modules = [ self.nixosModules.default module ];
       };
-      baseConfig = (apply (getName path) (import path));
+      baseConfig = apply (getName path) (import path);
 
     in
     {

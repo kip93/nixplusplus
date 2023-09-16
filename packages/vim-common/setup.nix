@@ -28,11 +28,11 @@ let
     git
     git-lfs
     openssh
-  ] ++ (lib.optionals (features.coc) ([
+  ] ++ (lib.optionals features.coc ([
     # CoC
     bat
     nodejs
-  ] ++ ([
+  ] ++ [
     # Bash
     shellcheck
     # Go
@@ -55,7 +55,7 @@ let
     '')
     # Rust
     rust-analyzer
-  ]))));
+  ])));
 
   PLUGINS = builtins.filter (x: self.lib.isSupported x pkgs.system) (with vimPlugins; [
     # Theme
@@ -86,15 +86,15 @@ let
     thesaurus_query-vim
     vim-abolish
     vim-pencil
-  ] ++ (lib.optionals (features.nerdtree) [
+  ] ++ (lib.optionals features.nerdtree [
     # File tree
     nerdtree
     nerdtree-git-plugin
     nerdtree-syntax-highlight
-  ]) ++ (lib.optionals (features.startify) [
+  ]) ++ (lib.optionals features.startify [
     # Start page
     vim-startify
-  ]) ++ (lib.optionals (features.coc) [
+  ]) ++ (lib.optionals features.coc [
     # CoC
     coc-nvim
     coc-fzf
