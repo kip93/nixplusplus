@@ -1,5 +1,6 @@
 /.pre-commit-config.yaml
 /.devenv/**/*
+/.direnv/**/*
 /**/result*
 /**/*[~#]
 /**/*.sw[a-p]
