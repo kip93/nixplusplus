@@ -14,9 +14,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { self, ... } @ inputs:
-{ lib, ... }:
+{ config, lib, ... }:
 {
-  config.boot = {
+  config.boot = lib.optionalAttrs (!config.boot.isContainer) {
     kernel.sysctl."vm.swappiness" = lib.mkDefault 10;
     runSize = lib.mkDefault "50%";
   };

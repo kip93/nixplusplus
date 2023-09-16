@@ -14,13 +14,13 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { ... } @ inputs:
-{ lib, ... }:
+{ config, lib, ... }:
 {
   config.boot.loader = {
     timeout = lib.mkDefault 2;
     grub.enable = lib.mkDefault false;
     systemd-boot = {
-      enable = lib.mkDefault true;
+      enable = lib.mkDefault (!config.boot.isContainer);
       editor = false;
       consoleMode = "auto";
     };

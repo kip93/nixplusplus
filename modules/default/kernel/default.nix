@@ -14,8 +14,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { self, ... } @ inputs:
+{ config, lib, ... }:
 {
-  config.boot = {
+  config.boot = lib.optionalAttrs (!config.boot.isContainer) {
     consoleLogLevel = 4; # Warn
     kernelParams = [ "panic=5" ];
     kernelPatches = [{
