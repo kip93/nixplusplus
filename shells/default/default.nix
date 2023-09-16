@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ pkgs, self, ... } @ args:
+{ npppkgs, pkgs, self, ... } @ args:
 {
   inherit pkgs;
   inputs = builtins.removeAttrs args [ "pkgs" "system" ];
@@ -23,6 +23,8 @@
       packages = with pkgs; [ cacert coreutils nixVersions.unstable ];
       enterShell = ''
         export PS1="\[\e[0m\][\[\e[36m\] nix++ \[\e[0m\]] \[\e[1m\]\$\[\e[0m\] "
+        EDITOR="''${EDITOR:-${npppkgs.vim-minimal}/bin/vim}" # Default to vim
+        export EDITOR
       '';
     })
   ] ++ (self.lib.import.asList ./.);
