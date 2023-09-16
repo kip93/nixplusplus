@@ -19,7 +19,7 @@
   inputs = builtins.removeAttrs args [ "pkgs" "system" ];
   modules = [
     # Basics
-    ({ pkgs, ...}: {
+    ({ pkgs, ... }: {
       packages = with pkgs; [ cacert coreutils nixVersions.unstable ];
       enterShell = ''
         export PS1="\[\e[0m\][\[\e[36m\] nix++ \[\e[0m\]] \[\e[1m\]\$\[\e[0m\] "
