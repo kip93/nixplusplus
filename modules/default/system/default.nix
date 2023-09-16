@@ -32,11 +32,14 @@
         substituters = [
           "https://cache.nixos.org/"
           "https://nix-community.cachix.org/"
-        ] ++ self.nixConfig.extra-substituters;
+          "https://kip93.cachix.org"
+        ];
         trusted-public-keys = [
           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        ] ++ self.nixConfig.extra-trusted-public-keys;
+          "kip93.cachix.org-1:SSwmPNc/WrxSIMKREDw/cisT17XYLB14sEkx1HMXGwQ="
+          "k93-1:wHbMV55yrJjYJ8HaxUp+WelU79KYJnil+cfSl3dtn24="
+        ];
       };
       registry = builtins.mapAttrs
         (_: flake: { inherit flake; })
