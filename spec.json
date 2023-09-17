@@ -3,7 +3,7 @@
     "hidden": false,
     "description": "Nix++",
     "nixexprinput": "src",
-    "nixexprpath": "release.nix",
+    "nixexprpath": "flake.nix",
     "checkinterval": 900,
     "schedulingshares": 100,
     "enableemail": false,
