@@ -51,6 +51,11 @@
       url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hydra = {
+      url = "github:NixOS/hydra/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nix.follows = "nix";
+    };
     impermanence = {
       url = "github:nix-community/impermanence/master";
     };

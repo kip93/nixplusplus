@@ -13,11 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nix, nixpkgs, self, ... } @ inputs:
+{ nixpkgs, self, ... } @ inputs:
 { config, lib, ... }:
 {
   config = {
-    nixpkgs.overlays = [ self.overlays.default nix.overlays.default ];
+    nixpkgs.overlays = [ self.overlays.default ];
     nix = {
       settings = {
         allowed-users = [ "*" ];

@@ -201,6 +201,30 @@
         "type": "github"
       }
     },
+    "hydra": {
+      "inputs": {
+        "nix": [
+          "nix"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1694272663,
+        "narHash": "sha256-dfb3wV6GriOzarXl1WQEUA0QxhgTmlZ36sozW8x+je8=",
+        "owner": "NixOS",
+        "repo": "hydra",
+        "rev": "c1a5ff3959f8d3d0f13295d29a02084e14dff735",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "master",
+        "repo": "hydra",
+        "type": "github"
+      }
+    },
     "impermanence": {
       "locked": {
         "lastModified": 1694622745,
@@ -398,6 +422,7 @@
         "flake-utils": "flake-utils",
         "gitignore-nix": "gitignore-nix",
         "home-manager": "home-manager",
+        "hydra": "hydra",
         "impermanence": "impermanence",
         "nix": "nix",
         "nixos-artwork": "nixos-artwork",
