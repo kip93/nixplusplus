@@ -12,7 +12,7 @@
         },
         "nixpkgs": {
             "type": "git",
-            "value": "git://github.com/NixOS/nixpkgs.git nixpkgs-unstable"
+            "value": "https://github.com/NixOS/nixpkgs.git nixpkgs-unstable"
         }
     }
 }
