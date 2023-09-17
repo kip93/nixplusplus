@@ -7,7 +7,7 @@
     "checkinterval": 900,
     "schedulingshares": 100,
     "enableemail": false,
-    "enable_dynamic_run_command": true,
+    "enable_dynamic_run_command": false,
     "emailoverride": "",
     "keepnr": 10,
     "inputs": {
