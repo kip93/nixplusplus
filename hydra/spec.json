@@ -1,0 +1,10 @@
+{
+    "main": {
+        "type": 1,
+        "enabled": true,
+        "hidden": false,
+        "flake": "git+ssh://git.kip93.net/nix++",
+        "checkinterval": 900,
+        "keepnr": 10
+    }
+}
