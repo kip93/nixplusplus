@@ -96,6 +96,7 @@
     apps = import ./apps inputs;
     devShells = import ./shells inputs;
     checks = import ./checks inputs;
+    hydraJobs = import ./hydra inputs;
     lib = import ./lib inputs;
     nixosModules = import ./modules inputs;
     overlays = import ./overlays inputs;

@@ -1,0 +1,20 @@
+{
+    "enabled": 1,
+    "hidden": false,
+    "description": "Nix++",
+    "nixexprinput": "src",
+    "nixexprpath": "release.nix",
+    "checkinterval": 900,
+    "schedulingshares": 100,
+    "enableemail": false,
+    "enable_dynamic_run_command": false,
+    "emailoverride": "",
+    "keepnr": 10,
+    "inputs": {
+        "src": {
+            "type": "git",
+            "value": "ssh://git.kip93.net/nix++",
+            "emailresponsible": false
+        }
+    }
+}
