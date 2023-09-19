@@ -183,11 +183,12 @@ rec {
             apply = name: apply name localSystem crossSystem;
           })
         ).overrideAttrs (super: {
-          passthru = super.passthru.entries // {
+          passthru = super.passthru.entries // rec {
             _all = self.lib.pkgs.${localSystem}.${crossSystem}.linkFarm
               "all-packages-meta-package"
               super.passthru.entries
             ;
+            ${if !(super.passthru.entries ? default) then "default" else null} = _all;
           };
         })
       );
