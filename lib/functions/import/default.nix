@@ -218,7 +218,14 @@ rec {
       buildConfig = module: import "${nixpkgs}/nixos/lib/eval-config.nix" {
         system = null;
         specialArgs = self.lib.flakes.registry;
-        modules = [ self.nixosModules.default module ];
+        modules = [
+          # Have a default system, for when not building via the packages below
+          ({ lib, ... }: {
+            nixpkgs.localSystem = lib.mkDefault "x86_64-linux";
+          })
+          self.nixosModules.default
+          module
+        ];
       };
       baseConfig = apply (getName path) (import path);
 
@@ -253,20 +260,15 @@ rec {
                     (lib.systems.elaborate crossSystem)
                   ;
                 });
-                configTopLevel =
-                  crossConfig.config.system.build.toplevel.overrideAttrs
-                    ({ name, ... }: {
-                      name = "${name}+${nixpkgs.lib.optionalString
-                        (localSystem != crossSystem)
-                        "${localSystem}+"
-                      }${crossSystem}";
-                    })
-                ;
 
               in
-              configTopLevel.overrideAttrs (_: {
-                passthru.default = configTopLevel;
-              })
+              crossConfig.config.system.build.toplevel.overrideAttrs
+                ({ name, ... }: {
+                  name = "${name}+${nixpkgs.lib.optionalString
+                    (localSystem != crossSystem)
+                    "${localSystem}+"
+                  }${crossSystem}";
+                })
             )
           ;
 
@@ -274,7 +276,11 @@ rec {
         nixpkgs.lib.recursiveUpdate
           packages
           (self.lib.forEachSystem self.lib.supportedSystems'.linux (system:
-            packages.${system}.${system}.passthru
+            {
+              default = packages.${system}.${system}.overrideAttrs (_: {
+                passthru = packages.${system};
+              });
+            }
           ))
       ;
     }

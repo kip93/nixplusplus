@@ -13,5 +13,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ self, ... } @ inputs:
-self.lib.import.asTemplates ./.
+{
+  path = ./src;
+  description = ''
+    Flake setup for a single NixOS configuration.
+
+    Allows for both native and cross compilation, as well as local and remote
+    deployments.
+  '';
+}
