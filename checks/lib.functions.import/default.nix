@@ -98,7 +98,7 @@ pkgs.nixTest {
           (builtins.attrNames apps)
           self.lib.supportedSystems
       ;
-      expected = [ ];
+      expected = [ "armv6l-linux" ]; # Can only cross compile to armv6l-linux
     };
 
     checks = {
@@ -118,7 +118,7 @@ pkgs.nixTest {
           (builtins.attrNames checks)
           self.lib.supportedSystems
       ;
-      expected = [ ];
+      expected = [ "armv6l-linux" ]; # Can only cross compile to armv6l-linux
     };
 
     configs = {
@@ -211,7 +211,7 @@ pkgs.nixTest {
         packages.x86_64-linux ? aarch64-linux
         &&
         !packages.x86_64-linux ? aarch64-darwin
-        && # TODO NixOS/nixpkgs#180771
+        && # TODO nixpkgs#180771
         !packages.aarch64-darwin ? x86_64-darwin
       ;
       expected = true;

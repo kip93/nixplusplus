@@ -22,6 +22,7 @@ rec {
     (system: builtins.head (builtins.match ".*-(.*)" system))
     supportedSystems
   ;
+  # Systems I personally own and use, so they should be somewhat well tested.
   _systems = [
     # Linux
     "x86_64-linux"
@@ -33,27 +34,29 @@ rec {
   _extraSystems = [
     # Linux
     "i686-linux"
-    "armv6l-linux"
+    "armv6l-linux" # cross-compile only
     # MacOS
     "x86_64-darwin"
     "aarch64-darwin"
   ];
 
-  # Maps a function over each given system.
+  # Maps a function over each given system. Also removes on `armv6l-linux` since
+  # it seems to not work due to rustc not being available (nixpkgs#70411).
   # For a given `x`, it returns `{ <system> = x; }`.
   forEachSystem = systems: mapFunction:
     builtins.listToAttrs
       (builtins.map
         (name: { inherit name; value = mapFunction name; })
-        systems
+        (builtins.filter (x: x != "armv6l-linux") systems)
       )
   ;
 
   # Maps a function over each of the elements of the given system matrix.
   # Makes sure only allow mappings for the differents archs while avoiding
   # mixing different operating systems, since those can cause a fuck-ton of
-  # issues. Additionally, given https://github.com/NixOS/nixpkgs/issues/180771,
-  # I also had to disable `aarch64-darwin -> x86_64-darwin`.
+  # issues. Additionally, given nixpkgs#180771, I also had to disable
+  # `aarch64-darwin -> x86_64-darwin`. Also disables building on `armv6l-linux`
+  # since it seems to not work due to rustc not being available (nixpkgs#70411).
   # For a given `x`, it returns `{ <local>.<target> = x; }`.
   forEachSystem' = systems: mapFunction:
     builtins.listToAttrs
@@ -71,7 +74,9 @@ rec {
                   builtins.head (builtins.match ".*-(.*)" localSystem)
                   ==
                   builtins.head (builtins.match ".*-(.*)" crossSystem)
-                  && # TODO NixOS/nixpkgs#180771
+                  &&
+                  (localSystem != "armv6l-linux")
+                  && # TODO nixpkgs#180771
                   (localSystem != "aarch64-darwin" || crossSystem != "x86_64-darwin")
                 )
                 systems
