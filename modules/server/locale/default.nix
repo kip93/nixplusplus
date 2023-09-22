@@ -17,6 +17,6 @@
 {
   config = {
     console.keyMap = self.lib.mkDefault "us";
-    time.zone = self.lib.mkStrict "Etc/UTC";
+    time.timeZone = self.lib.mkStrict "Etc/UTC";
   };
 }
