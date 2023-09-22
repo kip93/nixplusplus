@@ -52,7 +52,7 @@ in
   };
 
   config = {
-    nix.gc.automatic = lib.mkForce false;
+    nix.gc.automatic = self.lib.mkForce false;
 
     systemd = {
       # Timer that will trigger the clean up.

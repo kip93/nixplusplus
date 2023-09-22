@@ -13,16 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ self, ... } @ inputs:
-{ config, ... }:
-{
-  config.boot.loader = {
-    timeout = self.lib.mkDefault 2;
-    grub.enable = self.lib.mkDefault false;
-    systemd-boot = {
-      enable = self.lib.mkDefault (!config.boot.isContainer);
-      editor = false;
-      consoleMode = "auto";
-    };
-  };
+{ nixpkgs, ... } @ inputs:
+rec {
+  # Create equivalents to nixpkgs override functions, but with a just ever so
+  # slightly different value, so that our values and those of nixpkgs have
+  # a clearer hirarchy.
+  inherit (nixpkgs.lib) mkOverride;
+  # Our defaults are higher priority than that of nixpkgs.
+  mkDefault = mkOverride 999; # nixpkgs set 1000
+  # Let user defined forced values take priority over ours.
+  mkForce = mkOverride 51; # nixpkgs sets 50
 }

@@ -21,7 +21,7 @@
       defaultPackages =
         with pkgs;
         with self.packages.${pkgs.buildPlatform.system}.${pkgs.hostPlatform.system};
-        lib.mkForce [
+        self.lib.mkForce [
           bash
           cacert
           coreutils-full

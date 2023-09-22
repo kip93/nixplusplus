@@ -220,9 +220,7 @@ rec {
         specialArgs = self.lib.flakes.registry;
         modules = [
           # Have a default system, for when not building via the packages below
-          ({ lib, ... }: {
-            nixpkgs.localSystem = lib.mkDefault "x86_64-linux";
-          })
+          { nixpkgs.localSystem = self.lib.mkDefault "x86_64-linux"; }
           self.nixosModules.default
           module
         ];
