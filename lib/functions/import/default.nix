@@ -242,9 +242,9 @@ rec {
           packages = self.lib.forEachSystem' self.lib.supportedSystems'.linux
             (localSystem: crossSystem:
               let
-                crossConfig = buildConfig ({ config, lib, ... }: {
+                crossConfig = buildConfig ({ config, ... }: {
                   imports = [ baseConfig ];
-                  nixpkgs.pkgs = lib.mkOverride 0 (import nixpkgs {
+                  nixpkgs.pkgs = self.lib.mkStrict (import nixpkgs {
                     inherit (config.nixpkgs)
                       config
                       overlays
@@ -254,7 +254,7 @@ rec {
                       crossSystem
                       ;
                   });
-                  nixpkgs.hostPlatform = lib.mkOverride 0
+                  nixpkgs.hostPlatform = self.lib.mkStrict
                     (lib.systems.elaborate crossSystem)
                   ;
                 });

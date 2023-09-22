@@ -23,4 +23,6 @@ rec {
   mkDefault = mkOverride 999; # nixpkgs set 1000
   # Let user defined forced values take priority over ours.
   mkForce = mkOverride 51; # nixpkgs sets 50
+  # Ignore any user configurations and set the value we ask.
+  mkStrict = mkOverride 0; # No nixpkgs equivalent.
 }

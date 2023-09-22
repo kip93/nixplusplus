@@ -14,10 +14,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { home-manager, self, ... } @ inputs:
-{ lib, ... }:
 {
   imports = [ home-manager.nixosModules.default ];
   config.users.motd = "";
-  config.users.mutableUsers = lib.mkOverride 0 false;
+  config.users.mutableUsers = self.lib.mkStrict false;
   config.home-manager.useUserPackages = true;
 }
