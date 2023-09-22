@@ -242,7 +242,7 @@ rec {
           packages = self.lib.forEachSystem' self.lib.supportedSystems'.linux
             (localSystem: crossSystem:
               let
-                crossConfig = buildConfig ({ config, ... }: {
+                crossConfig = buildConfig ({ config, lib, ... }: {
                   imports = [ baseConfig ];
                   nixpkgs.pkgs = self.lib.mkStrict (import nixpkgs {
                     inherit (config.nixpkgs)
