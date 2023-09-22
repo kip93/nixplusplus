@@ -1,6 +1,7 @@
 # Nix++
 
-An ever-growing opinionated collection of nix goodies, all available from a single neat flake.
+An ever-growing opinionated collection of nix goodies, all available from a
+single neat(-ish) flake.
 
 ## License
 
