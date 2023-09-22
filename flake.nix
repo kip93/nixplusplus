@@ -40,7 +40,7 @@
       inputs.systems.follows = "systems";
     };
     flake-compat = {
-      url = "github:edolstra/flake-compat/master";
+      url = "github:nix-community/flake-compat/master";
       flake = false;
     };
     gitignore-nix = {
