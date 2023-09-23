@@ -17,4 +17,5 @@ places. Just take your pick and let the magic flow through you:
 
 ## License
 
-Unless stated otherwise, everything here is licensed under [GPLv3+](./LICENSE.md).
+Unless stated otherwise, everything here is licensed under
+[GPLv3+](./LICENSE.md).
