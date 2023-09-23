@@ -67,7 +67,7 @@
       url = "github:NixOS/hydra/master";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        nix.follows = "nix";
+        # nix.follows = "nix"; # DON'T! See hydra#1182
       };
     };
     impermanence = {

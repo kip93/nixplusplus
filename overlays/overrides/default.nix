@@ -14,6 +14,23 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { hydra, nix, ... } @ inputs:
-final: prev: {
-  hydra_unstable = final.hydra;
-} // (hydra.overlays.default final prev) // (nix.overlays.default final prev)
+final: prev:
+let
+  # Avoid infinite recursion by renaming flakes
+  hydra' = hydra;
+  nix' = nix;
+in
+let
+  # A fake overlaid pkgs, to ensure that hydra uses it's own version of nix,
+  # due to hydra#1182
+  hydra_final = final // (hydra'.inputs.nix.overlays.default hydra_final prev);
+  # Get the relevant bits out of the provided overlays
+  inherit (hydra'.overlays.default hydra_final prev) hydra perlPackages;
+  inherit (nix'.overlays.default final prev) lowdown-nix nix;
+
+in
+{
+  # Expose the extracted packages into the overlay
+  inherit lowdown-nix nix;
+  hydra_unstable = hydra;
+}
