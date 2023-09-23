@@ -19,25 +19,33 @@
   inputs = {
     agenix = {
       url = "github:ryantm/agenix/0.14.0";
-      inputs.home-manager.follows = "home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        home-manager.follows = "home-manager";
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     devenv = {
       url = "github:cachix/devenv/latest";
-      inputs.flake-compat.follows = "flake-compat";
-      inputs.nix.follows = "nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.pre-commit-hooks.follows = "pre-commit-hooks";
+      inputs = {
+        flake-compat.follows = "flake-compat";
+        nix.follows = "nix";
+        nixpkgs.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+      };
     };
     devour = {
       url = "github:srid/devour-flake/v3";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.systems.follows = "systems";
-      inputs.flake.follows = "";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        systems.follows = "systems";
+        flake.follows = "";
+      };
     };
     flake-utils = {
       url = "github:numtide/flake-utils/main";
-      inputs.systems.follows = "systems";
+      inputs = {
+        systems.follows = "systems";
+      };
     };
     flake-compat = {
       url = "github:nix-community/flake-compat/master";
@@ -45,29 +53,39 @@
     };
     gitignore-nix = {
       url = "github:hercules-ci/gitignore.nix/master";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     home-manager = {
       url = "github:nix-community/home-manager/release-23.05";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     hydra = {
       url = "github:NixOS/hydra/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nix.follows = "nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nix.follows = "nix";
+      };
     };
     impermanence = {
       url = "github:nix-community/impermanence/master";
     };
     # microvm-nix = {
     #   url = "github:astro/microvm.nix/main";
-    #   inputs.flake-utils.follows = "flake-utils";
-    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs = {
+    #     flake-utils.follows = "flake-utils";
+    #     nixpkgs.follows = "nixpkgs";
+    #   };
     # };
     nix = {
       url = "github:NixOS/nix/latest-release";
-      inputs.flake-compat.follows = "flake-compat";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        flake-compat.follows = "flake-compat";
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     nixos-artwork = {
       url = "github:NixOS/nixos-artwork/master";
@@ -81,15 +99,19 @@
     };
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix/master";
-      inputs.flake-compat.follows = "flake-compat";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.gitignore.follows = "gitignore-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        flake-compat.follows = "flake-compat";
+        flake-utils.follows = "flake-utils";
+        gitignore.follows = "gitignore-nix";
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     rust-overlay = {
       url = "github:oxalica/rust-overlay/stable";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        flake-utils.follows = "flake-utils";
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     systems = {
       url = "path:systems.nix";

@@ -16,7 +16,9 @@
 { home-manager, self, ... } @ inputs:
 {
   imports = [ home-manager.nixosModules.default ];
-  config.users.motd = "";
-  config.users.mutableUsers = self.lib.mkStrict false;
-  config.home-manager.useUserPackages = true;
+  config = {
+    users.motd = "";
+    users.mutableUsers = self.lib.mkStrict false;
+    home-manager.useUserPackages = true;
+  };
 }

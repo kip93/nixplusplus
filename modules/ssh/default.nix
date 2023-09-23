@@ -19,42 +19,44 @@ let
 
 in
 {
-  # SSH server
-  services.openssh = {
-    enable = true;
-    ports = [ ports.openssh ];
-    openFirewall = true;
-    settings = {
-      # No password
-      ChallengeResponseAuthentication = self.lib.mkStrict "no";
-      PasswordAuthentication = self.lib.mkStrict false;
-      PermitRootLogin = self.lib.mkStrict "no";
-      UsePAM = self.lib.mkStrict "no";
+  config.services = {
+    # SSH server
+    openssh = {
+      enable = true;
+      ports = [ ports.openssh ];
+      openFirewall = true;
+      settings = {
+        # No password
+        ChallengeResponseAuthentication = self.lib.mkStrict "no";
+        PasswordAuthentication = self.lib.mkStrict false;
+        PermitRootLogin = self.lib.mkStrict "no";
+        UsePAM = self.lib.mkStrict "no";
 
-      # Only keys
-      AuthenticationMethods = self.lib.mkStrict "publickey";
-      PubkeyAuthentication = self.lib.mkStrict "yes";
+        # Only keys
+        AuthenticationMethods = self.lib.mkStrict "publickey";
+        PubkeyAuthentication = self.lib.mkStrict "yes";
 
-      # Kill inactive sessions
-      ClientAliveCountMax = 5;
-      ClientAliveInterval = 60;
+        # Kill inactive sessions
+        ClientAliveCountMax = 5;
+        ClientAliveInterval = 60;
+      };
     };
-  };
 
-  # Tarpit
-  services.endlessh-go = {
-    enable = true;
-    port = ports.endlessh;
-    openFirewall = true;
-    prometheus = { enable = true; port = ports.stats; };
-  };
+    # Tarpit
+    endlessh-go = {
+      enable = true;
+      port = ports.endlessh;
+      openFirewall = true;
+      prometheus = { enable = true; port = ports.stats; };
+    };
 
-  # Watchdog
-  services.fail2ban = {
-    enable = true;
-    # Be a bit more lenient by default (not much of an issue without password
-    # auths).
-    maxretry = 20;
-    bantime = null; # Ban forever
+    # Watchdog
+    fail2ban = {
+      enable = true;
+      # Be a bit more lenient by default (not much of an issue without password
+      # auths).
+      maxretry = 20;
+      bantime = null; # Ban forever
+    };
   };
 }
