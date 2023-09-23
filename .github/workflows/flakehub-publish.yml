@@ -1,0 +1,22 @@
+# TODO remove (https://github.com/DeterminateSystems/flakehub-push/issues/79)
+name: "Publish flake to FlakeHub"
+on: { push: { branches: [ "main" ] } }
+jobs:
+  flakehub-publish:
+    runs-on: "ubuntu-latest"
+    permissions: { id-token: "write", contents: "read" }
+    steps:
+      - uses: "actions/checkout@v3"
+      - uses: "DeterminateSystems/nix-installer-action@main"
+      - id: version
+        run: |
+          set -eu
+          timestamp=${{ github.event.commits[0].timestamp }}
+          minor="$(date -d "$timestamp" +%Y%m%d)"
+          printf 'minor=%s\n' "$minor" >>"$GITHUB_OUTPUT"
+      - uses: "DeterminateSystems/flakehub-push@main"
+        with:
+          name: "kip93/npp"
+          visibility: "public"
+          rolling: true
+          rolling-minor: ${{ steps.version.outputs.minor }}
