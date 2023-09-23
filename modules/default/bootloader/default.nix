@@ -13,9 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ self, ... } @ inputs:
-{ config, ... }:
-{
+{ self, ... } @ _inputs:
+{ config, ... }: {
   config.boot.loader = {
     timeout = self.lib.mkDefault 2;
     grub.enable = self.lib.mkDefault false;

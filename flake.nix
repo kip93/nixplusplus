@@ -28,7 +28,9 @@
       };
     };
     devenv = {
-      url = "github:cachix/devenv/latest";
+      # Required by shell language integration
+      url = "github:cachix/devenv/main";
+      # url = "github:cachix/devenv/latest";
       inputs = {
         flake-compat.follows = "flake-compat";
         nix.follows = "nix";

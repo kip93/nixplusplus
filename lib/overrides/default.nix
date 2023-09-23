@@ -13,8 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, ... } @ inputs:
-rec {
+{ nixpkgs, ... } @ _inputs: rec {
   # Create equivalents to nixpkgs override functions, but with a just ever so
   # slightly different value, so that our values and those of nixpkgs have
   # a clearer hirarchy.

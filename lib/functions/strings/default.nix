@@ -13,8 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, self, ... } @ inputs:
-rec {
+{ nixpkgs, ... } @ _inputs: rec {
   # Create a string representation of a value of unknown type.
   # Values are evaluated shallowly.
   toString = _toString 1;

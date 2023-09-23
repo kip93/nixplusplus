@@ -13,8 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ home-manager, self, ... } @ inputs:
-{
+{ home-manager, self, ... } @ _inputs: {
   imports = [ home-manager.nixosModules.default ];
   config = {
     users.motd = "";

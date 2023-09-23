@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, pkgs, self, ... } @ args:
+{ pkgs, self, ... } @ _args:
 let
   apps = self.lib.import.asApps' {
     path = ./apps;

@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ self, ... } @ inputs:
+{ self, ... } @ _inputs:
 { config, lib, pkgs, ... }:
 let
   cfg = config.npp.${builtins.baseNameOf ./.};

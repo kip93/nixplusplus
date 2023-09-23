@@ -13,9 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, self, ... } @ inputs:
-{ config, lib, ... }:
-{
+{ nixpkgs, self, ... } @ _inputs:
+{ config, lib, ... }: {
   config = {
     nixpkgs.overlays = [ self.overlays.default ];
     nix = {

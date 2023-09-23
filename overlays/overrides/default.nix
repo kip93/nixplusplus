@@ -19,6 +19,7 @@ let
   # Avoid infinite recursion by renaming flakes
   hydra' = hydra;
   nix' = nix;
+
 in
 let
   # A fake overlaid pkgs, to ensure that hydra uses it's own version of nix,
@@ -31,6 +32,6 @@ let
 in
 {
   # Expose the extracted packages into the overlay
-  inherit lowdown-nix nix;
+  inherit lowdown-nix nix perlPackages;
   hydra_unstable = hydra;
 }

@@ -13,9 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, self, ... } @ inputs:
+{ nixpkgs, self, ... } @ _inputs:
 # Filter out meta packages
-builtins.mapAttrs (with nixpkgs.lib; _: value: filterAttrs (key: _: !hasPrefix "_" key) value.passthru)
+with nixpkgs.lib;
+builtins.mapAttrs (_: v: filterAttrs (k: _: !hasPrefix "_" k) v.passthru)
 {
   # Cherry picked scenarios, since I have only a subset of "supported systems"
   # as hydra builders.

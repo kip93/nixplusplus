@@ -13,8 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nix, nixpkgs, self, ... } @ inputs:
-{
+{ nixpkgs, self, ... } @ _inputs: {
   # A shorthand expression to get cross-compiled packages. First key is the
   # build machine; the second, the target one.
   # It also applies the overlays from this flake.

@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ self, ... } @ inputs:
-{ pkgs, ... }:
-{ config.boot.kernelPackages = self.lib.mkDefault pkgs.linuxPackages_hardened; }
+{ self, ... } @ _inputs:
+{ pkgs, ... }: {
+  config.boot.kernelPackages = self.lib.mkDefault pkgs.linuxPackages_hardened;
+}

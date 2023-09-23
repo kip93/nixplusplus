@@ -13,9 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ self, ... } @ inputs:
-{ config, lib, ... }:
-{
+{ self, ... } @ _inputs:
+{ config, lib, ... }: {
   config.boot = {
     kernel = lib.optionalAttrs (!config.boot.isContainer) {
       sysctl."vm.swappiness" = self.lib.mkDefault 10;

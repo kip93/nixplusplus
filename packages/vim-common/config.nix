@@ -14,8 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { features, pkgs, self, ... }:
-with pkgs;
-''
+with pkgs; ''
   -- -- Enable verbose logs
   -- vim.cmd [[
   --   autocmd VimEnter * set verbosefile = ~/.cache/nvim.log

@@ -13,11 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ pkgs, self, ... } @ args:
+{ pkgs, ... } @ args:
 with pkgs;
 let
   inherit (pkgs.lib) escapeShellArg;
-  inherit (self.lib) supportedSystems;
 
 in
 writeShellApplication {

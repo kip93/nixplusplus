@@ -13,8 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, self, ... } @ inputs:
-{
+{ self, ... } @ _inputs: {
   # Cherry picked scenarios, since I have only a subset of "supported systems"
   # as hydra builders.
 

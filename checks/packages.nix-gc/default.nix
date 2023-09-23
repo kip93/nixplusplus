@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, npppkgs, pkgs, self, ... } @ args:
+{ nixpkgs, npppkgs, pkgs, ... } @ _args:
 pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
 

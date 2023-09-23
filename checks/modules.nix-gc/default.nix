@@ -13,13 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ pkgs, self, ... } @ args:
+{ pkgs, self, ... } @ _args:
 pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
 
   nodes =
     let
-      common = { lib, pkgs, ... }: {
+      common = { pkgs, ... }: {
         imports = with self.nixosModules; [ nix-gc ];
         virtualisation.graphics = false;
         virtualisation.additionalPaths = with pkgs; [ hello ];

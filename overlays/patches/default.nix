@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, self, ... } @ inputs:
+{ self, ... } @ _inputs:
 final: prev: with final; {
   writeShellApplication = { checkPhase ? null, ... }@args: prev.writeShellApplication ({
     # Shellcheck does not work on armv6l-linux builders.

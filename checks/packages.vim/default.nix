@@ -13,18 +13,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ npppkgs, pkgs, self, system, ... } @ args:
+{ npppkgs, pkgs, ... } @ _args:
 with npppkgs;
 pkgs.nixosTest {
   name = builtins.baseNameOf ./.;
 
   nodes = {
-    machine1 = { pkgs, ... }: {
+    machine1 = {
       virtualisation.graphics = false;
       environment.systemPackages = [ vim-minimal ];
     };
   } // (pkgs.lib.optionalAttrs (npppkgs ? vim-full)) {
-    machine2 = { pkgs, ... }: {
+    machine2 = {
       virtualisation.graphics = false;
       environment.systemPackages = [ vim ];
     };

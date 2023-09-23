@@ -13,8 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ self, ... } @ inputs:
-final: prev: with final; {
+{ self, ... } @ _inputs:
+final: _: with final; {
   # An analogous to pkgs.nixosTest, but for nix expressions instead of
   # derivations.
   # Basically a wrapper for pkgs.lib.runTests, made to work for nix flake

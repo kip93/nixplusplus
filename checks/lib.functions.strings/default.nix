@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, pkgs, self, ... } @ args:
+{ pkgs, self, ... } @ _args:
 pkgs.nixTest {
   name = builtins.baseNameOf ./.;
   checks = {
@@ -36,7 +36,7 @@ pkgs.nixTest {
     };
 
     path = {
-      expr = self.lib.strings.toString (/foo/bar);
+      expr = self.lib.strings.toString /foo/bar;
       expected = "/foo/bar";
     };
     string = {

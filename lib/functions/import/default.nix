@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ devenv, nixpkgs, self, ... } @ inputs:
+{ devenv, nixpkgs, self, ... } @ _inputs:
 let
   # The use of `unsafeDiscardStringContext` is a technicality, since if the path
   # is on the nix store the basename will remember that. This breaks the
@@ -233,6 +233,7 @@ rec {
         let
           nativeConfig = buildConfig baseConfig;
           inherit (nativeConfig.config.networking) hostName;
+
         in
         { ${hostName} = nativeConfig; }
       ;
@@ -244,19 +245,21 @@ rec {
               let
                 crossConfig = buildConfig ({ config, lib, ... }: {
                   imports = [ baseConfig ];
-                  nixpkgs.pkgs = self.lib.mkStrict (import nixpkgs {
-                    inherit (config.nixpkgs)
-                      config
-                      overlays
-                      ;
-                    inherit
-                      localSystem
-                      crossSystem
-                      ;
-                  });
-                  nixpkgs.hostPlatform = self.lib.mkStrict
-                    (lib.systems.elaborate crossSystem)
-                  ;
+                  nixpkgs = {
+                    pkgs = self.lib.mkStrict (import nixpkgs {
+                      inherit (config.nixpkgs)
+                        config
+                        overlays
+                        ;
+                      inherit
+                        localSystem
+                        crossSystem
+                        ;
+                    });
+                    hostPlatform = self.lib.mkStrict
+                      (lib.systems.elaborate crossSystem)
+                    ;
+                  };
                 });
 
               in

@@ -16,7 +16,7 @@
 { self, ... } @ inputs:
 self.lib.import.asModules' {
   path = ./.;
-  apply = name: module: {
+  apply = _: module: {
     imports = [ (module inputs) ];
     meta = {
       inherit (self.lib.meta) maintainers;

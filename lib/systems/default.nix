@@ -13,8 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, ... } @ inputs:
-rec {
+{ nixpkgs, ... } @ _inputs: rec {
   # This flake's supported systems. Should cover the good majority of cases.
   # SEE ALSO: ${nixpkgs}/lib/systems/doubles.nix
   supportedSystems = builtins.sort builtins.lessThan (_systems ++ _extraSystems);
