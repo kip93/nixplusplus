@@ -14,7 +14,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 {
-  description = "Nix++ : A collection of fun nix things.";
+  description = ''
+    Nix++ : An ever-growing opinionated collection of nix goodies, all available
+    from a single neat(-ish) flake ❄.
+  '';
 
   inputs = {
     agenix = {
