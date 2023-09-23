@@ -12,7 +12,7 @@ jobs:
         run: |
           set -eu
           timestamp=${{ github.event.head_commit.timestamp }}
-          minor="$(date -d "$timestamp" +%Y%m%d)"
+          minor="$(date -ud "$timestamp" +%Y%m%d)"
           printf 'minor=%s\n' "$minor" >>"$GITHUB_OUTPUT"
       - uses: "DeterminateSystems/flakehub-push@main"
         with:
