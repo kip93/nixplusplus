@@ -19,7 +19,7 @@
   apply = _: schema: schema inputs;
   # TODO apps nixosModules packages templates
 }) // {
-  inherit (flake-schemas)
+  inherit (flake-schemas.schemas)
     devShells
     checks
     hydraJobs
