@@ -20,3 +20,4 @@ jobs:
           visibility: "public"
           rolling: true
           rolling-minor: ${{ steps.version.outputs.minor }}
+          spdx-expression: GPL-3.0-or-later
