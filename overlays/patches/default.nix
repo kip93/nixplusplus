@@ -24,6 +24,14 @@ final: prev: with final; {
     '';
   } // args);
 
+  nixosTest = args:
+    let test = prev.nixosTest args; in test // {
+      meta = (test.meta or { }) // {
+        # NixOS test are Linux exclusive (nixpkgs#193336)
+        platforms = test.meta.platforms or self.lib.supportedSystems'.linux;
+      };
+    };
+
   jre_headless = prev.jre_headless.overrideAttrs (
     { configureFlags ? [ ]
     , meta ? { platforms = self.lib.supportedSystems; }
