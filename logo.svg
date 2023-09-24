@@ -1,0 +1,68 @@
+<!-- The 6 lambdas of the nix logo, re-arranged into spelling "N++" -->
+<!-- Original logo can be found @ https://github.com/NixOS/nixos-artwork -->
+<!-- Since this is a derivative, this file is CC-BY-4.0 licensed -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    width="772.709" height="283.169" viewBox="0 0 724.415 265.471">
+    <defs>
+        <linearGradient id="d">
+            <stop offset="0" style="stop-color:#699ad7;stop-opacity:1" />
+            <stop offset=".243" style="stop-color:#7eb1dd;stop-opacity:1" />
+            <stop offset="1" style="stop-color:#7ebae4;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="c">
+            <stop offset="0" style="stop-color:#415e9a;stop-opacity:1" />
+            <stop offset=".232" style="stop-color:#4a6baf;stop-opacity:1" />
+            <stop offset="1" style="stop-color:#5277c3;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="a">
+            <stop offset="0" style="stop-color:#637ddf;stop-opacity:1" />
+            <stop offset=".232" style="stop-color:#649afa;stop-opacity:1" />
+            <stop offset="1" style="stop-color:#719efa;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="b">
+            <stop offset="0" style="stop-color:#7363df;stop-opacity:1" />
+            <stop offset=".232" style="stop-color:#6478fa;stop-opacity:1" />
+            <stop offset="1" style="stop-color:#719efa;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient xlink:href="#a" id="e" x1="213.956" x2="282.261" y1="338.624" y2="515.971"
+            gradientTransform="translate(983.36 601.389)" gradientUnits="userSpaceOnUse" />
+        <linearGradient xlink:href="#c" id="h" x1="-584.199" x2="-496.297" y1="782.336" y2="937.714"
+            gradientTransform="matrix(.866 -.50003 -.50003 -.866 1211.76 -115.796)" gradientUnits="userSpaceOnUse" />
+        <linearGradient xlink:href="#c" id="j" x1="-584.199" x2="-496.297" y1="782.336" y2="937.714"
+            gradientTransform="rotate(120.002 437.607 410.92)" gradientUnits="userSpaceOnUse" />
+        <linearGradient xlink:href="#c" id="l" x1="-584.199" x2="-496.297" y1="782.336" y2="937.714"
+            gradientTransform="rotate(-59.998 -1185 -945.526)" gradientUnits="userSpaceOnUse" />
+        <linearGradient xlink:href="#d" id="g" x1="200.597" x2="290.087" y1="351.411" y2="506.188"
+            gradientTransform="matrix(-.866 .50003 .50003 .866 190.834 -1165.08)" gradientUnits="userSpaceOnUse" />
+        <linearGradient xlink:href="#d" id="i" x1="200.597" x2="290.087" y1="351.411" y2="506.188"
+            gradientTransform="rotate(-59.998 -543.822 -244.537)" gradientUnits="userSpaceOnUse" />
+        <linearGradient xlink:href="#d" id="k" x1="200.597" x2="290.087" y1="351.411" y2="506.188"
+            gradientTransform="rotate(120.002 842.306 40.751)" gradientUnits="userSpaceOnUse" />
+    </defs>
+    <g style="display:inline;opacity:1">
+        <path
+            d="m156.339-747.058.02 244.415 48.897-27.625-.185-65.561 56.739 32.556 24.158-13.961.03-28.528-80.785-46.298-.138-66.693z"
+            style="opacity:1;fill:url(#g);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+            transform="translate(-156.339 763.521)" />
+        <path
+            d="m340.497-514.514-.021-244.414-48.896 27.624.184 65.562-56.738-32.557-24.158 13.962-.03 28.527 80.785 46.298.138 66.693z"
+            style="color:#000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000;solid-opacity:1;fill:url(#h);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+            transform="translate(-156.339 763.521)" />
+        <path
+            d="m357.901-627.71 244.415.021-27.624 48.896-65.562-.184 32.556 56.738-13.961 24.158-28.528.03-46.298-80.785-66.693-.138z"
+            style="opacity:1;fill:url(#i);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+            transform="translate(-156.339 763.521)" />
+        <path
+            d="m613.566-633.84-244.415-.022 27.624-48.895 65.562.184-32.556-56.739 13.961-24.158 28.527-.03 46.299 80.786 66.693.137z"
+            style="color:#000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000;solid-opacity:1;fill:url(#j);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+            transform="translate(-156.339 763.521)" />
+        <path
+            d="m880.753-633.82-244.414-.02 27.624-48.896 65.562.184-32.557-56.738 13.962-24.159 28.527-.03 46.298 80.786 66.693.138z"
+            style="opacity:1;fill:url(#k);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+            transform="translate(-156.339 763.521)" />
+        <path
+            d="m625.089-627.689 244.414.021-27.624 48.896-65.562-.184 32.557 56.738-13.962 24.159-28.527.03-46.298-80.786-66.694-.138z"
+            style="color:#000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000;solid-opacity:1;fill:url(#l);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+            transform="translate(-156.339 763.521)" />
+    </g>
+</svg>

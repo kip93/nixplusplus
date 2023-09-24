@@ -18,12 +18,26 @@
   inputs = builtins.removeAttrs args [ "pkgs" "system" ];
   modules = [
     # Basics
-    ({ pkgs, ... }: {
+    ({ lib, pkgs, ... }: {
       name = "Nix++";
       packages = with pkgs; [ cacert coreutils nixVersions.unstable ];
-      enterShell = ''
+      enterShell = lib.mkBefore ''
         EDITOR="''${EDITOR:-${npppkgs.vim-minimal}/bin/vim}" # Default to vim
         export EDITOR
+
+        printf ${lib.escapeShellArg ''
+          \x1B[0m
+            \x1B[96m...      \x1B[34m+++
+            \x1B[96m::: \x1B[34m+++  +++    \x1B[0;1mNix++ dev shell\x1B[0m
+            \x1B[96m:::: \x1B[34m+++ +++
+            \x1B[96m:::::: \x1B[34m+++++    \x1B[0mI'm making my own shell with linters and git hooks!
+            \x1B[96m::: ::: \x1B[34m++++    \x1B[0;2mAnd bugs. So many bugs. Plz send help.\x1B[0m
+            \x1B[96m:::  ::: \x1B[34m+++
+            \x1B[96m:::      \x1B[34m''''
+          \x1B[0m
+            Loading environment ...
+
+        ''}
       '';
     })
   ] ++ (self.lib.import.asList ./.);
