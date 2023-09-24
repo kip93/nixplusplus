@@ -16,7 +16,8 @@
 { nixpkgs, self, ... } @ _inputs:
 # Filter out meta packages
 with nixpkgs.lib;
-builtins.mapAttrs (_: v: filterAttrs (k: _: !hasPrefix "_" k) v.passthru)
+builtins.mapAttrs
+  (_: v: filterAttrs (k: _: !hasPrefix "_" k && k != "default") v.passthru)
 {
   # Cherry picked scenarios, since I have only a subset of "supported systems"
   # as hydra builders.
