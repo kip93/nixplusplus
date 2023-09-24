@@ -13,13 +13,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ self, ... } @ inputs: {
+{ nixpkgs, self, ... } @ inputs: {
   # A collection of flakes, taken from the inputs of this flake. Useful for
   # overriding NixOS default ones.
-  flakes.registry = (builtins.removeAttrs inputs [ "self" ]) // {
-    # Rename self into something actually useful.
-    nixplusplus = self;
-    # And alias it because nixplusplus is too long.
-    npp = self;
-  };
+  flakes.registry = nixpkgs.lib.filterAttrs
+    (_: value: value._type or null == "flake")
+    ((builtins.removeAttrs inputs [ "self" ]) // {
+      # Rename self into something actually useful.
+      nixplusplus = self;
+      # And alias it because nixplusplus is too long.
+      npp = self;
+    })
+  ;
 }
