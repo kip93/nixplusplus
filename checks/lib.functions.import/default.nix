@@ -204,7 +204,7 @@ pkgs.nixTest {
           (builtins.attrNames packages)
           self.lib.supportedSystems
       ;
-      expected = [ ];
+      expected = [ "armv6l-linux" ]; # Can only cross compile to armv6l-linux
     };
     packages_cross_systems = {
       expr =
