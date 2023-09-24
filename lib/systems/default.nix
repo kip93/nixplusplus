@@ -73,8 +73,6 @@
                   builtins.head (builtins.match ".*-(.*)" localSystem)
                   ==
                   builtins.head (builtins.match ".*-(.*)" crossSystem)
-                  &&
-                  (localSystem != "armv6l-linux")
                   && # TODO nixpkgs#180771
                   (localSystem != "aarch64-darwin" || crossSystem != "x86_64-darwin")
                 )
@@ -83,7 +81,10 @@
             )
           ;
         })
-        systems
+        (builtins.filter
+          (localSystem: localSystem != "armv6l-linux")
+          systems
+        )
       )
   ;
 
