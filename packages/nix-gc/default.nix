@@ -15,7 +15,7 @@
 
 { pkgs, ... } @ _args:
 with pkgs;
-writeShellApplication {
+writeShellApplication rec {
   name = builtins.baseNameOf ./.;
   runtimeInputs = [
     bash
@@ -124,4 +124,10 @@ writeShellApplication {
       nix-collect-garbage
     fi
   '';
+
+  meta = {
+    inherit name;
+    description = "A nix garbage collection script just a tad bit smarter than the default one";
+    longDescription = null;
+  };
 }
