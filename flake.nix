@@ -64,7 +64,9 @@
       };
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.05";
+      url = "github:nix-community/home-manager/master";
+      # TODO Release 23.11
+      # url = "github:nix-community/home-manager/release-23.11";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
@@ -101,7 +103,9 @@
       url = "github:NixOS/nixos-hardware/master";
     };
     nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-23.05";
+      url = "github:NixOS/nixpkgs/nixos-unstable";
+      # TODO Release 23.11
+      # url = "github:NixOS/nixpkgs/nixos-23.11";
     };
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix/master";
