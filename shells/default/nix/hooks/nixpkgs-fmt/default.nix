@@ -13,13 +13,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 {
   pre-commit.hooks.nixpkgs-fmt = {
     enable = true;
-    entry = lib.mkForce
-      "${config.pre-commit.tools.nixpkgs-fmt}/bin/nixpkgs-fmt --check ."
-    ;
+    entry = lib.mkForce "${with pkgs; writeShellScript "nixpkgs-fmt-wrapper.sh" ''
+      set -eu
+      export PATH=${lib.escapeShellArg (lib.makeBinPath [
+        config.pre-commit.tools.nixpkgs-fmt
+      ])}
+
+      nixpkgs-fmt --check . 2>/dev/null
+    ''}";
     pass_filenames = false;
   };
 }
