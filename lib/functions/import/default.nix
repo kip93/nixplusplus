@@ -262,6 +262,9 @@ rec {
                         crossSystem
                         ;
                     });
+                    buildPlatform = self.lib.mkStrict
+                      (lib.systems.elaborate localSystem)
+                    ;
                     hostPlatform = self.lib.mkStrict
                       (lib.systems.elaborate crossSystem)
                     ;
