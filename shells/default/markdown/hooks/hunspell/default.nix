@@ -56,10 +56,11 @@ in
     files = lib.mkForce "(^|/)README\\.md$";
     # Use specific dictionary and add custom words
     entry = lib.mkForce "${with pkgs; writeShellScript "hunspell-wrapper.sh" ''
-      set -eu -o pipefail
+      set +e -u -o pipefail
       export PATH=${lib.escapeShellArg (lib.makeBinPath [
         bash
         config.pre-commit.tools.hunspell
+        pandoc # TODO Some other alternative that is not 5GiB+?
       ])}
 
       export DICPATH=${
@@ -72,7 +73,21 @@ in
         printf '%s\n' ${lib.escapeShellArgs words} | sort -u >$out
       ''}
 
-      hunspell -d ${lang} -p $words -l "$@"
+      XC=0
+      for file in "$@" ; do
+        stdout="$( \
+          pandoc -t plain -- "$file" \
+          | hunspell -d ${lang} -p $words -l \
+        )"
+        xc=$?
+        if [ $xc -ne 0 ] ; then
+          printf '%s\n' "./$file"
+          printf '%s' "$stdout"
+          printf '\n\n'
+        fi
+        (( XC |= $xc ))
+      done
+      exit $XC
     ''}";
   };
 }
