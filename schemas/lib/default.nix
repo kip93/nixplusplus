@@ -20,7 +20,7 @@ let
     flakes.registry._apply = flakes: {
       what = "An attrset of flakes";
       children = builtins.mapAttrs
-        (_: _: { what = "flake"; })
+        (_: flake: { what = flake._type or "non-flake"; })
         flakes
       ;
     };
