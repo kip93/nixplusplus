@@ -154,6 +154,22 @@
         "type": "github"
       }
     },
+    "flake-schemas": {
+      "locked": {
+        "lastModified": 1693615523,
+        "narHash": "sha256-LeyH24etXCxNJviWptyLy2DPT9xt+oOs/zE66To1iPY=",
+        "owner": "DeterminateSystems",
+        "repo": "flake-schemas",
+        "rev": "8940e872c4f8c7cd7d0a1ec169fa0a24697b1f1c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "DeterminateSystems",
+        "ref": "main",
+        "repo": "flake-schemas",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": [
@@ -490,6 +506,7 @@
         "devenv": "devenv",
         "devour": "devour",
         "flake-compat": "flake-compat",
+        "flake-schemas": "flake-schemas",
         "flake-utils": "flake-utils",
         "gitignore-nix": "gitignore-nix",
         "home-manager": "home-manager",

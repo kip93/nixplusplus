@@ -46,15 +46,18 @@
         flake.follows = "";
       };
     };
+    flake-compat = {
+      url = "github:nix-community/flake-compat/master";
+      flake = false;
+    };
     flake-utils = {
       url = "github:numtide/flake-utils/main";
       inputs = {
         systems.follows = "systems";
       };
     };
-    flake-compat = {
-      url = "github:nix-community/flake-compat/master";
-      flake = false;
+    flake-schemas = {
+      url = "github:DeterminateSystems/flake-schemas/main";
     };
     gitignore-nix = {
       url = "github:hercules-ci/gitignore.nix/master";
@@ -133,6 +136,7 @@
     nixosModules = import ./modules inputs;
     overlays = import ./overlays inputs;
     packages = import ./packages inputs;
+    schemas = import ./schemas inputs;
     templates = import ./templates inputs;
   };
 

@@ -201,6 +201,12 @@ rec {
       ))
   ;
 
+  # Locate importable paths in a directory, and import them as schemas.
+  asSchemas = path: asSchemas' { inherit path; };
+  asSchemas' = { path, apply ? (_: x: x) }:
+    asAttrs' { inherit apply path; }
+  ;
+
   # Locate importable paths in a directory, and import them as templates.
   asTemplates = path: asTemplates' { inherit path; };
   asTemplates' = { path, apply ? (_: x: x) }:
