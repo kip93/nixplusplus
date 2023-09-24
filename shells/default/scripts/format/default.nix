@@ -13,14 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ pkgs, ... } @ _args:
-with pkgs;
-writeShellApplication {
-  name = builtins.baseNameOf ./.;
-  runtimeInputs = [
-    nixpkgs-fmt
-  ];
-  text = ''
-    nixpkgs-fmt -- "''${@:-.}"
-  '';
+{ config, pkgs, ... }:
+{
+  scripts.format.exec = with pkgs; "${writeShellScript "format-code.sh" ''
+    set -eu -o pipefail
+    export PATH=${lib.escapeShellArg (lib.makeBinPath [
+      config.pre-commit.tools.nixpkgs-fmt
+    ])}
+
+    nixpkgs-fmt "$DEVENV_ROOT"
+  ''}";
 }
