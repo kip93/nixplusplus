@@ -11,18 +11,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1694733633,
         "narHash": "sha256-/o/OubAsPMbxqru59tLlWzUI7LBNDaoW4rFwQ2Smxcg=",
-        "owner": "ryantm",
-        "repo": "agenix",
         "rev": "54693c91d923fecb4cf04c4535e3d84f8dec7919",
-        "type": "github"
+        "revCount": 252,
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/ryantm/agenix/0.14.0/018a95ff-fb8b-733c-b44f-dec952c16ff7/source.tar.gz"
       },
       "original": {
-        "owner": "ryantm",
-        "ref": "0.14.0",
-        "repo": "agenix",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://flakehub.com/f/ryantm/agenix/0.14.%2A.tar.gz"
       }
     },
     "darwin": {
@@ -156,18 +153,15 @@
     },
     "flake-schemas": {
       "locked": {
-        "lastModified": 1693615523,
-        "narHash": "sha256-LeyH24etXCxNJviWptyLy2DPT9xt+oOs/zE66To1iPY=",
-        "owner": "DeterminateSystems",
-        "repo": "flake-schemas",
-        "rev": "8940e872c4f8c7cd7d0a1ec169fa0a24697b1f1c",
-        "type": "github"
+        "narHash": "sha256-ifw8Td8kD08J8DxFbYjeIx5naHcDLz7s2IFP3X42I/U=",
+        "rev": "c702cbb663d6d70bbb716584a2ee3aeb35017279",
+        "revCount": 21,
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/flake-schemas/0.1.1/018a4c59-80e1-708a-bb4d-854930c20f72/source.tar.gz"
       },
       "original": {
-        "owner": "DeterminateSystems",
-        "ref": "main",
-        "repo": "flake-schemas",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://flakehub.com/f/DeterminateSystems/flake-schemas/0.1.%2A.tar.gz"
       }
     },
     "flake-utils": {

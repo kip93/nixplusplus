@@ -21,16 +21,14 @@
 
   inputs = {
     agenix = {
-      url = "github:ryantm/agenix/0.14.0";
+      url = "https://flakehub.com/f/ryantm/agenix/0.14.*.tar.gz";
       inputs = {
         home-manager.follows = "home-manager";
         nixpkgs.follows = "nixpkgs";
       };
     };
     devenv = {
-      # Required by shell language integration
       url = "github:cachix/devenv/main";
-      # url = "github:cachix/devenv/latest";
       inputs = {
         flake-compat.follows = "flake-compat";
         nix.follows = "nix";
@@ -57,7 +55,7 @@
       };
     };
     flake-schemas = {
-      url = "github:DeterminateSystems/flake-schemas/main";
+      url = "https://flakehub.com/f/DeterminateSystems/flake-schemas/0.1.*.tar.gz";
     };
     gitignore-nix = {
       url = "github:hercules-ci/gitignore.nix/master";
