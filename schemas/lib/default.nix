@@ -19,13 +19,10 @@ let
   exceptions = {
     flakes.registry._apply = flakes: {
       what = "An attrset of flakes";
-      children = (builtins.mapAttrs
-        (_: flake: { what = flake._type or "non-flake"; })
-        (nixpkgs.lib.filterAttrs (name: _: name != "systems") flakes)
-      ) // {
-        # Workaround for nix-systems#6 (hopefully will be fixed with nix#3978)
-        systems = "non-flake";
-      };
+      children = builtins.mapAttrs
+        (_: _: { what = "flake"; })
+        flakes
+      ;
     };
 
     meta = {

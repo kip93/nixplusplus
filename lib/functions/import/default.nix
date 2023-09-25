@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ devenv, nixpkgs, self, ... } @ _inputs:
+{ devenv, nixpkgs, self, ... } @ inputs:
 let
   # The use of `unsafeDiscardStringContext` is a technicality, since if the path
   # is on the nix store the basename will remember that. This breaks the
@@ -25,6 +25,14 @@ let
     builtins.unsafeDiscardStringContext
       (builtins.baseNameOf path)
   ;
+
+  # Extra arguments passed to NixOS configs.
+  specialArgs = (builtins.removeAttrs inputs [ "self" ]) // {
+    # Rename self into something actually useful.
+    nixplusplus = self;
+    # And alias it because nixplusplus is too long.
+    npp = self;
+  };
 
 in
 rec {
@@ -114,8 +122,8 @@ rec {
   asConfigs' = { path, apply ? (_: x: x) }:
     builtins.mapAttrs
       (_: config: import "${nixpkgs}/nixos/lib/eval-config.nix" {
+        inherit specialArgs;
         system = null;
-        specialArgs = self.lib.flakes.registry;
         modules = [
           self.nixosModules.default
           config
@@ -127,8 +135,8 @@ rec {
   asConfig = path: asConfig' { inherit path; };
   asConfig' = { path, apply ? (_: x: x) }:
     import "${nixpkgs}/nixos/lib/eval-config.nix" {
+      inherit specialArgs;
       system = null;
-      specialArgs = self.lib.flakes.registry;
       modules = [
         self.nixosModules.default
         (apply (getName path) (import path))
@@ -222,8 +230,8 @@ rec {
   asCrossConfig' = { path, apply ? (_: x: x) }:
     let
       buildConfig = module: import "${nixpkgs}/nixos/lib/eval-config.nix" {
+        inherit specialArgs;
         system = null;
-        specialArgs = self.lib.flakes.registry;
         modules = [
           # Have a default system, for when not building via the packages below
           { nixpkgs.localSystem = self.lib.mkDefault "x86_64-linux"; }

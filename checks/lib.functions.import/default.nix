@@ -129,6 +129,9 @@ pkgs.nixTest {
         config.system.build ? toplevel
         &&
         config.nix.registry.nixplusplus.flake == self
+        # Check workaround for nix-systems#6
+        &&
+        (!config.nix.registry ? systems)
       ;
       expected = true;
     };
