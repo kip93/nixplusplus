@@ -39,6 +39,7 @@
     devour = {
       url = "github:srid/devour-flake/v3";
       inputs = {
+        flake-parts.follows = "flake-parts";
         nixpkgs.follows = "nixpkgs";
         systems.follows = "systems";
         flake.follows = "";
@@ -52,6 +53,12 @@
       url = "github:numtide/flake-utils/main";
       inputs = {
         systems.follows = "systems";
+      };
+    };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts/main";
+      inputs = {
+        nixpkgs-lib.follows = "nixpkgs";
       };
     };
     flake-schemas = {
