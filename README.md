@@ -51,6 +51,9 @@ This repo's development tools are managed using [devenv](https://devenv.sh/).
 To make use of this tooling, either run `nix develop . --impure` or install and
 configure [direnv](https://direnv.net/).
 
+The source files for the dev shell are located in
+[./shells/default](./shells/default).
+
 ## License
 
 Unless stated otherwise, everything here is licensed under

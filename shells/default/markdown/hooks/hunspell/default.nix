@@ -22,6 +22,7 @@ let
   words = [
     "agenix"
     "backends"
+    "dev"
     "devenv"
     "direnv"
     "FlakeHub"
