@@ -13,11 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ home-manager, self, ... } @ _inputs: {
+{ home-manager, self, ... } @ _inputs:
+{ pkgs, ... }:
+{
   imports = [ home-manager.nixosModules.default ];
   config = {
     users = {
       motd = "";
+      defaultUserShell = self.lib.mkDefault pkgs.bashInteractive;
       mutableUsers = self.lib.mkStrict false;
     };
     home-manager.useUserPackages = true;
