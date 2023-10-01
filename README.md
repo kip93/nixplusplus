@@ -44,6 +44,13 @@ places. Just take your pick and let the ✨ magic ✨ flow through you:
 * FlakeHub:
   `https://flakehub.com/f/kip93/npp/*.tar.gz`
 
+## Development
+
+This repo's development tools are managed using [devenv](https://devenv.sh/).
+
+To make use of this tooling, either run `nix develop . --impure` or install and
+configure [direnv](https://direnv.net/).
+
 ## License
 
 Unless stated otherwise, everything here is licensed under
