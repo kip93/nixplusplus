@@ -22,7 +22,8 @@ pkgs.nixosTest {
       imports = with self.nixosModules; [ secrets backup ];
       virtualisation.graphics = false;
 
-      npp.secrets_key = "/etc/nixos/agenix.key";
+      # Bad security practice, but this is just a test.
+      npp.secrets_key = "${../test.key}";
       npp.backup = {
         passwordFile = ./backup.password.age;
         sshConfig = ./backup.sshconfig.age;
@@ -54,7 +55,6 @@ pkgs.nixosTest {
 
   testScript = ''
     client.start()
-    client.copy_from_host("${../test.key}", "/etc/nixos/agenix.key")
     client.copy_from_host("${./data}", "/var/data")
     client.shutdown()
 

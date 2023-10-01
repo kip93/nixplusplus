@@ -36,6 +36,15 @@ in
       description = mdDoc ''
         File containing the encrypted password, to be used to the encrypt the backups
         before transit.
+
+        NOTE: The password needs to be SHA256 hashed.
+
+        ```sh
+        $ openssl passwd -6
+        Password:
+        Verifying - Password:
+        $6$VuJ9jTKK5jOdG8s4$L76ZuXThBEW4QQ2VZi6M9lPrvkCqLVxxHmUx.2zaecce0OOxmbSRqzefoSeO7TZe60a2QL6il8uXmRPndjojg1
+        ```
       '';
     };
     sshConfig = mkOption {
@@ -185,9 +194,9 @@ in
     ];
 
     npp.secrets = {
-      "backup.password" = { file = cfg.passwordFile; owner = cfg.user; };
-      "backup.sshconfig" = { file = cfg.sshConfig; owner = cfg.user; };
-      "backup.sshkey" = { file = cfg.sshKey; owner = cfg.user; };
+      "npp.backup.password" = { file = cfg.passwordFile; owner = cfg.user; };
+      "npp.backup.sshconfig" = { file = cfg.sshConfig; owner = cfg.user; };
+      "npp.backup.sshkey" = { file = cfg.sshKey; owner = cfg.user; };
     };
 
     services.restic.backups =
@@ -199,16 +208,16 @@ in
             inherit (cfg) user;
             repository = "sftp:backup-server:${p.dst}";
             paths = p.srcs;
-            passwordFile = cfg_secrets."backup.password".path;
+            passwordFile = cfg_secrets."npp.backup.password".path;
             extraOptions = [
               (
                 "sftp.command='ssh " +
                 ''-o StrictHostKeyChecking=accept-new '' +
                 ''-o ServerAliveInterval=60 '' +
                 ''-o ServerAliveCountMax=240 '' +
-                ''-F '"'"'${cfg_secrets."backup.sshconfig".path}'"'"' '' +
+                ''-F '"'"'${cfg_secrets."npp.backup.sshconfig".path}'"'"' '' +
                 ''backup-server '' +
-                ''-i '"'"'${cfg_secrets."backup.sshkey".path}'"'"' '' +
+                ''-i '"'"'${cfg_secrets."npp.backup.sshkey".path}'"'"' '' +
                 "-s sftp'"
               )
             ];
