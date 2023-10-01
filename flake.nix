@@ -28,11 +28,12 @@
       };
     };
     devenv = {
-      url = "github:cachix/devenv/main";
+      url = "github:cachix/devenv/python-rewrite";
       inputs = {
         flake-compat.follows = "flake-compat";
         nix.follows = "nix";
         nixpkgs.follows = "nixpkgs";
+        poetry2nix.follows = "poetry2nix";
         pre-commit-hooks.follows = "pre-commit-hooks";
       };
     };
@@ -113,6 +114,13 @@
       url = "github:NixOS/nixpkgs/nixos-unstable";
       # TODO Release 23.11
       # url = "github:NixOS/nixpkgs/nixos-23.11";
+    };
+    poetry2nix = {
+      url = "github:nix-community/poetry2nix/master";
+      inputs = {
+        flake-utils.follows = "flake-utils";
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix/master";

@@ -13,8 +13,5 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-let
-  fun = import ./lib/systems/default.nix;
-
-in
-(fun (builtins.functionArgs fun)).supportedSystems
+# A copy of npp.lib.supportedSystems (sans armv6l-linux)
+[ "aarch64-darwin" "aarch64-linux" "armv7l-linux" "i686-linux" "x86_64-darwin" "x86_64-linux" ]
