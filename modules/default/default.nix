@@ -14,8 +14,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { self, ... } @ inputs: {
-  imports = self.lib.import.asList' {
+  imports = (self.lib.import.asList' {
     path = ./.;
     apply = _: module: module inputs;
-  };
+  }) ++ [ self.nixosModules.secrets ];
 }

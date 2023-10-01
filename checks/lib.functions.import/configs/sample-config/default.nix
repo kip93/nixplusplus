@@ -14,6 +14,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { modulesPath, npp, ... }: {
-  imports = [ "${modulesPath}/profiles/demo.nix" npp.nixosModules.default ];
+  imports = [ "${modulesPath}/profiles/demo.nix" npp.nixosModules.nix-gc ];
   nixpkgs.hostPlatform.config = "aarch64-unknown-linux-gnu";
 }
