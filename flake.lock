@@ -11,7 +11,6 @@
         ]
       },
       "locked": {
-        "lastModified": 1694733633,
         "narHash": "sha256-/o/OubAsPMbxqru59tLlWzUI7LBNDaoW4rFwQ2Smxcg=",
         "rev": "54693c91d923fecb4cf04c4535e3d84f8dec7919",
         "revCount": 252,
@@ -162,7 +161,6 @@
     },
     "flake-schemas": {
       "locked": {
-        "lastModified": 1693491534,
         "narHash": "sha256-ifw8Td8kD08J8DxFbYjeIx5naHcDLz7s2IFP3X42I/U=",
         "rev": "c702cbb663d6d70bbb716584a2ee3aeb35017279",
         "revCount": 21,
