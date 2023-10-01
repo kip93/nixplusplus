@@ -15,15 +15,6 @@
 
 { self, ... } @ _inputs:
 final: prev: with final; {
-  writeShellApplication = { checkPhase ? null, ... }@args: prev.writeShellApplication ({
-    # Shellcheck does not work on armv6l-linux builders.
-    checkPhase = lib.optionalString (checkPhase == null && buildPlatform.system == "armv6l-linux") ''
-      runHook preCheck
-      ${stdenv.shellDryRun} "$target"
-      runHook postCheck
-    '';
-  } // args);
-
   nixosTest = args:
     let test = prev.nixosTest args; in test // {
       meta = (test.meta or { }) // {
