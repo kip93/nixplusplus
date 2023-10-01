@@ -1,0 +1,88 @@
+// See:
+//  - https://github.com/NixOS/hydra/blob/master/hydra-api.yaml
+//  - https://github.com/NixOS/hydra/blob/master/doc/architecture.md
+//  - https://github.com/NixOS/hydra/blob/master/src/sql/hydra.sql
+{
+  // IDs ///////////////////////////////////////////////////////////////////////
+  "project":  "project-id",  // UID for the project
+  "jobset":   "jobset-id",   // UID for the jobset
+  "job":      "job-id",      // UID for the job
+  "build":     42,           // UID for the build
+
+  // Timestamps ////////////////////////////////////////////////////////////////
+  "timestamp": 1674628758,  // Unix timestamp for when the build was registered
+  "startTime": 1674628759,  // Unix timestamp for when the build started
+  "stopTime":  1674628760,  // Unix timestamp for when the build finished
+
+  // Status ////////////////////////////////////////////////////////////////////
+  "buildStatus": 0,  // 0  : succeeded
+                     // 2  : dependency failed
+                     // 3  : aborted
+                     // 4  : canceled by the user
+                     // 6  : failed with output
+                     // 7  : timed out
+                     // 9  : aborted
+                     // 10 : log size limit exceeded
+                     // 11 : output size limit exceeded
+                     // *  : failed
+
+  // Outputs ///////////////////////////////////////////////////////////////////
+  "drvPath": "/nix/store/[...].drv",  // .drv file that was built
+  "outputs": [  // The outputs defined by the nix expression that was built
+    {
+      "path": "/nix/store/[...]",  // Output store path
+      "name": "out"                // Output name (e.g., out, lib, dev, ...)
+    },
+    // ...
+  ],
+  "products": [  // Arbitrary downloadable artifacts, like manuals or ISO files
+                 // (defined in $out/nix-support/hydra-build-products)
+    // `echo "doc manual $out/foo baz/qax.txt" >>$out/nix-support/hydra-build-products
+    {
+      "type": "doc", "subtype": "manual",
+      // Semi-arbitrary type to allow hydra to show them nicely in the UI
+      //
+      // Known types ([type|*]:[subtype|*]):
+      //  - nix-build:*            The output of a (maybe failed) nix build
+      //  - file:source-dist       Source files
+      //  - file:rpm               RPM package
+      //  - file:srpm              SRPM package
+      //  - file:deb               DEB package
+      //  - file:iso               ISO image
+      //  - file:binary-dist       Binary file
+      //  - file:*                 Generic file
+      //  - channel:*              Nix channel
+      //  - report:coverage        Test coverage report
+      //  - report:*               Generic report file
+      //  - doc:readme             Readme
+      //  - doc:manual             Manual
+      //  - doc:release-notes      Release notes
+      //  - doc:*                  Generic documentation file
+      //  - doc-pdf:readme         Readme
+      //  - doc-pdf:manual         Manual
+      //  - doc-pdf:release-notes  Release notes
+      //  - doc-pdf:*              Generic documentation file
+      //  - *:*                    Generic product
+
+      "path": "/nix/store/[...]/foo",  // Path to artifact to download
+      "defaultpath": "baz/qax.txt",    // If artifact is a directory, this
+                                       // optional relative path points to a
+                                       // file inside it
+      // ...
+    },
+    // ...
+  ],
+  "metrics": [  // Arbitrary build metrics, like test coverage or CPU usage
+                // (defined in $out/nix-support/hydra-metrics)
+    // `echo 'coverage 6.9 %' >>$out/nix-support/hydra-metrics
+    {
+      "name": "coverage",  // Arbitrary metric name
+      "value": 6.9,        // Float metric value
+      "unit": "%",         // Arbitrary optional unit
+      // ...
+    },
+    // ...
+  ],
+
+  // ...
+}

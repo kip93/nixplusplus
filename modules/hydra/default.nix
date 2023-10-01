@@ -107,6 +107,11 @@ in
               description = mdDoc ''
                 Command to run. Can use the `$HYDRA_JSON` environment variable to access
                 information about the build.
+
+                Explained contents of `$HYDRA_JSON`:
+                ```jsonc
+                ${builtins.readFile ./schema.jsonc}
+                ```
               '';
             };
           };
