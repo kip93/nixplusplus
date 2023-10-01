@@ -34,6 +34,7 @@ let
     "jobset"
     "json"
     "kip93"
+    "nginx"
     "NixOS"
     "nixplusplus"
     "nixpkgs"

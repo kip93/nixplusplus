@@ -13,21 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# This lists all ports in a single file, to make it visible if something is
-# trying to use the same ports.
+# EDITOR=vim nix run github:ryantm/agenix -- -i ../test.key -e <AGE_FILE>
+let
+  publicKeys = [ (builtins.readFile ../test.pub) ];
 
-# Should keep to conventions whenever it makes sense
-# https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
-
-# For internal ports, they should be in the range [16000-17000) range and taken
-# up on an incremental order as needed (this range was chosen just because it's
-# a large enough range with no officially taken ports and no very important
-# looking unofficial ones).
+in
 {
-  ssh = {
-    endlessh = 22;
-    openssh = 222;
-    stats = 16000;
-  };
-  hydra = 16001;
+  "hydra.password.age" = { inherit publicKeys; };
 }
