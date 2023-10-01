@@ -15,6 +15,16 @@
 
 { nixos-artwork, self, ... } @ inputs:
 { lib, ... }:
+let
+  nonGlobStr = with lib.types; mkOptionType {
+    name = "nonGlobStr";
+    description = "(optionally newline-terminated) non-glob single-line string";
+    descriptionClass = "noun";
+    check = x: singleLineStr.check x && builtins.match "\\*" x == null;
+    inherit (singleLineStr) merge;
+  };
+
+in
 {
   imports = self.lib.import.asList' {
     path = ./.;
@@ -65,6 +75,50 @@
       default = "${nixos-artwork}/logo/nix-snowflake.svg";
       defaultText = literalExpression ''"''${nixos-artwork}/logo/nix-snowflake.svg"'';
       example = "/var/hydra/logo.png";
+    };
+
+    commands = mkOption {
+      type = types.listOf
+        (types.submodule {
+          options = {
+            project = mkOption {
+              type = types.nullOr nonGlobStr;
+              default = null;
+              description = mdDoc ''
+                The name of the project. Defaults to all projects.
+              '';
+            };
+            jobset = mkOption {
+              type = types.nullOr nonGlobStr;
+              default = null;
+              description = mdDoc ''
+                The name of the jobset. Defaults to all jobsets.
+              '';
+            };
+            job = mkOption {
+              type = types.nullOr nonGlobStr;
+              default = null;
+              description = mdDoc ''
+                The name of the job. Defaults to all jobs.
+              '';
+            };
+            command = mkOption {
+              type = types.nonEmptyStr;
+              description = mdDoc ''
+                Command to run. Can use the `$HYDRA_JSON` environment variable to access
+                information about the build.
+              '';
+            };
+          };
+        });
+      description = mdDoc ''
+        Configure specific commands to execute after the specified matching jobs
+        finish.
+      '';
+      example = [{
+        project = "example-project";
+        command = "cat $HYDRA_JSON >/tmp/hydra-output";
+      }];
     };
   };
 }

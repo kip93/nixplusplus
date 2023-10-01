@@ -58,6 +58,29 @@ in
         <dynamicruncommand>
           enable = 0
         </dynamicruncommand>
+
+        # Run these commands after a job finishes (if they match the given pattern)
+        ${builtins.concatStringsSep "" (builtins.map (cmd: ''
+          <runcommand>
+            job = ${
+              if cmd.project == null then
+                "*"
+              else
+                cmd.project
+            }:${
+              if cmd.jobset == null then
+                "*"
+              else
+                cmd.jobset
+            }:${
+              if cmd.job == null then
+                "*"
+              else
+                cmd.job
+            }
+            command = ${cmd.command}
+          </runcommand>
+        '') cfg.commands)}
       '';
     };
 

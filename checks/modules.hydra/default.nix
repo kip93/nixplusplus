@@ -41,7 +41,21 @@ pkgs.nixosTest {
 
     # Bad security practice, but this is just a test.
     npp.secrets_key = "${../test.key}";
-    npp.hydra = { url = domain; passwordFile = ./hydra.password.age; };
+    npp.hydra = {
+      url = domain;
+      passwordFile = ./hydra.password.age;
+      commands = [
+        {
+          command = "touch /tmp/glob-match";
+        }
+        {
+          project = "test-project";
+          jobset = "test-jobset";
+          job = "test-job";
+          command = "touch /tmp/noglob-match";
+        }
+      ];
+    };
   };
 
   testScript = ''
@@ -53,6 +67,7 @@ pkgs.nixosTest {
     server.wait_for_unit("hydra-server.service")
     server.require_unit_state("hydra-queue-runner.service")
     server.require_unit_state("hydra-evaluator.service")
+    server.require_unit_state("hydra-notify.service")
     server.wait_for_open_port(${toString port})
     server.wait_for_unit("nginx.service")
 
@@ -73,7 +88,7 @@ pkgs.nixosTest {
         -H 'Accept: application/json' \\
         -H 'Content-Type: application/json' \\
         -b cookie_jar.txt \\
-        -X PUT https://${domain}/project/test \\
+        -X PUT https://${domain}/project/test-project \\
         -d ${lib.escapeShellArg (builtins.toJSON {
           displayname = "Test project";
           enabled = 1;
@@ -86,7 +101,7 @@ pkgs.nixosTest {
         -H 'Accept: application/json' \\
         -H 'Content-Type: application/json' \\
         -b cookie_jar.txt \\
-        -X PUT https://${domain}/jobset/test/test \\
+        -X PUT https://${domain}/jobset/test-project/test-jobset \\
         -d ${lib.escapeShellArg (builtins.toJSON {
           description = "Test jobset";
           enabled = 1;
@@ -100,7 +115,7 @@ pkgs.nixosTest {
             type = "path";
             value = "${pkgs.writeTextDir "default.nix" ''
               {
-                test = builtins.derivation {
+                test-job = builtins.derivation {
                   name = "test-job";
                   system = "${system}";
                   builder = "/bin/sh";
@@ -131,6 +146,10 @@ pkgs.nixosTest {
         -H 'Accept: application/json' \\
         -X GET https://${domain}/build/1 \\
       | jq .buildstatus | xargs -r test 0 -eq
+    """)
+
+    server.wait_until_succeeds("""
+      test -f /tmp/glob-match && test -f /tmp/noglob-match
     """)
 
     server.shutdown()
