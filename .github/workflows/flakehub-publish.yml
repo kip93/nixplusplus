@@ -8,6 +8,7 @@ jobs:
     steps:
       - uses: "actions/checkout@v3"
       - uses: "DeterminateSystems/nix-installer-action@main"
+      - run: nix flake lock --update-input systems  # See nix#3978
       - id: version
         run: |
           set -eu
