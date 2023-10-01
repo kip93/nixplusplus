@@ -35,7 +35,7 @@
     },
     // ...
   ],
-  "products": [  // Arbitrary downloadable artifacts, like manuals or ISO files
+  "products": [  // Arbitrary downloadable artefacts, like manuals or ISO files
                  // (defined in $out/nix-support/hydra-build-products)
     // `echo "doc manual $out/foo baz/qax.txt" >>$out/nix-support/hydra-build-products
     {
