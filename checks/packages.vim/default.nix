@@ -15,7 +15,7 @@
 
 { npppkgs, pkgs, ... } @ _args:
 with npppkgs;
-pkgs.nixosTest {
+pkgs.testers.runNixOSTest {
   name = builtins.baseNameOf ./.;
 
   nodes = {

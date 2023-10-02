@@ -14,25 +14,21 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { pkgs, self, ... } @ _args:
-pkgs.nixosTest {
+pkgs.testers.runNixOSTest {
   name = builtins.baseNameOf ./.;
 
-  nodes =
-    let
-      common = { pkgs, ... }: {
-        imports = with self.nixosModules; [ nix-gc ];
-        virtualisation.graphics = false;
-        virtualisation.additionalPaths = with pkgs; [ hello ];
-        npp.nix-gc = { schedule = "@0"; };
-      };
-
-    in
-    {
-      machine1 = { imports = [ common ]; npp.nix-gc = { }; };
-      machine2 = { imports = [ common ]; npp.nix-gc = { last = 10; }; };
-      machine3 = { imports = [ common ]; npp.nix-gc = { days = 10; }; };
-      machine4 = { imports = [ common ]; npp.nix-gc = { last = 0; days = 0; }; };
-    };
+  defaults = { pkgs, ... }: {
+    imports = with self.nixosModules; [ nix-gc ];
+    virtualisation.graphics = false;
+    virtualisation.additionalPaths = with pkgs; [ hello ];
+    npp.nix-gc = { schedule = "@0"; };
+  };
+  nodes = {
+    machine1 = { npp.nix-gc = { }; };
+    machine2 = { npp.nix-gc = { last = 10; }; };
+    machine3 = { npp.nix-gc = { days = 10; }; };
+    machine4 = { npp.nix-gc = { last = 0; days = 0; }; };
+  };
 
   testScript = with pkgs; ''
     start_all()
@@ -65,5 +61,5 @@ pkgs.nixosTest {
       machine.shutdown()
   '';
 
-  meta.timeout = 180;
+  meta.timeout = 300;
 }

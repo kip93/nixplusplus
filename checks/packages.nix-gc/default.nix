@@ -14,7 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { nixpkgs, npppkgs, pkgs, ... } @ _args:
-pkgs.nixosTest {
+pkgs.testers.runNixOSTest {
   name = builtins.baseNameOf ./.;
 
   nodes = {

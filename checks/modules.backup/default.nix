@@ -14,13 +14,15 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { pkgs, self, ... } @ _args:
-pkgs.nixosTest {
+pkgs.testers.runNixOSTest {
   name = builtins.baseNameOf ./.;
 
+  defaults = {
+    virtualisation.graphics = false;
+  };
   nodes = {
     client = {
       imports = with self.nixosModules; [ secrets backup ];
-      virtualisation.graphics = false;
 
       # Bad security practice, but this is just a test.
       npp.secrets_key = "${../test.key}";
@@ -37,7 +39,6 @@ pkgs.nixosTest {
     };
 
     server = { pkgs, ... }: {
-      virtualisation.graphics = false;
       virtualisation.writableStore = true;
 
       environment.systemPackages = with pkgs; [ restic rage ];

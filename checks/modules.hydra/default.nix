@@ -22,7 +22,7 @@ let
   port = (import ../../modules/ports.nix).hydra;
 
 in
-pkgs.nixosTest {
+pkgs.testers.runNixOSTest {
   name = builtins.baseNameOf ./.;
 
   nodes.server = { lib, ... }: {

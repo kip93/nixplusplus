@@ -15,13 +15,15 @@
 
 { self, ... } @ _inputs:
 final: prev: with final; {
-  nixosTest = args:
-    let test = prev.nixosTest args; in test // {
-      meta = (test.meta or { }) // {
-        # NixOS test are Linux exclusive (nixpkgs#193336)
-        platforms = test.meta.platforms or self.lib.supportedSystems'.linux;
+  testers = prev.testers // {
+    runNixOSTest = args:
+      let test = prev.testers.runNixOSTest args; in test // {
+        meta = (test.meta or { }) // {
+          # NixOS test are Linux exclusive (nixpkgs#193336)
+          platforms = test.meta.platforms or self.lib.supportedSystems'.linux;
+        };
       };
-    };
+  };
 
   jre_headless = prev.jre_headless.overrideAttrs (
     { configureFlags ? [ ]
