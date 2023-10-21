@@ -37,6 +37,8 @@ let
     "jobset"
     "json"
     "kip93"
+    "NAS"
+    "NFS"
     "nginx"
     "NixOS"
     "nixplusplus"
@@ -50,6 +52,7 @@ let
     "statix"
     "TODO"
     "upstreamed"
+    "ZFS"
   ];
 
 in

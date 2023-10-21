@@ -24,4 +24,11 @@
   mkForce = mkOverride 51; # nixpkgs sets 50
   # Ignore any user configurations and set the value we ask.
   mkStrict = mkOverride 0; # No nixpkgs equivalent.
+
+  # Create extensions to nixpkgs order functions, to have better granularity.
+  inherit (nixpkgs.lib) mkOrder;
+  # Add this before anything else.
+  mkFirst = mkOrder 0; # mkBefore is 500
+  # Add this after everything else.
+  mkLast = mkOrder 9999; # mkAfter is 1500
 }
