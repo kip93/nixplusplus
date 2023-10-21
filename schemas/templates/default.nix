@@ -13,19 +13,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ flake-schemas, self, ... } @ inputs:
-(self.lib.import.asSchemas' {
-  path = ./.;
-  apply = _: schema: schema inputs;
-}) // {
-  inherit (flake-schemas.schemas)
-    devShells
-    checks
-    # hydraJobs # Reimplemented to avoid nesting into cross compiled jobs
-    nixosConfigurations
-    nixosModules
-    overlays
-    # packages # We have a superset that also allows for cross-compilation
-    schemas
+{ ... } @ _inputs:
+{
+  version = 1;
+  doc = ''
+    The `templates` flake output is used to provide ways to create new flakes using
+    `nix flake init`.
+  '';
+  inventory = output: {
+    children = builtins.mapAttrs
+      (_: _: { what = "flake template"; })
+      output
     ;
+  };
 }

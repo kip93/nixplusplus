@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ hydra, nix, ... } @ inputs:
+{ hydra, nix, ... } @ _inputs:
 final: prev:
 let
   # Avoid infinite recursion by renaming flakes
@@ -27,11 +27,26 @@ let
   hydra_final = final // (hydra'.inputs.nix.overlays.default hydra_final prev);
   # Get the relevant bits out of the provided overlays
   inherit (hydra'.overlays.default hydra_final prev) hydra perlPackages;
-  inherit (nix'.overlays.default final prev) lowdown-nix nix;
+  inherit (nix'.overlays.default final prev) lowdown-nix nix nixStable nixUnstable;
 
 in
 {
   # Expose the extracted packages into the overlay
-  inherit lowdown-nix nix perlPackages;
+  inherit lowdown-nix nix nixStable nixUnstable perlPackages;
+  nixVersions = with final; prev.nixVersions // {
+    schemas = nixSchemas;
+  };
   hydra_unstable = hydra;
+
+  # Build a nix package that has flake schema support (see nix#8892)
+  nixSchemas = nix.overrideAttrs ({ patches ? [ ], ... }: {
+    patches = patches ++ [
+      (final.fetchpatch {
+        url = "https://github.com/NixOS/nix/pull/8892.diff";
+        hash = "sha256-NfBksfuW1RUWe3O9cyqdM+A4O9ZGvEWg8rfv+24BosA=";
+        excludes = [ "doc/manual/src/SUMMARY.md.in" "flake.nix" "flake.lock" ];
+      })
+    ];
+    doCheck = false; # Schema tests still require internet connection
+  });
 }

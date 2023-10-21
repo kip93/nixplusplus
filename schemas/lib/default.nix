@@ -29,6 +29,9 @@ let
       _apply = metadata: {
         what = "Metadata for this flake";
       } // recurse metadata [ "meta" ];
+      homepage._apply = _: {
+        what = "This flake's home page";
+      };
       license._apply = _: {
         what = "GPLv3+ license";
       };
@@ -41,6 +44,7 @@ let
       what = "Cross-compiled nixpkgs with overlays applied";
       children = builtins.mapAttrs
         (localSystem: crossPkgs: {
+          forSystems = [ localSystem ];
           children = builtins.mapAttrs
             (crossSystem: _: {
               what = "nixpkgs (${

@@ -20,7 +20,7 @@
     # Basics
     ({ lib, pkgs, ... }: {
       name = "Nix++";
-      packages = with pkgs; [ cacert coreutils nixVersions.unstable ];
+      packages = with pkgs; [ cacert coreutils nixVersions.schemas ];
       enterShell = lib.mkBefore ''
         EDITOR="''${EDITOR:-${npppkgs.vim-minimal}/bin/vim}" # Default to vim
         export EDITOR
