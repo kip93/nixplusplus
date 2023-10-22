@@ -34,6 +34,81 @@ let
     npp = self;
   };
 
+  # Build a NixOS configuration.
+  buildConfig = modules: import "${nixpkgs}/nixos/lib/eval-config.nix" {
+    inherit specialArgs;
+    system = null;
+    modules = [
+      self.nixosModules.default
+    ] ++ modules;
+  };
+
+  # Takes a list of paths and imports them ready to be used as
+  # `nixosConfigurations`. Adds x86_64-linux as the default system.
+  # Used in building cross NixOS configs.
+  asCrossNixosConfigurations = apply: paths: builtins.listToAttrs (builtins.map
+    (path: rec {
+      name = value.config.networking.hostName;
+      value = buildConfig [
+        # Have a default system, for when not building via the packages below
+        {
+          nixpkgs.localSystem = self.lib.mkDefault {
+            system = "x86_64-linux";
+            config = "x86_64-unknown-linux-gnu";
+          };
+        }
+        (apply (getName path) (import path))
+      ];
+    })
+    paths
+  );
+
+  # Takes a path to a config, local system, and cross system, and it turns it
+  # into a buildable cross compiled package. Output format is an attrset that
+  # has two entries:
+  #  * name:  hostname of the config
+  #  * value: the config's package
+  # Used in building cross NixOS configs.
+  asCrossNixosPackage = apply: path: localSystem: crossSystem:
+    let
+      inherit (buildConfig [
+        ({ config, lib, ... }: {
+          imports = [ (apply (getName path) (import path)) ];
+          nixpkgs = {
+            pkgs = self.lib.mkStrict (import nixpkgs {
+              inherit (config.nixpkgs)
+                config
+                overlays
+                ;
+              inherit
+                localSystem
+                crossSystem
+                ;
+            });
+            buildPlatform = self.lib.mkStrict
+              (lib.systems.elaborate localSystem)
+            ;
+            hostPlatform = self.lib.mkStrict
+              (lib.systems.elaborate crossSystem)
+            ;
+          };
+        })
+      ]) config;
+
+    in
+    {
+      name = config.networking.hostName;
+      value =
+        config.system.build.toplevel.overrideAttrs ({ name, ... }: {
+          name = "${name}+${nixpkgs.lib.optionalString
+            (localSystem != crossSystem)
+            "${localSystem}+"
+          }${crossSystem}";
+        })
+      ;
+    }
+  ;
+
 in
 rec {
   # Locate importable paths in a directory.
@@ -121,27 +196,13 @@ rec {
   asConfigs = path: asConfigs' { inherit path; };
   asConfigs' = { path, apply ? (_: x: x) }:
     builtins.mapAttrs
-      (_: config: import "${nixpkgs}/nixos/lib/eval-config.nix" {
-        inherit specialArgs;
-        system = null;
-        modules = [
-          self.nixosModules.default
-          config
-        ];
-      })
+      (_: config: buildConfig [ config ])
       (asAttrs' { inherit apply path; })
   ;
   # Import a single configuration.
   asConfig = path: asConfig' { inherit path; };
   asConfig' = { path, apply ? (_: x: x) }:
-    import "${nixpkgs}/nixos/lib/eval-config.nix" {
-      inherit specialArgs;
-      system = null;
-      modules = [
-        self.nixosModules.default
-        (apply (getName path) (import path))
-      ];
-    }
+    buildConfig [ (apply (getName path) (import path)) ]
   ;
 
   # Locate importable paths in a directory, and import them as a library.
@@ -227,85 +288,74 @@ rec {
   # setup, by having also package settings alongside with a somewhat simplified
   # structure (one fewer depth level).
   asCrossConfig = path: asCrossConfig' { inherit path; };
-  asCrossConfig' = { path, apply ? (_: x: x) }:
-    let
-      buildConfig = module: import "${nixpkgs}/nixos/lib/eval-config.nix" {
-        inherit specialArgs;
-        system = null;
-        modules = [
-          # Have a default system, for when not building via the packages below
-          {
-            nixpkgs.localSystem = self.lib.mkDefault {
-              system = "x86_64-linux";
-              config = "x86_64-unknown-linux-gnu";
+  asCrossConfig' = { path, apply ? (_: x: x) }: {
+    nixosConfigurations = asCrossNixosConfigurations apply [ path ];
+
+    packages =
+      let
+        packages = self.lib.forEachSystem' /*self.lib.supportedSystems'.linux*/ [ "x86_64-linux" "aarch64-linux" ] (localSystem: crossSystem:
+          let
+            package = (asCrossNixosPackage apply path localSystem crossSystem).value;
+
+          in
+          package.overrideAttrs (_: { passthru.default = package; })
+        );
+
+      in
+      nixpkgs.lib.recursiveUpdate
+        packages
+        (self.lib.forEachSystem /*self.lib.supportedSystems'.linux*/ [ "x86_64-linux" "aarch64-linux" ] (system:
+          packages.${system}.${system}.passthru
+        ))
+    ;
+
+    schemas = {
+      inherit (self.schemas)
+        nixosConfigurations
+        packages
+        schemas
+        ;
+    };
+  };
+
+  # A more complex case of the above, where we have multiple configurations.
+  asCrossConfigs = path: asCrossConfigs' { inherit path; };
+  asCrossConfigs' = { path, apply ? (_: x: x) }: {
+    nixosConfigurations = asCrossNixosConfigurations apply (locate path);
+
+    packages =
+      let
+        packages = self.lib.forEachSystem' self.lib.supportedSystems'.linux (localSystem: crossSystem:
+          (self.lib.pkgs.${localSystem}.${crossSystem}.linkFarm
+            "all-configs-${crossSystem}-meta-package"
+            (builtins.listToAttrs (builtins.map
+              (path': asCrossNixosPackage apply path' localSystem crossSystem)
+              (locate path)
+            ))
+          ).overrideAttrs (super: {
+            passthru = super.passthru.entries // {
+              default = self.lib.pkgs.${localSystem}.${crossSystem}.linkFarm
+                "all-configs-meta-package"
+                super.passthru.entries
+              ;
             };
-          }
-          self.nixosModules.default
-          module
-        ];
-      };
-      baseConfig = apply (getName path) (import path);
+          })
+        );
 
-    in
-    {
-      nixosConfigurations =
-        let
-          nativeConfig = buildConfig baseConfig;
-          inherit (nativeConfig.config.networking) hostName;
+      in
+      nixpkgs.lib.recursiveUpdate
+        packages
+        (self.lib.forEachSystem self.lib.supportedSystems'.linux (system:
+          packages.${system}.${system}.passthru
+        ))
+    ;
 
-        in
-        { ${hostName} = nativeConfig; }
-      ;
-
-      packages =
-        let
-          packages = self.lib.forEachSystem' self.lib.supportedSystems'.linux
-            (localSystem: crossSystem:
-              let
-                crossConfig = buildConfig ({ config, lib, ... }: {
-                  imports = [ baseConfig ];
-                  nixpkgs = {
-                    pkgs = self.lib.mkStrict (import nixpkgs {
-                      inherit (config.nixpkgs)
-                        config
-                        overlays
-                        ;
-                      inherit
-                        localSystem
-                        crossSystem
-                        ;
-                    });
-                    buildPlatform = self.lib.mkStrict
-                      (lib.systems.elaborate localSystem)
-                    ;
-                    hostPlatform = self.lib.mkStrict
-                      (lib.systems.elaborate crossSystem)
-                    ;
-                  };
-                });
-
-              in
-              crossConfig.config.system.build.toplevel.overrideAttrs
-                ({ name, ... }: {
-                  name = "${name}+${nixpkgs.lib.optionalString
-                    (localSystem != crossSystem)
-                    "${localSystem}+"
-                  }${crossSystem}";
-                })
-            )
-          ;
-
-        in
-        nixpkgs.lib.recursiveUpdate
-          packages
-          (self.lib.forEachSystem self.lib.supportedSystems'.linux (system:
-            {
-              default = packages.${system}.${system}.overrideAttrs (_: {
-                passthru = packages.${system};
-              });
-            }
-          ))
-      ;
-    }
-  ;
+    schemas = {
+      inherit (self.schemas)
+        nixosConfigurations
+        packages
+        schemas
+        ;
+    };
+  };
 }
