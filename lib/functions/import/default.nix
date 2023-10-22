@@ -222,7 +222,7 @@ rec {
   ;
 
   # This one is a bit different. Usually when it comes to NixOS configurations,
-  # these flakes only ever contain a sinle configuration and nothing else; and
+  # these flakes only ever contain a single configuration and nothing else; and
   # so with that assumption in mind I can do a hacky config cross compilation
   # setup, by having also package settings alongside with a somewhat simplified
   # structure (one fewer depth level).
