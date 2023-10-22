@@ -293,7 +293,7 @@ rec {
 
     packages =
       let
-        packages = self.lib.forEachSystem' /*self.lib.supportedSystems'.linux*/ [ "x86_64-linux" "aarch64-linux" ] (localSystem: crossSystem:
+        packages = self.lib.forEachSystem' self.lib.supportedSystems'.linux (localSystem: crossSystem:
           let
             package = (asCrossNixosPackage apply path localSystem crossSystem).value;
 
@@ -304,7 +304,7 @@ rec {
       in
       nixpkgs.lib.recursiveUpdate
         packages
-        (self.lib.forEachSystem /*self.lib.supportedSystems'.linux*/ [ "x86_64-linux" "aarch64-linux" ] (system:
+        (self.lib.forEachSystem self.lib.supportedSystems'.linux (system:
           packages.${system}.${system}.passthru
         ))
     ;
