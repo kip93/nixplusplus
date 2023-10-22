@@ -81,6 +81,8 @@ in
             command = ${cmd.command}
           </runcommand>
         '') cfg.commands)}
+
+        ${cfg.extraConfig}
       '';
     };
 

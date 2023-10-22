@@ -125,5 +125,16 @@ in
         command = "cat $HYDRA_JSON >/tmp/hydra-output";
       }];
     };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      description = mdDoc ''
+        Additional hydra configuration entries.
+      '';
+      default = "";
+      example = ''
+        evaluator_workers = 1
+      '';
+    };
   };
 }
