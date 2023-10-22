@@ -234,7 +234,12 @@ rec {
         system = null;
         modules = [
           # Have a default system, for when not building via the packages below
-          { nixpkgs.localSystem = self.lib.mkDefault "x86_64-linux"; }
+          {
+            nixpkgs.localSystem = self.lib.mkDefault {
+              system = "x86_64-linux";
+              config = "x86_64-unknown-linux-gnu";
+            };
+          }
           self.nixosModules.default
           module
         ];
