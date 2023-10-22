@@ -34,10 +34,44 @@ in
         description = "[ nix++ ] Automatic ZFS snapshot - timer";
         wantedBy = [ "multi-user.target" ];
         timerConfig = {
-          OnCalendar = "*:0/15";
-          RandomizedDelaySec = "5m";
           Unit = "npp_zfs-snapshot.service";
-        };
+
+        } // (if builtins.any ({ snapshots, ... }: snapshots.frequent or null != null) (builtins.attrValues cfg.datasets) then {
+          OnCalendar = "*-*-* *:00/15";
+          RandomizedDelaySec = "10m";
+          AccuracySec = "1m";
+          Persistent = false;
+
+        } else if builtins.any ({ snapshots, ... }: snapshots.hourly or null != null) (builtins.attrValues cfg.datasets) then {
+          OnCalendar = "*-*-* *:00";
+          RandomizedDelaySec = "45m";
+          AccuracySec = "5m";
+          Persistent = false;
+
+        } else if builtins.any ({ snapshots, ... }: snapshots.daily or null != null) (builtins.attrValues cfg.datasets) then {
+          OnCalendar = "*-*-* 00:00";
+          RandomizedDelaySec = "8h";
+          AccuracySec = "1h";
+          Persistent = true;
+
+        } else if builtins.any ({ snapshots, ... }: snapshots.weekly or null != null) (builtins.attrValues cfg.datasets) then {
+          OnCalendar = "Sun *-*-* 00:00";
+          RandomizedDelaySec = "1d";
+          AccuracySec = "1h";
+          Persistent = true;
+
+        } else if builtins.any ({ snapshots, ... }: snapshots.monthly or null != null) (builtins.attrValues cfg.datasets) then {
+          OnCalendar = "*-*-01 00:00";
+          RandomizedDelaySec = "7d";
+          AccuracySec = "1h";
+          Persistent = true;
+
+        } else {
+          OnCalendar = "*-01-01 00:00";
+          RandomizedDelaySec = "7d";
+          AccuracySec = "1d";
+          Persistent = true;
+        });
       };
 
       # Service that will do the actual snapshotting.
