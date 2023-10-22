@@ -226,17 +226,14 @@ rec {
     let
       overlays = asAttrs' { inherit apply path; };
     in
-    if overlays ? default then
-      overlays
-    else
-      overlays // {
-        default = final: prev:
-          builtins.foldl'
-            (x: y: x // (y final (prev // x)))
-            { }
-            (builtins.attrValues overlays)
-        ;
-      }
+    overlays // {
+      default = overlays.default or (final: prev:
+        builtins.foldl'
+          (x: y: x // (y final (prev // x)))
+          { }
+          (builtins.attrValues overlays)
+      );
+    }
   ;
 
   # Locate importable paths in a directory, and import them as packages.
