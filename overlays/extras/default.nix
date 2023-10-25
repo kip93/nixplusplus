@@ -57,4 +57,18 @@ final: _: with final; {
       }"
     ; runCommand name { } "mkdir -p $out"
   ;
+
+  # The complement of pkgsCross, pkgsBuildBuild, and pkgsHostTarget. Could be
+  # called pkgsHostHostHost but that'd be a bit excesive.
+  # See nixpkgs#253261
+  pkgsNative = import final.path {
+    config = pkgs.config or { };
+    overlays = [
+      (_: prev': {
+        pkgsNative = prev'.pkgsNative or prev';
+      })
+    ] ++ (pkgs.overlays or [ ]);
+    localSystem = pkgs.hostPlatform;
+    crossSystem = null;
+  };
 }
