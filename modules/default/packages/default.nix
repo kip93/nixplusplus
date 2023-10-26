@@ -52,5 +52,7 @@
       execWheelOnly = true;
       wheelNeedsPassword = true;
     };
+
+    programs.command-not-found.enable = true;
   };
 }
