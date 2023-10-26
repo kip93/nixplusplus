@@ -121,6 +121,7 @@ in
         Configure specific commands to execute after the specified matching jobs
         finish.
       '';
+      default = [ ];
       example = [{
         project = "example-project";
         command = "cat $HYDRA_JSON >/tmp/hydra-output";
