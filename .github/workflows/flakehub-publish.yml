@@ -16,8 +16,8 @@ jobs:
           printf 'minor=%s\n' "$minor" >>"$GITHUB_OUTPUT"
       - uses: "DeterminateSystems/flakehub-push@main"
         with:
-          name: "kip93/npp"
-          visibility: "public"
+          name: kip93/npp
+          visibility: public
           rolling: true
           rolling-minor: ${{ steps.version.outputs.minor }}
           spdx-expression: GPL-3.0-or-later

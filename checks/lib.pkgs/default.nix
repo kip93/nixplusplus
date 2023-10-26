@@ -17,7 +17,7 @@
 pkgs.nixTest {
   name = builtins.baseNameOf ./.;
   checks = {
-    local_build = {
+    localBuild = {
       expr =
         let
           pkgs' = self.lib.pkgs.x86_64-linux.x86_64-linux;
@@ -26,7 +26,7 @@ pkgs.nixTest {
       ;
       expected = true;
     };
-    cross_compilation = {
+    crossCompilation = {
       expr =
         let
           pkgs' = self.lib.pkgs.x86_64-linux.aarch64-linux;

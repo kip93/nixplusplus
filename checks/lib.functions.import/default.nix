@@ -47,12 +47,12 @@ pkgs.nixTest {
       expr = self.lib.import.locate ./apps;
       expected = [ ./apps/sample-app ];
     };
-    locate_empty = {
+    locateEmpty = {
       expr = self.lib.import.locate ./.;
       expected = [ ];
     };
 
-    as_list = {
+    asList = {
       expr = self.lib.import.asList' {
         path = ./apps;
         apply = _: y: y {
@@ -65,7 +65,7 @@ pkgs.nixTest {
         })
       ];
     };
-    as_attrs = {
+    asAttrs = {
       expr = self.lib.import.asAttrs' {
         path = ./apps;
         apply = _: y: y {
@@ -92,7 +92,7 @@ pkgs.nixTest {
       ;
       expected = true;
     };
-    apps_systems = {
+    appsSystems = {
       expr =
         pkgs.lib.lists.subtractLists
           (builtins.attrNames apps)
@@ -112,7 +112,7 @@ pkgs.nixTest {
       ;
       expected = true;
     };
-    checks_systems = {
+    checksSystems = {
       expr =
         pkgs.lib.lists.subtractLists
           (builtins.attrNames checks)
@@ -157,11 +157,11 @@ pkgs.nixTest {
       expr = (pkgs.extend overlays.sample-overlay).foo;
       expected = "bar";
     };
-    overlays-default = {
+    overlaysDefault = {
       expr = (pkgs.extend overlays.default) ? default;
       expected = true;
     };
-    overlays-no-default = {
+    overlaysNoDefault = {
       expr =
         let
           pkgs' = pkgs.extend overlays-no-default.default;
@@ -186,7 +186,7 @@ pkgs.nixTest {
       ;
       expected = true;
     };
-    packages_cross = {
+    packagesCross = {
       expr =
         let
           package = packages.x86_64-linux.aarch64-linux.sample-package;
@@ -201,7 +201,7 @@ pkgs.nixTest {
       ;
       expected = true;
     };
-    packages_systems = {
+    packagesSystems = {
       expr =
         pkgs.lib.lists.subtractLists
           (builtins.attrNames packages)
@@ -209,7 +209,7 @@ pkgs.nixTest {
       ;
       expected = [ "armv6l-linux" ]; # Can only cross compile to armv6l-linux
     };
-    packages_cross_systems = {
+    packagesCrossSystems = {
       expr =
         packages.x86_64-linux ? aarch64-linux
         &&

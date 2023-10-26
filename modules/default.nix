@@ -18,8 +18,6 @@ self.lib.import.asModules' {
   path = ./.;
   apply = _: module: {
     imports = [ (module inputs) ];
-    meta = {
-      inherit (self.lib.meta) maintainers;
-    };
+    meta = { inherit (self.lib.meta) maintainers; };
   };
 }

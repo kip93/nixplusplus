@@ -62,6 +62,7 @@ in
         wantedBy = [ "multi-user.target" ];
         timerConfig = {
           OnCalendar = cfg.schedule;
+          RandomizedDelaySec = "1h";
           Unit = "npp_nix-gc.service";
         };
       };

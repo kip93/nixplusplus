@@ -17,7 +17,9 @@
   # Cherry picked scenarios, since I have only a subset of "supported systems"
   # as hydra builders.
 
-  "x86_64-linux" = self.checks.x86_64-linux;
-  "aarch64-linux" = self.checks.aarch64-linux;
-  "armv7l-linux" = self.checks.armv7l-linux;
+  inherit (self.checks)
+    x86_64-linux
+    aarch64-linux
+    armv7l-linux
+    ;
 }

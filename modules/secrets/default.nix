@@ -40,10 +40,10 @@ in
         };
         path = mkOption {
           type = types.path;
-          readOnly = true;
           description = mdDoc ''
             The path where the secret has been decrypted.
           '';
+          readOnly = true;
           apply = _:
             config.age.secrets.${secret.config._module.args.name}.path
           ;

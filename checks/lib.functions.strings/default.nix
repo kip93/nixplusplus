@@ -54,36 +54,36 @@ pkgs.nixTest {
       expected = "lambda";
     };
 
-    empty_list = {
+    emptyList = {
       expr = self.lib.strings.toString [ ];
       expected = "[ ]";
     };
-    shallow_list = {
+    shallowList = {
       expr = self.lib.strings.toString [{ }];
       expected = "[ { ... } ]";
     };
-    deep_list = {
+    deepList = {
       expr = self.lib.strings.toDeepString [ [ [ 1 2 3 ] ] ];
       expected = "[ [ [ 1 2 3 ] ] ]";
     };
 
-    empty_set = {
+    emptySet = {
       expr = self.lib.strings.toString { };
       expected = "{ }";
     };
-    shallow_set = {
+    shallowSet = {
       expr = self.lib.strings.toString { a.b.c = [ 1 ]; };
       expected = "{ a = { ... }; }";
     };
-    deep_set = {
+    deepSet = {
       expr = self.lib.strings.toDeepString { a.b.c = [ 1 ]; };
       expected = "{ a = { b = { c = [ 1 ]; }; }; }";
     };
-    set_with_string = {
+    setWithString = {
       expr = self.lib.strings.toString { __toString = "foo"; };
       expected = "foo";
     };
-    set_with_out_path = {
+    setWithOutPath = {
       expr = self.lib.strings.toString { outPath = "/foo"; };
       expected = "/foo";
     };

@@ -96,7 +96,7 @@ in
         Type = "oneshot";
         RemainAfterExit = true;
         User = "hydra";
-        ExecStart = "${pkgs.writeShellScript "configure-hydra-user.sh" ''
+        ExecStart = "${pkgs.writeShellScript "npp_configure-hydra-user.sh" ''
           ${config.services.hydra.package}/bin/hydra-create-user admin \
             --role admin \
             --password-hash "$(<${config.npp.secrets."npp.hydra.password".path})"

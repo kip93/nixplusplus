@@ -83,24 +83,24 @@ in
           options = {
             project = mkOption {
               type = types.nullOr nonGlobStr;
-              default = null;
               description = mdDoc ''
                 The name of the project. Defaults to all projects.
               '';
+              default = null;
             };
             jobset = mkOption {
               type = types.nullOr nonGlobStr;
-              default = null;
               description = mdDoc ''
                 The name of the jobset. Defaults to all jobsets.
               '';
+              default = null;
             };
             job = mkOption {
               type = types.nullOr nonGlobStr;
-              default = null;
               description = mdDoc ''
                 The name of the job. Defaults to all jobs.
               '';
+              default = null;
             };
             command = mkOption {
               type = types.nonEmptyStr;
@@ -115,7 +115,8 @@ in
               '';
             };
           };
-        });
+        })
+      ;
       description = mdDoc ''
         Configure specific commands to execute after the specified matching jobs
         finish.

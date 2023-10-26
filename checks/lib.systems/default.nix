@@ -17,18 +17,18 @@
 pkgs.nixTest {
   name = builtins.baseNameOf ./.;
   checks = {
-    systems_exist = {
+    systemsExist = {
       expr = builtins.all
         (x: builtins.any (y: x == y) nixpkgs.lib.systems.doubles.all)
         self.lib.supportedSystems
       ;
       expected = true;
     };
-    for_each_empty = {
+    forEachEmpty = {
       expr = self.lib.forEachSystem [ ] (_: { });
       expected = { };
     };
-    for_each = {
+    forEach = {
       expr = self.lib.forEachSystem [ "x86_64-linux" ] (x: [
         (builtins.elemAt (builtins.split "-" x) 0)
         (builtins.elemAt (builtins.split "-" x) 2)
@@ -37,7 +37,7 @@ pkgs.nixTest {
         x86_64-linux = [ "x86_64" "linux" ];
       };
     };
-    for_each_2 = {
+    forEach2 = {
       expr = self.lib.forEachSystem [ "x86_64-linux" "aarch64-linux" ] (x: [
         (builtins.elemAt (builtins.split "-" x) 0)
         (builtins.elemAt (builtins.split "-" x) 2)
@@ -47,11 +47,11 @@ pkgs.nixTest {
         aarch64-linux = [ "aarch64" "linux" ];
       };
     };
-    for_matrix_empty = {
+    forMatrixEmpty = {
       expr = self.lib.forEachSystem' [ ] (_: _: { });
       expected = { };
     };
-    for_matrix = {
+    forMatrix = {
       expr = self.lib.forEachSystem' [ "x86_64-linux" ] (x: y: [
         [
           (builtins.elemAt (builtins.split "-" x) 0)
@@ -68,7 +68,7 @@ pkgs.nixTest {
         };
       };
     };
-    for_matrix_2 = {
+    forMatrix2 = {
       expr = self.lib.forEachSystem' [ "x86_64-linux" "aarch64-linux" ] (x: y: [
         [
           (builtins.elemAt (builtins.split "-" x) 0)
@@ -90,15 +90,15 @@ pkgs.nixTest {
         };
       };
     };
-    is_supported_implicit = {
+    isSupportedImplicit = {
       expr = self.lib.isSupported { } "x86_64-linux";
       expected = true;
     };
-    is_supported_explicit = {
+    isSupportedExplicit = {
       expr = self.lib.isSupported { meta.platforms = [ "x86_64-linux" ]; } "x86_64-linux";
       expected = true;
     };
-    is_not_supported = {
+    isNotSupported = {
       expr = self.lib.isSupported { meta.platforms = [ "x86_64-linux" ]; } "aarch64-linux";
       expected = false;
     };
