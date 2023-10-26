@@ -45,7 +45,6 @@
       inputs = {
         flake-parts.follows = "flake-parts";
         nixpkgs.follows = "nixpkgs";
-        systems.follows = "systems";
         flake.follows = "";
       };
     };
@@ -55,9 +54,6 @@
     };
     flake-utils = {
       url = "github:numtide/flake-utils/main";
-      inputs = {
-        systems.follows = "systems";
-      };
     };
     flake-parts = {
       url = "github:hercules-ci/flake-parts/main";
@@ -141,10 +137,6 @@
         flake-utils.follows = "flake-utils";
         nixpkgs.follows = "nixpkgs";
       };
-    };
-    systems = {
-      url = "path:systems.nix";
-      flake = false;
     };
   };
 
