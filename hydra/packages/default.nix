@@ -31,6 +31,7 @@ builtins.mapAttrs
   "x86_64-linux.aarch64-linux" = self.packages.x86_64-linux.aarch64-linux;
   "x86_64-linux.armv7l-linux" = self.packages.x86_64-linux.armv7l-linux;
   "x86_64-linux.armv6l-linux" = self.packages.x86_64-linux.armv6l-linux;
+  "aarch64-linux.x86_64-linux" = self.packages.aarch64-linux.x86_64-linux;
   "aarch64-linux.armv7l-linux" = self.packages.aarch64-linux.armv7l-linux;
   "aarch64-linux.armv6l-linux" = self.packages.aarch64-linux.armv6l-linux;
   "armv7l-linux.armv6l-linux" = self.packages.armv7l-linux.armv6l-linux;
