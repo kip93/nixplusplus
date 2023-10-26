@@ -96,7 +96,7 @@ in
   config = {
     networking.hostId = self.lib.mkDefault "00000000";
     boot = {
-      kernelPackages = self.lib.mkDefault
+      kernelPackages =
         config.boot.zfs.package.latestCompatibleLinuxPackages
       ;
       initrd = {
