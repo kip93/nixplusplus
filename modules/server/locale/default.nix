@@ -16,6 +16,6 @@
 { self, ... } @ _inputs: {
   config = {
     console.keyMap = self.lib.mkDefault "us";
-    time.timeZone = self.lib.mkStrict "Etc/UTC";
+    time.timeZone = "Etc/UTC";
   };
 }
