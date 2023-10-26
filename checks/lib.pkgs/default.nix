@@ -22,7 +22,7 @@ pkgs.nixTest {
         let
           pkgs' = self.lib.pkgs.x86_64-linux.x86_64-linux;
         in
-        pkgs'.buildPlatform == pkgs'.targetPlatform
+        pkgs'.buildPlatform == pkgs'.hostPlatform
       ;
       expected = true;
     };
@@ -33,7 +33,7 @@ pkgs.nixTest {
         in
         pkgs'.buildPlatform.system == "x86_64-linux"
         &&
-        pkgs'.targetPlatform.system == "aarch64-linux"
+        pkgs'.hostPlatform.system == "aarch64-linux"
       ;
       expected = true;
     };
