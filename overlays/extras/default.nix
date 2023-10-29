@@ -14,49 +14,51 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 { self, ... } @ _inputs:
-final: _: with final; {
-  # An analogous to pkgs.nixosTest, but for nix expressions instead of
-  # derivations.
+final: prev: with final; {
+  # An analogous to pkgs.testers.runNixOSTest, but for nix expressions instead
+  # of derivations.
   # Basically a wrapper for pkgs.lib.runTests, made to work for nix flake
-  # checks. Just like nixosTest, it runs a test and then creates an empty
-  # derivation as a placeholder. Unlike nixosTest, this runs at evaluation time,
-  # not build time; therefore this will run first, and will fail fast.
-  nixTest = { name, checks }:
-    let
-      failed = builtins.listToAttrs
-        (builtins.map
-          (result: {
-            name = builtins.substring 4 (builtins.stringLength result.name)
-              result.name
-            ;
-            value = { inherit (result) result expected; };
-          })
-          (lib.runTests (lib.mapAttrs'
-            (name: value: {
-              name = "test${name}";
-              inherit value;
+  # checks. Just like runNixOSTest, it runs a test and then creates an empty
+  # derivation as a placeholder. Unlike runNixOSTest, this runs at evaluation
+  # time, not build time; therefore this will run first, and will fail fast.
+  testers = prev.testers // {
+    nixTest = { name, checks }:
+      let
+        failed = builtins.listToAttrs
+          (builtins.map
+            (result: {
+              name = builtins.substring 4 (builtins.stringLength result.name)
+                result.name
+              ;
+              value = { inherit (result) result expected; };
             })
-            checks
-          ))
-        )
-      ;
-    in
-    assert lib.asserts.assertMsg
-      (builtins.length (builtins.attrNames failed) == 0)
-      "[ ${name} ] Tests failed:${builtins.foldl'
-        (x: name:
-          let
-            failure = failed.${name};
-            actual = self.lib.strings.toDeepString failure.result;
-            expected = self.lib.strings.toDeepString failure.expected;
-          in
-          "${x}\n* ${name}\n  ${actual} != ${expected}"
-        )
-        ""
-        (builtins.attrNames failed)
-      }"
-    ; runCommand name { } "mkdir -p $out"
-  ;
+            (lib.runTests (lib.mapAttrs'
+              (name: value: {
+                name = "test${name}";
+                inherit value;
+              })
+              checks
+            ))
+          )
+        ;
+      in
+      assert lib.asserts.assertMsg
+        (builtins.length (builtins.attrNames failed) == 0)
+        "[ ${name} ] Tests failed:${builtins.foldl'
+          (x: name:
+            let
+              failure = failed.${name};
+              actual = self.lib.strings.toDeepString failure.result;
+              expected = self.lib.strings.toDeepString failure.expected;
+            in
+            "${x}\n* ${name}\n  ${actual} != ${expected}"
+          )
+          ""
+          (builtins.attrNames failed)
+        }"
+      ; runCommand name { } "mkdir -p $out"
+    ;
+  };
 
   # The complement of pkgsCross, pkgsBuildBuild, and pkgsHostTarget. Could be
   # called pkgsHostHostHost but that'd be a bit excesive.

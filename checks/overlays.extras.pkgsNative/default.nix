@@ -20,7 +20,7 @@ let
   crossPkgs = self.lib.pkgs.x86_64-linux.aarch64-linux;
 
 in
-pkgs.nixTest {
+pkgs.testers.nixTest {
   name = builtins.baseNameOf ./.;
   checks = {
     sameSystem = {

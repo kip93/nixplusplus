@@ -40,7 +40,7 @@ let
   templates = self.lib.import.asTemplates ./templates;
 
 in
-pkgs.nixTest {
+pkgs.testers.nixTest {
   name = builtins.baseNameOf ./.;
   checks = {
     locate = {
