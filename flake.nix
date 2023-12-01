@@ -71,9 +71,7 @@
       };
     };
     home-manager = {
-      url = "https://flakehub.com/f/nix-community/home-manager/0.1.0.tar.gz";
-      # TODO Switch back to stable when 23.11 comes out
-      # url = "https://flakehub.com/f/nix-community/home-manager/*.tar.gz";
+      url = "https://flakehub.com/f/nix-community/home-manager/*.tar.gz";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
@@ -110,9 +108,7 @@
       url = "github:NixOS/nixos-hardware/master";
     };
     nixpkgs = {
-      url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.0.tar.gz";
-      # TODO Switch back to stable when 23.11 comes out
-      # url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
+      url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
     };
     # TODO devenv#745
     # poetry2nix = {

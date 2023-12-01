@@ -39,7 +39,8 @@ in
   hydra_unstable = hydra;
 
   # Build a nix package that has flake schema support (see nix#8892)
-  nixSchemas = nix.overrideAttrs ({ patches ? [ ], ... }: {
+  nixSchemas = final.nixVersions.nix_2_18.overrideAttrs ({ patches ? [ ], ... }: {
+    pname = "nix-schemas";
     patches = patches ++ [
       (final.fetchpatch {
         url = "https://github.com/NixOS/nix/pull/8892.diff";
@@ -47,6 +48,9 @@ in
         excludes = [ "doc/manual/src/SUMMARY.md.in" "flake.nix" "flake.lock" ];
       })
     ];
-    doCheck = false; # Schema tests still require internet connection
+
+    # Schema tests still require internet connection
+    doCheck = false;
+    doInstallCheck = false;
   });
 }

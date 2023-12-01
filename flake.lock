@@ -216,16 +216,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1698250431,
-        "narHash": "sha256-qs2gTeH4wpnWPO6Oi6sOhp2IhG0i0DzcnrJxIY3/CP8=",
-        "rev": "09587fbbc6a669f7725613e044c2577dc5d43ab5",
-        "revCount": 3087,
+        "lastModified": 1700814205,
+        "narHash": "sha256-lWqDPKHRbQfi+zNIivf031BUeyciVOtwCwTjyrhDB5g=",
+        "rev": "aeb2232d7a32530d3448318790534d196bf9427a",
+        "revCount": 3137,
         "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/nix-community/home-manager/0.1.3087%2Brev-09587fbbc6a669f7725613e044c2577dc5d43ab5/018b679e-4d1a-7251-8be5-847ed0a39b27/source.tar.gz"
+        "url": "https://api.flakehub.com/f/pinned/nix-community/home-manager/0.2311.3137%2Brev-aeb2232d7a32530d3448318790534d196bf9427a/018c0081-bcd9-7796-8a7f-2e553d22218f/source.tar.gz"
       },
       "original": {
         "type": "tarball",
-        "url": "https://flakehub.com/f/nix-community/home-manager/0.1.0.tar.gz"
+        "url": "https://flakehub.com/f/nix-community/home-manager/%2A.tar.gz"
       }
     },
     "hydra": {
@@ -335,11 +335,11 @@
         "nixpkgs-regression": "nixpkgs-regression_2"
       },
       "locked": {
-        "lastModified": 1696259154,
-        "narHash": "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=",
+        "lastModified": 1701122567,
+        "narHash": "sha256-iA8DqS+W2fWTfR+nNJSvMHqQ+4NpYMRT3b+2zS6JTvE=",
         "owner": "NixOS",
         "repo": "nix",
-        "rev": "f5f4de6a550327b4b1a06123c2e450f1b92c73b6",
+        "rev": "50f8f1c8bc019a4c0fd098b9ac674b94cfc6af0d",
         "type": "github"
       },
       "original": {
@@ -384,16 +384,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1698134075,
-        "narHash": "sha256-foCD+nuKzfh49bIoiCBur4+Fx1nozo+4C/6k8BYk4sg=",
-        "rev": "8efd5d1e283604f75a808a20e6cde0ef313d07d4",
-        "revCount": 540331,
+        "lastModified": 1701263465,
+        "narHash": "sha256-lNXUIlkfyDyp9Ox21hr+wsEf/IBklLvb6bYcyeXbdRc=",
+        "rev": "50aa30a13c4ab5e7ba282da460a3e3d44e9d0eb3",
+        "revCount": 552290,
         "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/NixOS/nixpkgs/0.1.540331%2Brev-8efd5d1e283604f75a808a20e6cde0ef313d07d4/018b68a1-980b-79cd-8916-4ac2a0b4d400/source.tar.gz"
+        "url": "https://api.flakehub.com/f/pinned/NixOS/nixpkgs/0.2311.552290%2Brev-50aa30a13c4ab5e7ba282da460a3e3d44e9d0eb3/018c2040-b298-7891-a1fa-f5820457f9cb/source.tar.gz"
       },
       "original": {
         "type": "tarball",
-        "url": "https://flakehub.com/f/NixOS/nixpkgs/0.1.0.tar.gz"
+        "url": "https://flakehub.com/f/NixOS/nixpkgs/%2A.tar.gz"
       }
     },
     "nixpkgs-regression": {
