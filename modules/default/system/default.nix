@@ -31,13 +31,12 @@
         substituters = [
           "https://cache.nixos.org/"
           "https://nix-community.cachix.org/"
-          "https://kip93.cachix.org"
+          "https://npp.cachix.org"
         ];
         trusted-public-keys = [
           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-          "kip93.cachix.org-1:SSwmPNc/WrxSIMKREDw/cisT17XYLB14sEkx1HMXGwQ="
-          "k93-1:wHbMV55yrJjYJ8HaxUp+WelU79KYJnil+cfSl3dtn24="
+          "npp.cachix.org-1:L4IIIpXuj6UnPe/bCNsNquzuyHZfi34mYClXv5xZVx8="
         ];
       };
       registry = builtins.mapAttrs
