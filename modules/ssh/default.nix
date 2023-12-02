@@ -56,7 +56,9 @@ in
       # Be a bit more lenient by default (not much of an issue without password
       # auths).
       maxretry = 20;
-      bantime = null; # Ban forever
+      # Ban for ever increasing times
+      bantime = "1h";
+      bantime-increment = { enable = true; rndtime = "5m"; };
     };
   };
 }
