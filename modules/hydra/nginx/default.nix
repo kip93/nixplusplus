@@ -13,16 +13,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ ... } @ _inputs:
-{ config, lib, ... }:
+{ self, ... } @ _inputs:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.npp.${builtins.baseNameOf ./..};
+  hosts = [
+    (lib.removePrefix "www." cfg.url)
+  ] ++ (lib.optional (!self.lib.strings.isValidIP cfg.url)
+    "www.${lib.removePrefix "www." cfg.url}"
+  );
 
 in
 {
   config = {
     networking.firewall.allowedTCPPorts = [ 80 443 ];
-    security.acme = lib.optionalAttrs (cfg.email != null) {
+    security.acme = lib.optionalAttrs (cfg.useACME && cfg.email != null) {
       certs.${cfg.url} = { inherit (cfg) email; };
     };
 
@@ -32,7 +37,9 @@ in
         npp_hydra_https = {
           serverName = cfg.url;
           serverAliases = [ ];
-          enableACME = true;
+          enableACME = cfg.useACME;
+          ${if !cfg.useACME then "sslCertificate" else null} = "/var/lib/npp/hydra.cert";
+          ${if !cfg.useACME then "sslCertificateKey" else null} = "/var/lib/npp/hydra.key";
           onlySSL = true;
           locations."/" = {
             proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}/";
@@ -61,5 +68,59 @@ in
         };
       };
     };
+
+    networking.hosts = { "127.0.0.1" = hosts; "::1" = hosts; };
+    system.activationScripts.npp_hydra_cert = lib.optionalString (!cfg.useACME) ''
+      (
+        set -eu
+        export PATH=${with pkgs; lib.escapeShellArg (lib.makeBinPath [
+          coreutils
+          openssl
+        ])}
+
+        if [ ! -f /var/lib/npp/hydra.cert ] || [ ! -f /var/lib/npp/hydra.key ] ; then
+          mkdir -p /var/lib/npp
+          rm -rf /var/lib/npp/hydra.cert /var/lib/npp/hydra.key
+
+          openssl req 2>/dev/null \
+            -newkey rsa:4096 -x509 -sha256 -nodes \
+            -config ${pkgs.writeText "openssl-hydra.conf" ''
+              [req]
+              prompt = no
+              distinguished_name = req_distinguished_name
+              req_extensions = v3_req
+              [req_distinguished_name]
+              CN = ${cfg.url}
+              ${lib.optionalString (cfg.email != null) ''
+                emailAddress = ${cfg.email}
+              ''}
+              [v3_req]
+              keyUsage = keyEncipherment, dataEncipherment
+              extendedKeyUsage = serverAuth
+              subjectAltName = @alt_names
+              [alt_names]
+              ${builtins.concatStringsSep "" (builtins.map
+                ({ i, elem }: "DNS.${toString i} = ${elem}\n")
+                (builtins.genList
+                  (i: { i = i + 1; elem = builtins.elemAt hosts i; })
+                  (builtins.length hosts)
+                )
+              )}
+            ''} \
+            -days 999999 \
+            -out /var/lib/npp/hydra.cert \
+            -keyout /var/lib/npp/hydra.key
+
+          openssl x509 \
+            -in /var/lib/npp/hydra.cert \
+            -noout -text -certopt no_serial,no_issuer,no_pubkey,no_sigdump
+
+          chown ${with config.services.nginx; "${user}:${group}"} /var/lib/npp/hydra.*
+
+          mkdir -p /run/nixos
+          printf 'nginx.service\n' >>/run/nixos/activation-restart-list
+        fi
+      )
+    '';
   };
 }

@@ -13,12 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ nixpkgs, pkgs, self, system, ... } @ _args:
+{ pkgs, self, system, ... } @ _args:
 let
   inherit (pkgs) lib;
 
-  certs = import "${nixpkgs}/nixos/tests/common/acme/server/snakeoil-certs.nix";
-  inherit (certs) domain;
+  domain = "example.com";
   port = (import ../../modules/ports.nix).hydra;
 
 in
@@ -30,19 +29,14 @@ pkgs.testers.runNixOSTest {
     virtualisation = { memorySize = 2048; graphics = false; };
     environment.systemPackages = with pkgs; [ curl jq ];
 
-    # Disable Let's encrypt and use hardcoded certs
-    networking.hosts = { "127.0.0.1" = [ domain ]; "::1" = [ domain ]; };
-    security.pki.certificateFiles = [ certs.ca.cert ];
-    services.nginx.virtualHosts.npp_hydra_https = {
-      enableACME = lib.mkForce false;
-      sslCertificate = certs.${domain}.cert;
-      sslCertificateKey = certs.${domain}.key;
-    };
+    # There's no network, disable substituters
+    services.hydra.useSubstitutes = lib.mkForce false;
 
     # Bad security practice, but this is just a test.
     npp.secrets_key = "${../test.key}";
     npp.hydra = {
       url = domain;
+      useACME = false;
       passwordFile = ./hydra.password.age;
       commands = [
         {
@@ -72,7 +66,7 @@ pkgs.testers.runNixOSTest {
     server.wait_for_unit("nginx.service")
 
     server.succeed("""
-      curl -fsSe https://${domain} >&2 \\
+      curl -fksSe https://${domain} >&2 \\
         -H 'Accept: application/json' \\
         -H 'Content-Type: application/json' \\
         -c cookie_jar.txt \\
@@ -84,7 +78,7 @@ pkgs.testers.runNixOSTest {
     """)
 
     server.succeed("""
-      curl -fsSe https://${domain} >&2 \\
+      curl -fksSe https://${domain} >&2 \\
         -H 'Accept: application/json' \\
         -H 'Content-Type: application/json' \\
         -b cookie_jar.txt \\
@@ -97,7 +91,7 @@ pkgs.testers.runNixOSTest {
     """)
 
     server.succeed("""
-      curl -fsSe https://${domain} >&2 \\
+      curl -fksSe https://${domain} >&2 \\
         -H 'Accept: application/json' \\
         -H 'Content-Type: application/json' \\
         -b cookie_jar.txt \\
@@ -130,19 +124,19 @@ pkgs.testers.runNixOSTest {
     """)
 
     server.wait_until_succeeds("""
-      curl -fsS >&2 \\
+      curl -fksS >&2 \\
         -H 'Accept: application/json' \\
         -X GET https://${domain}/eval/1
     """)
 
     server.wait_until_succeeds("""
-      curl -fsS >&2 \\
+      curl -fksS >&2 \\
         -H 'Accept: application/json' \\
         -X GET https://${domain}/build/1
     """)
 
     server.wait_until_succeeds("""
-      curl -fsS >&2 \\
+      curl -fksS >&2 \\
         -H 'Accept: application/json' \\
         -X GET https://${domain}/build/1 \\
       | jq .buildstatus | xargs -r test 0 -eq

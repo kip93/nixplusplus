@@ -39,13 +39,24 @@ in
       '';
       example = "hydra.example.com";
     };
+    useACME = mkOption {
+      type = types.bool;
+      description = mdDoc ''
+        If Let's encrypt should be used instead of generating a self-signed certificate.
+      '';
+      default = true;
+    };
     email = mkOption {
       type = types.nullOr types.singleLineStr;
       description = mdDoc ''
-        Email used to issue certificate with Let's encrypt.
+        Email used to create the SSL certificate.
       '';
       default = null;
-      defaultText = literalExpression "config.security.acme.defaults.email";
+      defaultText = literalMD ''
+        if `useACME` is `true`, `null` means that `config.security.acme.defaults.email`
+        will be used. If `useACME` is `false`, then a `null` value will omit the email
+        field in the self-signed cert.
+      '';
       example = "hydra@example.com";
     };
 
