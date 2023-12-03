@@ -15,5 +15,8 @@
 
 { self, ... } @ _inputs:
 { pkgs, ... }: {
-  config.boot.kernelPackages = self.lib.mkDefault pkgs.linuxPackages_hardened;
+  config.boot = {
+    kernelPackages = self.lib.mkDefault pkgs.linuxPackages_hardened;
+    kernelParams = [ "panic=5" ];
+  };
 }
