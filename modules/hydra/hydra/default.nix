@@ -44,7 +44,7 @@ in
       enable = true;
       listenHost = "127.0.0.1";
       inherit port;
-      hydraURL = cfg.url;
+      hydraURL = "https://${cfg.url}/";
       notificationSender = "noone@nowhere";
       useSubstitutes = true;
       inherit (cfg) logo;
