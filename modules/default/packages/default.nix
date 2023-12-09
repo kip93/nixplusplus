@@ -35,9 +35,8 @@
           less
           openssh
           p7zip
-          pigz
-          pixz
           vim-minimal
+          xz
         ]
       ;
       systemPackages = [ ];
