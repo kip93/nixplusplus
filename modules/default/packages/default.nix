@@ -22,6 +22,7 @@
         with self.packages.${pkgs.buildPlatform.system}.${pkgs.hostPlatform.system};
         self.lib.mkForce [
           bash
+          binutils
           cacert
           coreutils-full
           curl
@@ -31,6 +32,7 @@
           gnupg
           gnused
           gnutar
+          gzip
           htop
           less
           openssh
