@@ -49,6 +49,7 @@
       //  - file:srpm              SRPM package
       //  - file:deb               DEB package
       //  - file:iso               ISO image
+      //  - file:sd-image          SD image
       //  - file:binary-dist       Binary file
       //  - file:*                 Generic file
       //  - channel:*              Nix channel
