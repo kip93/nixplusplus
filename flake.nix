@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -20,8 +20,33 @@
   '';
 
   inputs = {
+    nixpkgs = {
+      url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
+    };
+    home-manager = {
+      url = "https://flakehub.com/f/nix-community/home-manager/*.tar.gz";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    hydra = {
+      url = "github:NixOS/hydra/nix-2.20"; # Keep in sync! (See hydra#1182)
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nix.follows = "nix";
+      };
+    };
+    nix = {
+      url = "https://flakehub.com/f/NixOS/nix/2.20.*.tar.gz";
+      inputs = {
+        flake-compat.follows = "flake-compat";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
     agenix = {
-      url = "https://flakehub.com/f/ryantm/agenix/0.14.*.tar.gz";
+      url = "https://flakehub.com/f/ryantm/agenix/*.tar.gz";
       inputs = {
         home-manager.follows = "home-manager";
         nixpkgs.follows = "nixpkgs";
@@ -29,14 +54,10 @@
     };
     devenv = {
       url = "github:cachix/devenv/main";
-      # TODO devenv#745
-      # url = "github:cachix/devenv/python-rewrite";
       inputs = {
         flake-compat.follows = "flake-compat";
         nix.follows = "nix";
         nixpkgs.follows = "nixpkgs";
-        # TODO devenv#745
-        # poetry2nix.follows = "poetry2nix";
         pre-commit-hooks.follows = "pre-commit-hooks";
       };
     };
@@ -70,35 +91,8 @@
         nixpkgs.follows = "nixpkgs";
       };
     };
-    home-manager = {
-      url = "https://flakehub.com/f/nix-community/home-manager/*.tar.gz";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
-    hydra = {
-      url = "github:NixOS/hydra/master";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        # nix.follows = "nix"; # DON'T! See hydra#1182
-      };
-    };
     impermanence = {
       url = "github:nix-community/impermanence/master";
-    };
-    # microvm-nix = {
-    #   url = "github:astro/microvm.nix/main";
-    #   inputs = {
-    #     flake-utils.follows = "flake-utils";
-    #     nixpkgs.follows = "nixpkgs";
-    #   };
-    # };
-    nix = {
-      url = "github:NixOS/nix/latest-release";
-      inputs = {
-        flake-compat.follows = "flake-compat";
-        nixpkgs.follows = "nixpkgs";
-      };
     };
     nixos-artwork = {
       url = "github:NixOS/nixos-artwork/master";
@@ -107,17 +101,6 @@
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
     };
-    nixpkgs = {
-      url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
-    };
-    # TODO devenv#745
-    # poetry2nix = {
-    #   url = "github:nix-community/poetry2nix/master";
-    #   inputs = {
-    #     flake-utils.follows = "flake-utils";
-    #     nixpkgs.follows = "nixpkgs";
-    #   };
-    # };
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix/master";
       inputs = {

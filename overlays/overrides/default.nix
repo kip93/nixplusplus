@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -16,33 +16,34 @@
 { hydra, nix, ... } @ _inputs:
 final: prev:
 let
-  # Avoid infinite recursion by renaming flakes
-  hydra' = hydra;
-  nix' = nix;
-
-in
-let
-  # A fake overlaid pkgs, to ensure that hydra uses it's own version of nix,
-  # due to hydra#1182
-  hydra_final = final // (hydra'.inputs.nix.overlays.default hydra_final prev);
-  # Get the relevant bits out of the provided overlays
-  inherit (hydra'.overlays.default hydra_final prev) hydra perlPackages;
-  inherit (nix'.overlays.default final prev) lowdown-nix nix nixStable nixUnstable;
+  # A fake set of overlaid pkgs, to ensure that hydra uses it's own version of
+  # nix, due to hydra#1182.
+  # Also useful for just getting out the relevant parts.
+  hydra_prev = prev
+    // (hydra.inputs.nix.overlays.default hydra_final prev)
+  ;
+  hydra_final = hydra_prev
+    // (hydra.overlays.default hydra_final hydra_prev)
+  ;
+  # A fake overlaid pkgs, to just extract the interesting parts out of the
+  # nix overlay.
+  nix_final = final
+    // (nix.overlays.default nix_final prev)
+  ;
 
 in
 {
-  # Expose the extracted packages into the overlay
-  inherit lowdown-nix nix nixStable nixUnstable perlPackages;
+  # Expose the relevant packages into the overlay
+  inherit (nix_final) nix nixStable nixUnstable nix-perl-bindings;
   nixVersions = with final; prev.nixVersions // {
     schemas = nixSchemas;
   };
-  hydra_unstable = hydra;
 
-  # Build a nix package that has flake schema support (see nix#8892)
-  nixSchemas = final.nixVersions.nix_2_18.overrideAttrs ({ patches ? [ ], ... }: {
+  # Build a nix package that has flake schema support (see nix#8892).
+  nixSchemas = with final; nixVersions.nix_2_18.overrideAttrs ({ patches ? [ ], ... }: {
     pname = "nix-schemas";
     patches = patches ++ [
-      (final.fetchpatch {
+      (fetchpatch {
         url = "https://github.com/NixOS/nix/pull/8892.diff";
         hash = "sha256-NfBksfuW1RUWe3O9cyqdM+A4O9ZGvEWg8rfv+24BosA=";
         excludes = [ "doc/manual/src/SUMMARY.md.in" "flake.nix" "flake.lock" ];
@@ -52,5 +53,26 @@ in
     # Schema tests still require internet connection
     doCheck = false;
     doInstallCheck = false;
+  });
+
+  hydra_unstable = with final; hydra_final.hydra.overrideAttrs ({ patches ? [ ], ... }: {
+    patches = patches ++ [
+      # See nix#7098.
+      (writeText "hydra-disable-restrict-eval.patch" ''
+        --- a/src/hydra-eval-jobs/hydra-eval-jobs.cc
+        +++ b/src/hydra-eval-jobs/hydra-eval-jobs.cc
+        @@ -317,1 +317,1 @@
+        -        evalSettings.restrictEval = true;
+        +        evalSettings.restrictEval = false;
+      '')
+      # See cachix/devenv#658.
+      (writeText "hydra-disable-pure-eval.patch" ''
+        --- a/src/hydra-eval-jobs/hydra-eval-jobs.cc
+        +++ b/src/hydra-eval-jobs/hydra-eval-jobs.cc
+        @@ -321,1 +321,1 @@
+        -        evalSettings.pureEval = pureEval;
+        +        evalSettings.pureEval = false;
+      '')
+    ];
   });
 }
