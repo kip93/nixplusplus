@@ -1,0 +1,18 @@
+# TODO remove (https://github.com/flakestry/flakestry.dev/issues/1)
+name: "Publish flake to Flakestry"
+on: { push: { branches: [ "main", "develop" ] } }
+jobs:
+  flakestry-publish:
+    runs-on: ubuntu-latest
+    permissions: { id-token: "write", contents: "read" }
+    steps:
+      - uses: flakestry/flakestry-publish@main
+        if: github.ref == 'refs/heads/main'
+        with:
+          ref: "${{ github.ref }}"
+          version: "v1.{date}.{time}"
+      - uses: flakestry/flakestry-publish@main
+        if: github.ref == 'refs/heads/develop'
+        with:
+          ref: "${{ github.ref }}"
+          version: "v0.{date}.{time}"

@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -14,4 +14,5 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # TODO remove (https://github.com/DeterminateSystems/flakehub-push/issues/79)
+# TODO remove (https://github.com/flakestry/flakestry.dev/issues/1)
 { pre-commit.hooks.actionlint.enable = true; }
