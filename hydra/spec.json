@@ -3,9 +3,18 @@
         "type": 1,
         "enabled": 1,
         "hidden": false,
-        "flake": "git+ssh://git.kip93.net/nix++",
-        "checkinterval": 900,
-        "keepnr": 10,
+        "flake": "git+ssh://git.kip93.net/nix++?ref=main",
+        "checkinterval": 21600,
+        "keepnr": 5,
+        "emailoverride": ""
+    },
+    "develop": {
+        "type": 1,
+        "enabled": 1,
+        "hidden": false,
+        "flake": "git+ssh://git.kip93.net/nix++?ref=develop",
+        "checkinterval": 1800,
+        "keepnr": 20,
         "emailoverride": ""
     }
 }
