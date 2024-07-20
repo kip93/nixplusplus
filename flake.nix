@@ -21,57 +21,60 @@
 
   inputs = {
     nixpkgs = {
-      url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
+      url = "github:NixOS/nixpkgs/nixos-24.05";
     };
     home-manager = {
-      url = "https://flakehub.com/f/nix-community/home-manager/*.tar.gz";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
     };
 
     hydra = {
-      url = "github:NixOS/hydra/nix-2.20"; # Keep in sync! (See hydra#1182)
+      url = "github:NixOS/hydra/nix-2.22"; # Keep in sync! (See hydra#1182)
       inputs = {
         nixpkgs.follows = "nixpkgs";
         nix.follows = "nix";
       };
     };
     nix = {
-      url = "https://flakehub.com/f/NixOS/nix/2.20.*.tar.gz";
+      url = "github:NixOS/nix/2.22.2";
       inputs = {
         flake-compat.follows = "flake-compat";
+        flake-parts.follows = "flake-parts";
         nixpkgs.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
       };
     };
 
     agenix = {
-      url = "https://flakehub.com/f/ryantm/agenix/*.tar.gz";
+      url = "github:ryantm/agenix/0.15.0";
       inputs = {
         home-manager.follows = "home-manager";
         nixpkgs.follows = "nixpkgs";
       };
     };
+    cachix = {
+      url = "github:cachix/cachix";
+      inputs = {
+        devenv.follows = "devenv";
+        flake-compat.follows = "flake-compat";
+        nixpkgs.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+      };
+    };
     devenv = {
       url = "github:cachix/devenv/main";
       inputs = {
+        cachix.follows = "cachix";
         flake-compat.follows = "flake-compat";
         nix.follows = "nix";
         nixpkgs.follows = "nixpkgs";
         pre-commit-hooks.follows = "pre-commit-hooks";
       };
     };
-    devour = {
-      url = "github:srid/devour-flake/v3";
-      inputs = {
-        flake-parts.follows = "flake-parts";
-        nixpkgs.follows = "nixpkgs";
-        flake.follows = "";
-      };
-    };
     flake-compat = {
       url = "github:nix-community/flake-compat/master";
-      flake = false;
     };
     flake-utils = {
       url = "github:numtide/flake-utils/main";
@@ -83,7 +86,7 @@
       };
     };
     flake-schemas = {
-      url = "https://flakehub.com/f/DeterminateSystems/flake-schemas/0.1.*.tar.gz";
+      url = "github:DeterminateSystems/flake-schemas/main";
     };
     gitignore-nix = {
       url = "github:hercules-ci/gitignore.nix/master";
@@ -102,18 +105,17 @@
       url = "github:NixOS/nixos-hardware/master";
     };
     pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix/master";
+      url = "github:cachix/git-hooks.nix/master";
       inputs = {
         flake-compat.follows = "flake-compat";
-        flake-utils.follows = "flake-utils";
         gitignore.follows = "gitignore-nix";
         nixpkgs.follows = "nixpkgs";
+        nixpkgs-stable.follows = "nixpkgs";
       };
     };
     rust-overlay = {
       url = "github:oxalica/rust-overlay/stable";
       inputs = {
-        flake-utils.follows = "flake-utils";
         nixpkgs.follows = "nixpkgs";
       };
     };
