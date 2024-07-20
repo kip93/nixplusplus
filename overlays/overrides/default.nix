@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ hydra, nix, ... } @ _inputs:
+{ flake-schemas, hydra, nix, ... } @ _inputs:
 final: prev:
 let
   # A fake set of overlaid pkgs, to ensure that hydra uses it's own version of
@@ -34,22 +34,30 @@ let
 in
 {
   # Expose the relevant packages into the overlay
-  inherit (nix_final) nix nixStable nixUnstable nix-perl-bindings;
+  inherit (nix_final) nixStable nix-perl-bindings;
+  nix = nix_final.nix.override
+    {
+      boehmgc = nix_final.boehmgc.override {
+        enableLargeConfig = true;
+      };
+    } // {
+    perl-bindings = nix_final.nix-perl-bindings;
+  };
+
   nixVersions = with final; prev.nixVersions // {
     schemas = nixSchemas;
   };
 
   # Build a nix package that has flake schema support (see nix#8892).
-  nixSchemas = with final; nixVersions.nix_2_18.overrideAttrs ({ patches ? [ ], ... }: {
+  nixSchemas = with final; (callPackage "${fetchFromGitHub {
+    owner = "DeterminateSystems";
+    repo = "nix-src";
+    rev = "flake-schemas";
+    hash = "sha256-LcCwNsd1v5HjOlNPxtQHjosomwaktcLUjGDuYlapyLE=";
+  }}/package.nix"
+    { inherit flake-schemas; }
+  ).overrideAttrs (_: {
     pname = "nix-schemas";
-    patches = patches ++ [
-      (fetchpatch {
-        url = "https://github.com/NixOS/nix/pull/8892.diff";
-        hash = "sha256-NfBksfuW1RUWe3O9cyqdM+A4O9ZGvEWg8rfv+24BosA=";
-        excludes = [ "doc/manual/src/SUMMARY.md.in" "flake.nix" "flake.lock" ];
-      })
-    ];
-
     # Schema tests still require internet connection
     doCheck = false;
     doInstallCheck = false;
