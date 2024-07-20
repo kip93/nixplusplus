@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -223,6 +223,7 @@ in
             ];
 
             timerConfig = { OnCalendar = cfg.schedule; };
+            runCheck = true;
             pruneOpts =
               (lib.optional (cfg.keep.last != null) "--keep-last ${toString cfg.keep.last}") ++
               (lib.optional (cfg.keep.hours != null) "--keep-hourly ${toString cfg.keep.hours}") ++
