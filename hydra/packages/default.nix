@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -30,9 +30,5 @@ builtins.mapAttrs
   # Cross compilation
   "x86_64-linux.aarch64-linux" = self.packages.x86_64-linux.aarch64-linux;
   "x86_64-linux.armv7l-linux" = self.packages.x86_64-linux.armv7l-linux;
-  "x86_64-linux.armv6l-linux" = self.packages.x86_64-linux.armv6l-linux;
-  "aarch64-linux.x86_64-linux" = self.packages.aarch64-linux.x86_64-linux;
   "aarch64-linux.armv7l-linux" = self.packages.aarch64-linux.armv7l-linux;
-  "aarch64-linux.armv6l-linux" = self.packages.aarch64-linux.armv6l-linux;
-  "armv7l-linux.armv6l-linux" = self.packages.armv7l-linux.armv6l-linux;
 }
