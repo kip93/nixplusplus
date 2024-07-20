@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -15,19 +15,8 @@
 
 { self, ... } @ _inputs:
 final: prev: with final; {
-  testers = prev.testers // {
-    runNixOSTest = args:
-      let test = prev.testers.runNixOSTest args; in test // {
-        meta = (test.meta or { }) // {
-          # NixOS test are Linux exclusive (nixpkgs#193336)
-          platforms = test.meta.platforms or self.lib.supportedSystems'.linux;
-        };
-      };
-  };
-
   jre_headless = prev.jre_headless.overrideAttrs (
     { configureFlags ? [ ]
-    , meta ? { platforms = self.lib.supportedSystems; }
     , nativeBuildInputs ? [ ]
     , ...
     }: {
@@ -41,16 +30,6 @@ final: prev: with final; {
           "--with-build-jdk=${buildPackages.jre_headless.home}"
         ])
       ;
-      # Disable on i686 machines.
-      meta = meta // {
-        platforms = lib.optionals
-          (!lib.hasPrefix "i686-" buildPackages.system)
-          (builtins.filter
-            (x: !lib.hasPrefix "i686-" x)
-            meta.platforms
-          )
-        ;
-      };
     }
   );
   # Apply jre fixes to LanguageTool.
