@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -27,7 +27,6 @@ writeShellApplication {
     nix
     nixpkgs-fmt
     statix
-    vulnix
   ];
   text = ''
     XC=0
@@ -63,7 +62,7 @@ writeShellApplication {
 
     printf '\n# Check linting ################################################\n'
     (
-      statix check --config ${import ../lint/config.nix args} -- . ;
+      statix check --config ${import ./lint-config.nix args} -- . ;
     ) || XC="$(( XC + 0x04 ))"
 
     [ $(( XC & 0x01 )) -ne 0 ] \
@@ -81,14 +80,6 @@ writeShellApplication {
     || (
       nix --no-warn-dirty --print-build-logs --keep-going flake check -- . ;
     ) || XC="$(( XC + 0x10 ))"
-
-    [ $(( XC & 0x09 )) -ne 0 ] \
-    || printf '\n# Check vulnerabilities ########################################\n'
-    [ $(( XC & 0x09 )) -ne 0 ] \
-    || (
-      printf '%s\n' "''${drvs[@]}" \
-      | xargs -r vulnix ;
-    ) || XC="$(( XC + 0x20 ))"
 
     printf '\n# Finished #####################################################\n'
     printf '\x1B[1;%dmXC: 0x%02X\x1B[0m\n' \

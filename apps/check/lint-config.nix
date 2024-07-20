@@ -13,13 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ pkgs, self, ... }: {
-  # languages.nix.enable = true; # Adds vulnix, which is unmaintained
-  packages = with pkgs; [
-    cachix
-    statix
-    deadnix
-    nil
-  ];
-  imports = self.lib.import.asList ./.;
-}
+{ pkgs, ... } @ _args:
+with pkgs;
+writeTextDir "statix.toml" ''
+  disabled = [
+    'redundant_pattern_bind',
+  ]
+  nix_version = '${nix.version}'
+''
