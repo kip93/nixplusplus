@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -18,14 +18,8 @@
   # build machine; the second, the target one.
   # It also applies the overlays from this flake.
   pkgs = self.lib.forEachSupportedSystem' (localSystem: crossSystem: import nixpkgs {
-    localSystem.config =
-      nixpkgs.lib.systems.parse.tripleFromSystem
-        (nixpkgs.lib.systems.parse.mkSystemFromString localSystem)
-    ;
-    crossSystem.config =
-      nixpkgs.lib.systems.parse.tripleFromSystem
-        (nixpkgs.lib.systems.parse.mkSystemFromString crossSystem)
-    ;
+    inherit localSystem;
+    crossSystem = if localSystem != crossSystem then crossSystem else null;
     overlays = [ self.overlays.default ];
   });
 }

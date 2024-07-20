@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -98,7 +98,7 @@ pkgs.testers.nixTest {
           (builtins.attrNames apps)
           self.lib.supportedSystems
       ;
-      expected = [ "armv6l-linux" ]; # Can only cross compile to armv6l-linux
+      expected = [ ];
     };
 
     checks = {
@@ -118,7 +118,7 @@ pkgs.testers.nixTest {
           (builtins.attrNames checks)
           self.lib.supportedSystems
       ;
-      expected = [ "armv6l-linux" ]; # Can only cross compile to armv6l-linux
+      expected = [ ];
     };
 
     configs = {
@@ -207,7 +207,7 @@ pkgs.testers.nixTest {
           (builtins.attrNames packages)
           self.lib.supportedSystems
       ;
-      expected = [ "armv6l-linux" ]; # Can only cross compile to armv6l-linux
+      expected = [ ];
     };
     packagesCrossSystems = {
       expr =

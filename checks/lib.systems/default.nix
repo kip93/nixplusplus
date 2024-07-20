@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -82,7 +82,6 @@ pkgs.testers.nixTest {
       expected = {
         aarch64-linux = {
           aarch64-linux = [ [ "aarch64" "linux" ] [ "aarch64" "linux" ] ];
-          x86_64-linux = [ [ "aarch64" "linux" ] [ "x86_64" "linux" ] ];
         };
         x86_64-linux = {
           aarch64-linux = [ [ "x86_64" "linux" ] [ "aarch64" "linux" ] ];
