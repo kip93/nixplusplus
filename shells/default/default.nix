@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -13,13 +13,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-{ npppkgs, pkgs, self, ... } @ args: {
+{ devenv-root, npppkgs, pkgs, self, ... } @ args: {
   inherit pkgs;
   inputs = builtins.removeAttrs args [ "pkgs" "system" ];
   modules = [
     # Basics
     ({ lib, pkgs, ... }: {
       name = "Nix++";
+      devenv.root =
+        let
+          devenvRootFileContent = builtins.readFile devenv-root.outPath;
+        in
+        pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent
+      ;
       packages = with pkgs; [ cacert coreutils nixVersions.schemas ];
       enterShell = lib.mkBefore ''
         EDITOR="''${EDITOR:-${npppkgs.vim-minimal}/bin/vim}" # Default to vim

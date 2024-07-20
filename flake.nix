@@ -73,6 +73,10 @@
         pre-commit-hooks.follows = "pre-commit-hooks";
       };
     };
+    devenv-root = {
+      url = "file+file:///dev/null";
+      flake = false;
+    };
     flake-compat = {
       url = "github:nix-community/flake-compat/master";
     };
