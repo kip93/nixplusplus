@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -398,6 +398,7 @@ pkgs.testers.runNixOSTest rec {
           systemd.mounts = [
             {
               wantedBy = [ "multi-user.target" ];
+              wants = [ "network-online.target" ];
               after = [ "network-online.target" ];
               what = "${nodes.server.networking.primaryIPAddress}:/dataset";
               where = "/mnt/nfs";
@@ -405,6 +406,7 @@ pkgs.testers.runNixOSTest rec {
             }
             {
               wantedBy = [ "multi-user.target" ];
+              wants = [ "network-online.target" ];
               after = [ "network-online.target" ];
               what = "root@${nodes.server.networking.primaryIPAddress}:/mnt/pool0/dataset";
               where = "/mnt/sshfs";

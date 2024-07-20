@@ -1,5 +1,5 @@
 # This file is part of Nix++.
-# Copyright (C) 2023 Leandro Emmanuel Reina Kiperman.
+# Copyright (C) 2023-2024 Leandro Emmanuel Reina Kiperman.
 #
 # Nix++ is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -43,7 +43,7 @@ let
     # Lua
     lua-language-server
     # Nix
-    rnix-lsp
+    nil
     # Prose
     languagetool
     # Python
@@ -179,8 +179,6 @@ symlinkJoin rec {
     description = "Neovim, with some pizzazz!";
     longDescription = null;
     mainProgram = "v";
-    platforms = lib.optionals (!lib.hasPrefix "armv6l-" buildPlatform.system)
-      nvim.meta.platforms
-    ;
+    platforms = builtins.filter (x: !lib.hasPrefix "armv7l-" x) nvim.meta.platforms;
   };
 }
